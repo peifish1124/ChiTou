@@ -37,5 +37,5 @@ export default function Home() {
         <p>關於我們 · 隱私權條款 · Cookie 條款 · © 2023 ChiTou, Inc.</p>
       </footer>
     </main>
-  )
+  );
 }
