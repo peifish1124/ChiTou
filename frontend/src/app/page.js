@@ -1,36 +1,31 @@
-import Image from 'next/image'
-import styles from "./page.module.scss";
+import Image from "next/image";
+import Nav from "@/components/Nav";
+import styles from "@/styles/css-modules/page.module.scss";
 
 export default function Home() {
   return (
     <main className={styles.main}>
       {/* navbar */}
-      <nav className={styles.navbar}>
-      </nav>
-
+      {/* <nav className={styles.navbar}></nav> */}
+      <Nav />
       {/* main */}
       <div className={styles.page}>
         <div className={styles.leftPage}>
-
           {/* search box */}
 
           {/* trip card */}
 
           {/* + buttom */}
-          
         </div>
-          
-        <div className={styles.rightPage}>
 
+        <div className={styles.rightPage}>
           {/* start mode */}
 
           {/* detailed mode */}
 
           {/* create mode */}
-
         </div>
       </div>
-      
 
       {/* footer */}
       <footer className={styles.footer}>
