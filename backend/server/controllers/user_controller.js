@@ -41,12 +41,12 @@ exports.signup = async (req, res) => {
     // 200 OK
     accessToken = await userUtil.generateAccessToken(user);
     console.log('Signup success');
-    return res.status(200).json({ 
+    return res.status(200).json({
       data: {
-        accessToken: accessToken,
+        access_token: accessToken,
         user: user
-      }});
-
+      }
+    });
   } catch (err) {
 
     console.log(err);
@@ -56,5 +56,53 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  // TODO: not yet finished
+  console.log('Signin');
+
+  if (req.headers['content-type'] !== 'application/json') {
+    const [errorCode, errorMessage] = errorRes.contentTypeError();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  const { name, password } = req.body;
+  if (!name || !password) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+
+    const isNameExist = await userModel.nameExist(name);
+    if (isNameExist === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isNameExist) {
+      const [errorCode, errorMessage] = errorRes.userNotFound();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // log in user
+    const user = await userModel.login(name, password);
+    if (user === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!user) {
+      const [errorCode, errorMessage] = errorRes.wrongPassword();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    accessToken = await userUtil.generateAccessToken(user);
+    console.log('Signin success');
+    return res.status(200).json({
+      data: {
+        access_token: accessToken,
+        user: user
+      }
+    });
+  } catch (err) {
+
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
 };

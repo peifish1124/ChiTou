@@ -1,4 +1,5 @@
 const poolConnection = require('../../utils/db_connection');
+const userUtil = require('../../utils/user_util');
 
 exports.nameExist = async (name) => {
   const connection = await poolConnection();
@@ -42,3 +43,33 @@ exports.createUser = async (name, password) => {
     connection.release();
   }
 };
+
+exports.login = async (name, password) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT id, name, password
+    FROM users
+    WHERE name = ?
+    `;
+
+  try {
+    const [rows] = await connection.query(query, [name]);
+    if (rows.length === 0) {
+      return null;
+    }
+    const user = rows[0];
+    const isPasswordCorrect = await userUtil.isPasswordCorrect(password, user.password);
+    if (isPasswordCorrect) {
+      return {
+        id: user.id,
+        name: user.name,
+      }
+    }
+    return false;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+}

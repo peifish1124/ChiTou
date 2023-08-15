@@ -90,11 +90,10 @@ CREATE TABLE `schedules` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `trip_id` bigint unsigned NOT NULL,
   `place` varchar(255) NOT NULL,
-  `start_time` varchar(255) DEFAULT NULL,
-  `end_time` varchar(255) DEFAULT NULL,
   `note` varchar(500) DEFAULT NULL,
   `sequence` int NOT NULL,
   `trip_day` int NOT NULL,
+  `duration` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `trip_id` (`trip_id`),
   CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`trip_id`) REFERENCES `trips` (`id`)
@@ -181,7 +180,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,4 +202,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-15 11:00:50
+-- Dump completed on 2023-08-15 16:12:06
