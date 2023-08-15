@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Nav from "@/components/Nav";
+import TravelDetail from "@/components/TravelDetail";
 import styles from "@/styles/css-modules/page.module.scss";
 
 export default function Home() {
@@ -22,7 +23,7 @@ export default function Home() {
           {/* start mode */}
 
           {/* detailed mode */}
-
+          <TravelDetail trips />
           {/* create mode */}
         </div>
       </div>
