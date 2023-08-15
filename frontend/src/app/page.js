@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
 import StartMode from "@/components/StartMode"
+import CreateMode from "@/components/CreateMode"
 import styles from "@/styles/css-modules/page.module.scss";
 
 export default function Home() {
@@ -39,11 +40,12 @@ export default function Home() {
 
         <div className={styles.rightPage}>
           {/* start mode */}
-          <StartMode />
+          {/* <StartMode /> */}
 
           {/* detailed mode */}
 
           {/* create mode */}
+          <CreateMode />
         </div>
       </div>
 
