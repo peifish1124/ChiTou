@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Nav from "@/components/Nav";
+import TripCard from "@/components/TripCard";
 import styles from "@/styles/css-modules/page.module.scss";
 
 export default function Home() {
@@ -14,6 +15,10 @@ export default function Home() {
           {/* search box */}
 
           {/* trip card */}
+          <div className={styles.tripcard}>
+            <TripCard /> 
+            <TripCard />
+          </div>
 
           {/* + buttom */}
         </div>
