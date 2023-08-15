@@ -6,7 +6,7 @@ module.exports = {
   },
 
   emptyInput: () => {
-    return [400, 'Input Feild should not be Empty'];
+    return [400, 'Input Field should not be Empty'];
   },
 
   nameAlreadyExist: () => {
