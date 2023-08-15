@@ -4,7 +4,7 @@ const errorRes = require('../../utils/error_message_util');
 
 
 exports.signup = async (req, res) => {
-  console.log('Signup');
+  console.log('User Signup');
 
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
@@ -20,7 +20,6 @@ exports.signup = async (req, res) => {
   }
 
   try {
-
     const isNameExist = await userModel.nameExist(name);
     if (isNameExist === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
@@ -48,7 +47,6 @@ exports.signup = async (req, res) => {
       }
     });
   } catch (err) {
-
     console.log(err);
     const [errorCode, errorMessage] = errorRes.dbConnectFailed();
     return res.status(errorCode).json({ error: errorMessage });
@@ -56,7 +54,7 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  console.log('Signin');
+  console.log('User Signin');
 
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
@@ -100,7 +98,63 @@ exports.signin = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};
 
+// [middleware] authorization function
+exports.authorization = async (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    const [errorCode, errorMessage] = errorRes.tokenNotFound();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  const token = authorization.replace('Bearer ', '');
+  try {
+    const payload = await userUtil.decodePayload(token);
+
+    const { id, name } = payload;
+    req.userData = { id: id, name: name };
+    return next();
+  } catch (error) {
+    return error_message.wrongToken(res);
+  }
+};
+
+exports.search = async (req, res) => {
+  // TODO: havn't finished
+  console.log('User Search');
+  const { keyword } = req.query;
+
+  if (typeof keyword == 'undefined') {
+    return res.status(200).json({ data: { users: [] } });
+  }
+
+  const { 'id': myId } = req.userData;
+  const { name } = req.body;
+  if (!name) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const users = await userModel.search(keyword);
+    if (users === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    console.log('Search success');
+    return res.status(200).json({
+      data: {
+        users: users
+      }
+    });
+  } catch (err) {
     console.log(err);
     const [errorCode, errorMessage] = errorRes.dbConnectFailed();
     return res.status(errorCode).json({ error: errorMessage });

@@ -9,6 +9,14 @@ module.exports = {
     return [400, 'Input Field should not be Empty'];
   },
 
+  tokenNotFound: () => {
+    return [401, 'Token Not Found'];
+  },
+
+  wrongToken: () => {
+    return [403, 'Wrong Token'];
+  },
+
   nameAlreadyExist: () => {
     return [403, 'Name Already Existed'];
   },
