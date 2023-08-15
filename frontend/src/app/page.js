@@ -3,6 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
+import StartMode from "@/components/StartMode"
 import styles from "@/styles/css-modules/page.module.scss";
 
 export default function Home() {
@@ -38,6 +39,7 @@ export default function Home() {
 
         <div className={styles.rightPage}>
           {/* start mode */}
+          <StartMode />
 
           {/* detailed mode */}
 
