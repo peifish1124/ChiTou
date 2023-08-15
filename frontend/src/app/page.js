@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import Nav from "@/components/Nav";
+import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
 import styles from "@/styles/css-modules/page.module.scss";
 
@@ -13,14 +15,25 @@ export default function Home() {
       <div className={styles.page}>
         <div className={styles.leftPage}>
           {/* search box */}
+          <div className={styles.searchTripCard}>
+            <SearchTripCard />
+          </div>
 
           {/* trip card */}
           <div className={styles.tripcard}>
-            <TripCard /> 
+            <TripCard />
             <TripCard />
           </div>
 
-          {/* + buttom */}
+          {/* + button */}
+          <div className={styles.AddBtn}>
+            <Image
+              src="/addBtn.svg"
+              alt="cover"
+              fill={true}
+              objectFit="cover"
+            />
+          </div>
         </div>
 
         <div className={styles.rightPage}>
