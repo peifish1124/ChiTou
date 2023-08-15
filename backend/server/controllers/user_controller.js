@@ -120,7 +120,8 @@ exports.authorization = async (req, res, next) => {
     req.userData = { id: id, name: name };
     return next();
   } catch (error) {
-    return error_message.wrongToken(res);
+    const [errorCode, errorMessage] = errorRes.wrongToken();
+    return res.status(errorCode).json({ error: errorMessage });
   }
 };
 
