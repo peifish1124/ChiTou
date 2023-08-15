@@ -1,7 +1,6 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
-// TODO: db connection hasn't inited yet
 const POOL = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
