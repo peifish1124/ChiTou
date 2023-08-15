@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
 
     // 200 OK
     accessToken = await userUtil.generateAccessToken(user);
-    console.log('Signup success');
+    console.log('User Signup Success');
     return res.status(200).json({
       data: {
         access_token: accessToken,
@@ -88,7 +88,7 @@ exports.signin = async (req, res) => {
 
     // 200 OK
     accessToken = await userUtil.generateAccessToken(user);
-    console.log('Signin success');
+    console.log('User Signin Success');
     return res.status(200).json({
       data: {
         access_token: accessToken,
@@ -124,19 +124,11 @@ exports.authorization = async (req, res, next) => {
 };
 
 exports.search = async (req, res) => {
-  // TODO: havn't finished
   console.log('User Search');
   const { keyword } = req.query;
 
   if (typeof keyword == 'undefined') {
     return res.status(200).json({ data: { users: [] } });
-  }
-
-  const { 'id': myId } = req.userData;
-  const { name } = req.body;
-  if (!name) {
-    const [errorCode, errorMessage] = errorRes.emptyInput();
-    return res.status(errorCode).json({ error: errorMessage });
   }
 
   try {
@@ -147,7 +139,6 @@ exports.search = async (req, res) => {
     }
 
     // 200 OK
-    console.log('Search success');
     return res.status(200).json({
       data: {
         users: users
