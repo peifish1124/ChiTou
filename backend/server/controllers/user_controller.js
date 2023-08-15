@@ -9,8 +9,6 @@ exports.signup = async (req, res) => {
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
-    // const ERROR = errorRes.contentTypeError();
-    // return res.status(ERROR.code).json({  error: ERROR.message });
   }
 
   const { name, password } = req.body;
