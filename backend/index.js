@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.WEB_PORT;
 
 app.use(express.json());
+app.use('/images', express.static('static'));
 
 // routes
 app.use('/users', userRoute);
