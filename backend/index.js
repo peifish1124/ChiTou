@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+
 // routes require
 const userRoute = require('./server/routes/user_route');
+const scheduleRoute = require('./server/routes/schedule_route');
 
 const app = express();
 const port = process.env.WEB_PORT;
@@ -9,7 +11,8 @@ const port = process.env.WEB_PORT;
 app.use(express.json());
 
 // routes
-app.use('/api/users', userRoute);
+app.use('/users', userRoute);
+app.use('/schedules', scheduleRoute);
 
 app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');

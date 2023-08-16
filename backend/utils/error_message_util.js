@@ -29,6 +29,9 @@ module.exports = {
     return [403, 'Signin Failed - Wrong Password'];
   },
 
+  scheduleNotUnique: () => {
+    return [500, 'Trip Day & Sequence with the Id are not Valid'];
+  },
   dbConnectFailed: () => {
     return [500, 'Server Error - Connecting to db Failed'];
   },
