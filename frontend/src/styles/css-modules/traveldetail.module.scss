@@ -71,7 +71,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      position: relative;
+      &.expand {
+        white-space: normal; /* 展開時取消截斷 */
+      }
     }
   }
   .expandBtn{

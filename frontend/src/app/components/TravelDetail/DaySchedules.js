@@ -51,12 +51,14 @@ export default function DaySchedules({ startDate, tripDay, daySchedules }) {
             fill="none"
           >
             {expanded ? (
+              // up arrow
               <path
                 d="M5 12.5L10 7.5L15 12.5"
                 stroke="#525252"
                 stroke-width="2.66667"
               />
             ) : (
+              // down arrow
               <path
                 d="M15 7.5L10 12.5L5 7.5"
                 stroke="#525252"
