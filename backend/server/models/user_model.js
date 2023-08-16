@@ -20,6 +20,25 @@ exports.nameExist = async (name) => {
   }
 };
 
+exports.userAllExist = async (ids) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT COUNT(id)
+    FROM users 
+    WHERE id IN (?)
+    `;
+
+  try {
+    const userCount = await connection.query(query, [ids]);
+    return userCount[0][0]['COUNT(id)'] == ids.length;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
 exports.createUser = async (name, password) => {
   const connection = await poolConnection();
   const query = `
@@ -72,4 +91,33 @@ exports.login = async (name, password) => {
   } finally {
     connection.release();
   }
-}
+};
+
+exports.search = async (keyword) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT id, name
+    FROM users
+    WHERE name LIKE ?
+    ORDER BY name DESC, id DESC
+    `;
+  
+  try {
+    const [rows] = await connection.query(query, [`%${keyword}%`]);
+    if(rows.length === 0) {
+      return [];
+    }
+
+    const users = rows.map((row) => {
+      return {
+        id: row.id,
+        name: row.name,
+      }
+    });
+    return users;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
