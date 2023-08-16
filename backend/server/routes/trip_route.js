@@ -5,5 +5,6 @@ const userController = require('../controllers/user_controller');
 
 router.post('/', userController.authorization, tripController.createTrip);
 router.get('/', userController.authorization, tripController.getTrips);
+router.get('/:id', userController.authorization, tripController.tripDetail);
 
 module.exports = router;
