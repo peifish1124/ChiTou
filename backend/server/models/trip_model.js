@@ -170,3 +170,20 @@ exports.tripDetail = async (tripId, myId) => {
     connection.release();
   }
 };
+
+exports.uploadPicture = async (tripId, filename) => {
+  const connection = await poolConnection();
+  
+  const query = `UPDATE trips SET picture = ? WHERE id = ?`;
+  try {
+    const picture_url = `https://${process.env.IP}/images/${filename}`;
+    await connection.query(query, [picture_url, tripId]);
+
+    return picture_url;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};

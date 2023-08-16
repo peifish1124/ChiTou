@@ -101,3 +101,43 @@ exports.tripDetail = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+exports.uploadPicture = async (req, res) => {
+  console.log('Upload Picture');
+
+  if(!req.headers['content-type']) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  if(!req.headers['content-type'].includes('multipart/form-data')) {
+    const [errorCode, errorMessage] = errorRes.contentTypeError();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  const { 'id': tripId } = req.params;
+
+  if(!req.file) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const url = await tripModel.uploadPicture(Number(tripId), req.file.filename);
+    if (url === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    console.log('Upload Picture Success');
+    return res.status(200).json({
+      data: {
+        picture: url
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};
