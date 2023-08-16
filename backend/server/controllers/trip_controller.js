@@ -67,3 +67,37 @@ exports.getTrips = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+exports.tripDetail = async (req, res) => {
+  console.log('Get Trip Detail');
+
+  const { 'id': tripId } = req.params;
+  const { 'id': myId } = req.userData;
+
+  const isTripExist = await tripModel.tripExist(tripId);
+  if (isTripExist === null) {
+    const [errorCode, errorMessage] = errorRes.queryFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  } else if (!isTripExist) {
+    const [errorCode, errorMessage] = errorRes.tripNotFound();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const trip = await tripModel.tripDetail(Number(tripId), myId);
+    if (trip === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+    console.log('Get Trip Detail Success');
+    return res.status(200).json({
+      data: {
+        trip: trip
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};
