@@ -18,7 +18,7 @@ export default function CreateMode() {
     }
   };
   useEffect(() => {
-    console.log(participantsList);
+    // console.log(participantsList);
   }, [participantsList]);
 
   const handleParticipantRemove = (index) => {
@@ -30,23 +30,23 @@ export default function CreateMode() {
   // Error handling
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [error, setError] = useState(false);
-  console.log(error);
+  // const [error, setError] = useState(false);
+  // console.log(error);
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
     if (endDate && date > endDate) {
-      setError(true);
+      // setError(true);
     } else {
-      setError(false);
+      // setError(false);
     }
   };
   const handleEndDateChange = (date) => {
     setEndDate(date);
     if (startDate && date < startDate) {
-      setError(true);
+      // setError(true);
     } else {
-      setError(false);
+      // setError(false);
     }
   };
 

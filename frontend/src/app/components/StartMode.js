@@ -7,11 +7,11 @@ export default function StartMode() {
       <div className={styles.createTrip}>
         <h1>點擊</h1>
         <Image
-            src="/addBtn.svg"
-            alt="addBtn"
-            width={30}
-            height={30}
-            objectFit="cover"
+          src="/addBtn.svg"
+          alt="addBtn"
+          width={30}
+          height={30}
+          objectFit="cover"
         />
         <h1>創建新的旅行</h1>
       </div>
