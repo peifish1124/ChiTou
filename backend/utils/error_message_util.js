@@ -1,12 +1,14 @@
-
 module.exports = {
   contentTypeError: () => {
     return [400, 'Content Type is not Correct'];
-    // return {code: 400, message: 'Content Type is not Correct'};
   },
 
   emptyInput: () => {
     return [400, 'Input Field should not be Empty'];
+  },
+
+  participantNotExist: () => {
+    return [400, 'Participant is not Existed']
   },
 
   tokenNotFound: () => {

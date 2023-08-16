@@ -20,6 +20,25 @@ exports.nameExist = async (name) => {
   }
 };
 
+exports.userAllExist = async (ids) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT COUNT(id)
+    FROM users 
+    WHERE id IN (?)
+    `;
+
+  try {
+    const userCount = await connection.query(query, [ids]);
+    return userCount[0][0]['COUNT(id)'] == ids.length;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
 exports.createUser = async (name, password) => {
   const connection = await poolConnection();
   const query = `
@@ -36,7 +55,7 @@ exports.createUser = async (name, password) => {
       }
     }
     return null;
-  }   catch (err) {
+  } catch (err) {
     console.error(err);
     return null;
   } finally {
