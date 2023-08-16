@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { TextField } from "@mui/material/TextField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Image from "next/image";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
@@ -25,38 +27,84 @@ export default function CreateMode() {
     setParticipantsList(updatedParticipants);
   };
 
+  // Error handling
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [error, setError] = useState(false);
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    if (endDate && date > endDate) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  };
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    if (startDate && date < startDate) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  };
+
   return (
     <div className={styles.createMode}>
       <div className={styles.cover}>
-        <Image
-          src="/default-cover.svg"
-          alt="cover"
-          fill={true}
-          objectFit="cover"
-        />
+        <Image src="/default-cover.svg" alt="cover" fill objectFit="cover" />
       </div>
       <h3>創建屬於你們的小旅行</h3>
       <form className={styles.createTripForm}>
         <div className={styles.tripInfoItem}>
           <p>旅行名稱：</p>
-          <input type="text" />
+          <div className={styles.tripInfoInput}>
+            <input type="text" />
+          </div>
         </div>
         <div className={styles.tripInfoItem}>
           <p>目的地：</p>
-          <input type="text" placeholder="請填入縣市名稱" />
+          <div className={styles.tripInfoInput}>
+            <input type="text" placeholder="請填入縣市名稱" />
+          </div>
         </div>
-        <div className={styles.tripInfoItem}>
+        <div className={styles.dataPickerItem}>
           <p>開始時間：</p>
-          <input type="text" placeholder="範例格式: 08/25/2023" />
+          {/* <input type="text" placeholder="範例格式: 08/25/2023" /> */}
+          <DatePicker
+            value={startDate}
+            onChange={handleStartDateChange}
+            renderInput={(params) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+              />
+            )}
+          />
         </div>
-        <div className={styles.tripInfoItem}>
+        <div className={styles.dataPickerItem}>
           <p>結束時間：</p>
-          <input type="text" placeholder="範例格式: 08/27/2023" />
+          {/* <input type="text" placeholder="範例格式: 08/27/2023" /> */}
+          <DatePicker
+            value={endDate}
+            onChange={handleEndDateChange}
+            renderInput={(params) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+              />
+            )}
+          />
         </div>
         <div className={styles.tripInfoItem}>
           <p>參與者：</p>
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              width: "100%",
+            }}
           >
             <input
               type="text"
