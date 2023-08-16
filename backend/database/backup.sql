@@ -33,12 +33,12 @@ DROP TABLE IF EXISTS `likes`;
 CREATE TABLE `likes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `schedule_id` bigint unsigned NOT NULL,
-  `member_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `schedule_id` (`schedule_id`),
-  KEY `member_id` (`member_id`),
+  KEY `user_id` (`user_id`),
   CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`),
-  CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)
+  CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
