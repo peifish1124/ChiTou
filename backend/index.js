@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+
 // routes require
 const userRoute = require('./server/routes/user_route');
+const scheduleRoute = require('./server/routes/schedule_route');
 const tripRoute = require('./server/routes/trip_route');
 
 const app = express();
@@ -12,6 +14,7 @@ app.use('/images', express.static('static'));
 
 // routes
 app.use('/users', userRoute);
+app.use('/schedules', scheduleRoute);
 app.use('/trips', tripRoute);
 
 app.get('/', (req, res) => {
