@@ -9,6 +9,14 @@ module.exports = {
     return [400, 'Input Field should not be Empty'];
   },
 
+  participantNotExist: () => {
+    return [400, 'Participant is not Existed']
+  },
+
+  tripNotFound: () => {
+    return [400, 'Input id is not Valid']
+  },
+
   tokenNotFound: () => {
     return [401, 'Token Not Found'];
   },

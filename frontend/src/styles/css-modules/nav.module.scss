@@ -1,0 +1,48 @@
+.navbar {
+  width: 100%;
+  height: 70px;
+  background: #d9e7ca;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  .logo {
+    color: #3d4a35;
+    text-align: center;
+    font-family: Pattaya;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .user {
+    display: flex;
+    align-items: center;
+    .userName {
+      margin: 0 1rem;
+      display: flex;
+      color: #000;
+      text-align: center;
+      font-family: Outfit;
+      // font-family: "Noto Sans TC", sans-serif;
+      font-size: 1.5rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    .userPic {
+      margin: 0 1rem;
+      display: flex;
+      width: 36px;
+      height: 36px;
+      position: relative;
+    }
+  }
+  .notifIcon {
+    margin: 0 1rem;
+    display: flex;
+    width: 36px;
+    height: 36px;
+    position: relative;
+  }
+}
