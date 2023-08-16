@@ -50,6 +50,11 @@ export default function TripCard({ trip, schedules }) {
           />
         ))}
       </div>
+      <div className={tripcard.editBtn}>
+        <button type="button">
+          <Image src="/editBtn.svg" alt="cover" fill objectFit="cover" />
+        </button>
+      </div>
     </div>
   );
 }
