@@ -1,10 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import Nav from "@/components/Nav";
 import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
-import StartMode from "@/components/StartMode"
-import CreateMode from "@/components/CreateMode"
+import StartMode from "@/components/StartMode";
+import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
 import styles from "@/styles/css-modules/page.module.scss";
 
@@ -84,11 +86,12 @@ const schedules = [
   },
 ];
 export default function Home() {
+  const [mode, setMode] = useState("start");
   return (
     <main className={styles.main}>
       {/* navbar */}
       {/* <nav className={styles.navbar}></nav> */}
-      <Nav />
+      <Nav changeToStart={() => setMode("start")} />
       {/* main */}
       <div className={styles.page}>
         <div className={styles.leftPage}>
@@ -99,29 +102,31 @@ export default function Home() {
 
           {/* trip card */}
           <div className={styles.tripcard}>
+            <TripCard changeToDetail={() => setMode("detailed")} />
             <TripCard />
             <TripCard />
           </div>
 
           {/* + button */}
-          <div className={styles.AddBtn}>
-            <Image
-              src="/addBtn.svg"
-              alt="cover"
-              fill={true}
-              objectFit="cover"
-            />
-          </div>
+          <button
+            type="button"
+            className={styles.AddBtn}
+            onClick={() => setMode("create")}
+          >
+            <Image src="/addBtn.svg" alt="cover" fill objectFit="cover" />
+          </button>
         </div>
 
         <div className={styles.rightPage}>
           {/* start mode */}
-          {/* <StartMode /> */}
+          {mode === "start" && <StartMode />}
 
           {/* detailed mode */}
-          <TravelDetail trip={trip} schedules={schedules} />
+          {mode === "detailed" && (
+            <TravelDetail trip={trip} schedules={schedules} />
+          )}
           {/* create mode */}
-          <CreateMode />
+          {mode === "create" && <CreateMode />}
         </div>
       </div>
 
