@@ -42,4 +42,28 @@ exports.createTrip = async (req, res) => {
     const [errorCode, errorMessage] = errorRes.dbConnectFailed();
     return res.status(errorCode).json({ error: errorMessage });
   }
-}
+};
+
+exports.getTrips = async (req, res) => {
+  console.log('Get Trips');
+
+  const { 'id': myId } = req.userData;
+
+  try {
+    const trips = await tripModel.getTrips(myId);
+    if (trips === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+    console.log('Get Trips Success');
+    return res.status(200).json({
+      data: {
+        trips: trips
+      }
+    })
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};
