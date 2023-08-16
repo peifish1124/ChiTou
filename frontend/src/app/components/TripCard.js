@@ -5,12 +5,7 @@ export default function TripCard() {
   return (
     <div className={styles.tripCard}>
       <div className={styles.cover}>
-        <Image
-          src="/default-cover.svg"
-          alt="cover"
-          fill={true}
-          objectFit="cover"
-        />
+        <Image src="/default-cover.svg" alt="cover" fill objectFit="cover" />
       </div>
       <div className={styles.tripInfo}>
         <div className={styles.tripInfoTop}>
