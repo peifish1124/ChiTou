@@ -10,6 +10,7 @@ import TripCard from "@/components/TripCard";
 import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
+import EditTrip from "./components/EditTrip";
 import styles from "@/styles/css-modules/page.module.scss";
 
 const trip = {
@@ -23,6 +24,7 @@ const trip = {
 };
 const schedules = [
   {
+    // 之後改成 trip_id
     id: 1,
     place: "台北101",
     duration: 2,
@@ -120,7 +122,7 @@ export default function Home() {
           <div className={styles.rightPage}>
             {mode === "start" && <StartMode />}
             {mode === "detailed" && (
-              <TravelDetail trip={trip} schedules={schedules} />
+              <EditTrip trip={trip} schedules={schedules} />
             )}
             {mode === "create" && <CreateMode />}
           </div>
