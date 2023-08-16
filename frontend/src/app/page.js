@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Nav from "@/components/Nav";
 import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
@@ -9,8 +11,6 @@ import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
 import styles from "@/styles/css-modules/page.module.scss";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const trip = {
   id: 1,

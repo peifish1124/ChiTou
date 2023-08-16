@@ -31,6 +31,7 @@ export default function CreateMode() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [error, setError] = useState(false);
+  console.log(error);
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
