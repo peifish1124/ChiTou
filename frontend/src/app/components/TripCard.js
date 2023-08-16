@@ -1,16 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import styles from "@/styles/css-modules/tripcard.module.scss";
 
-export default function TripCard() {
+export default function TripCard({ changeToDetail }) {
   return (
     <div className={styles.tripCard}>
       <div className={styles.cover}>
-        <Image
-          src="/default-cover.svg"
-          alt="cover"
-          fill={true}
-          objectFit="cover"
-        />
+        <Link href="/" onClick={changeToDetail}>
+          <Image src="/default-cover.svg" alt="cover" fill objectFit="cover" />
+        </Link>
       </div>
       <div className={styles.tripInfo}>
         <div className={styles.tripInfoTop}>

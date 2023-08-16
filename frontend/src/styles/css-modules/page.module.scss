@@ -1,21 +1,22 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    justify-content:space-between;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  background: #f8faf0;
+
+  .navbar {
     width: 100%;
-    background: #F8FAF0;
+    height: 70px;
+    background: #d9e7ca;
+  }
 
-    .navbar{
-        width: 100%;
-        height: 70px;
-        background: #D9E7CA;
-    }
-
-    .page{
-        display: flex;
-        width: 100%;
-        height: calc(100vh - 70px - 60px);
-
+  .page {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100% - 130px);
         .leftPage{
             display: flex;
             flex-direction: column;
@@ -24,7 +25,17 @@
             background: #F8FAF0;
             gap: 1.5rem;
             overflow: auto; 
-
+            &::-webkit-scrollbar {
+              width: 4px;
+            }
+            &::-webkit-scrollbar-track {
+              background-color: #d9e7ca;
+              border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb {
+              border-radius: 10px;
+              background-color: #103727
+            }
             .searchTripCard{
                 width: 100%;
                 height: 3rem;
@@ -38,11 +49,11 @@
             }
 
             .AddBtn{
-                position: absolute;
+                position: fixed;
                 width: 3rem;
                 height: 3rem;
                 top: calc(100vh - 70px - 60px);
-                left: 43%;
+                left: calc(50% - 4rem);
                 cursor: pointer;
             }
         }
@@ -51,20 +62,21 @@
             display: flex;
             width: 50%;
             background: #EDEFE5;
+            padding: 3% 5%;
         }
     }
 
-    .footer{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        background: #D9E7CA;
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    background: #d9e7ca;
 
-        p{
-            font-size: 0.8rem;
-            color: #525252;
-        }
+    p {
+      font-size: 0.8rem;
+      color: #525252;
     }
   }
+}
