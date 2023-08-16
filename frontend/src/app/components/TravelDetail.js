@@ -16,7 +16,7 @@ export default function TripCard({ trip, schedules }) {
     return newGroups;
   }, {});
 
-  console.log("dggdgd", groupedSchedules);
+  // console.log("dggdgd", groupedSchedules);
   return (
     <div
       className={tripcard.tripCard}

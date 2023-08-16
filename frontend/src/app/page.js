@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Nav from "@/components/Nav";
 import SearchTripCard from "@/components/SearchTripCard";
 import TripCard from "@/components/TripCard";
@@ -85,52 +87,46 @@ const schedules = [
     trip_day: 3,
   },
 ];
+
 export default function Home() {
   const [mode, setMode] = useState("start");
+
   return (
     <main className={styles.main}>
-      {/* navbar */}
-      {/* <nav className={styles.navbar}></nav> */}
-      <Nav changeToStart={() => setMode("start")} />
-      {/* main */}
-      <div className={styles.page}>
-        <div className={styles.leftPage}>
-          {/* search box */}
-          <div className={styles.searchTripCard}>
-            <SearchTripCard />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Nav changeToStart={() => setMode("start")} />
+
+        <div className={styles.page}>
+          <div className={styles.leftPage}>
+            <div className={styles.searchTripCard}>
+              <SearchTripCard />
+            </div>
+
+            <div className={styles.tripcard}>
+              <TripCard changeToDetail={() => setMode("detailed")} />
+              <TripCard />
+              <TripCard />
+            </div>
+
+            <button
+              type="button"
+              className={styles.AddBtn}
+              onClick={() => setMode("create")}
+            >
+              <Image src="/addBtn.svg" alt="cover" fill objectFit="cover" />
+            </button>
           </div>
 
-          {/* trip card */}
-          <div className={styles.tripcard}>
-            <TripCard changeToDetail={() => setMode("detailed")} />
-            <TripCard />
-            <TripCard />
+          <div className={styles.rightPage}>
+            {mode === "start" && <StartMode />}
+            {mode === "detailed" && (
+              <TravelDetail trip={trip} schedules={schedules} />
+            )}
+            {mode === "create" && <CreateMode />}
           </div>
-
-          {/* + button */}
-          <button
-            type="button"
-            className={styles.AddBtn}
-            onClick={() => setMode("create")}
-          >
-            <Image src="/addBtn.svg" alt="cover" fill objectFit="cover" />
-          </button>
         </div>
+      </LocalizationProvider>
 
-        <div className={styles.rightPage}>
-          {/* start mode */}
-          {mode === "start" && <StartMode />}
-
-          {/* detailed mode */}
-          {mode === "detailed" && (
-            <TravelDetail trip={trip} schedules={schedules} />
-          )}
-          {/* create mode */}
-          {mode === "create" && <CreateMode />}
-        </div>
-      </div>
-
-      {/* footer */}
       <footer className={styles.footer}>
         <p>關於我們 · 隱私權條款 · Cookie 條款 · © 2023 ChiTou, Inc.</p>
       </footer>
