@@ -10,7 +10,6 @@ import TripCard from "@/components/TripCard";
 import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
-import EditTrip from "./components/EditTrip";
 import styles from "@/styles/css-modules/page.module.scss";
 
 const trip = {
@@ -122,7 +121,7 @@ export default function Home() {
           <div className={styles.rightPage}>
             {mode === "start" && <StartMode />}
             {mode === "detailed" && (
-              <EditTrip trip={trip} schedules={schedules} />
+              <TravelDetail trip={trip} schedules={schedules} />
             )}
             {mode === "create" && <CreateMode />}
           </div>

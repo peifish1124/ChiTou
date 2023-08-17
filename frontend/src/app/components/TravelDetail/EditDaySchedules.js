@@ -1,16 +1,37 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Schedule from "./Schedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
 export default function DaySchedules({ startDate, tripDay, daySchedules }) {
   const [expanded, setExpanded] = useState(true);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
-  const sortedDaySchedules = [...daySchedules].sort(
-    (a, b) => a.sequence - b.sequence,
+  const [sortedDaySchedules, setSortedDaySchedules] = useState(
+    [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
+  // const sortedDaySchedules = [...daySchedules].sort(
+  //   (a, b) => a.sequence - b.sequence,
+  // );
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    const { source, destination } = result;
+    const newSortedSchedules = Array.from(sortedDaySchedules);
+    const [movedItem] = newSortedSchedules.splice(source.index, 1);
+    newSortedSchedules.splice(destination.index, 0, movedItem);
+
+    setSortedDaySchedules(newSortedSchedules);
+  };
+  useEffect(() => {
+    // console.log(sortedDaySchedules);
+  }, [sortedDaySchedules]);
   return (
     <div className={styles.daySchedules}>
       <div className={styles.daySchedules__header}>
@@ -69,18 +90,37 @@ export default function DaySchedules({ startDate, tripDay, daySchedules }) {
         </button>
       </div>
       {expanded && (
-        <>
-          <div className={styles.schedule__key}>
-            <p style={{ width: "25%" }}>地點</p>
-            <p style={{ width: "25%" }}>停留時間</p>
-            <p style={{ width: "50%" }}>備註</p>
-          </div>
-          <ul class={styles.timeline}>
-            {sortedDaySchedules.map((schedule) => (
-              <Schedule key={schedule.id} schedule={schedule} />
-            ))}
-          </ul>
-        </>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="scheduleList">
+            {(provided) => (
+              <ul
+                className={styles.timeline}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {sortedDaySchedules.map((schedule, index) => (
+                  <Draggable
+                    key={schedule.id}
+                    draggableId={schedule.id.toString()}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <li
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <Schedule key={schedule.id} schedule={schedule} />
+                      </li>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
     </div>
   );

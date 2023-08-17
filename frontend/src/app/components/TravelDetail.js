@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import dayjs from "dayjs";
-import DaySchedules from "./TravelDetail/DaySchedules";
+import DaySchedules from "./TravelDetail/EditDaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function TripCard({ trip, schedules }) {
