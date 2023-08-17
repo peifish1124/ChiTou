@@ -1,7 +1,7 @@
 .daySchedules {
   width: 100%;
   .daySchedules__header {
-    width: 30%;
+    width: 33%;
     font-size: 1.125rem;
     font-weight: 700;
     color: #525252;
@@ -9,6 +9,11 @@
     align-items: center;
     justify-content: space-between;
     margin: 0 0 0.5rem 0;
+
+    h2{
+      width: 8rem;
+      flex-shrink: 0;
+    }
   }
 
   .editDaySchedules__header {

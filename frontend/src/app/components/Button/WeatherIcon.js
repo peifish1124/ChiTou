@@ -1,6 +1,6 @@
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
-export default function WeatherBtn() {
+export default function WeatherIcon() {
   return (
     <div className={styles.weather}>
       <svg

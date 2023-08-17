@@ -8,7 +8,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TextField } from "@mui/material";
-import WeatherBtn from "../Button/WeatherBtn";
+import WeatherIcon from "../Button/WeatherIcon";
 import EditSchedule from "./EditSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
@@ -46,13 +46,13 @@ export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
   return (
     <div className={styles.daySchedules}>
       <div className={styles.editDaySchedules__header} style={{}}>
-        <div style={{ width: "25%" }}>
+        <div className={styles.daySchedules__header}>
           <h2>
             {`Day 
           ${tripDay} (
           ${targetDate.format("MM/DD")} )`}
           </h2>
-          <WeatherBtn />
+          <WeatherIcon />
           <button
             type="button"
             className={styles.daySchedules__header__button}
