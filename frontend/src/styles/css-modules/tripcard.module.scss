@@ -50,4 +50,20 @@
       gap: 0.3rem;
     }
   }
+  .editBtn{
+    position: fixed;
+    width: 2rem;
+    height: 2rem;
+    top: calc(100vh - 142px);
+    left: 91.5vw;
+    cursor: pointer;
+  }
+  .returnBtn{
+    position: fixed;
+    width: 5rem;
+    height: 2.5rem;
+    top: calc(100vh - 145px);
+    left: 88vw;
+    cursor: pointer;
+  }
 }
