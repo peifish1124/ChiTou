@@ -7,4 +7,7 @@ router.post('/', userController.authorization, scheduleController.create);
 router.put('/:id', userController.authorization, scheduleController.update);
 router.delete('/:id', userController.authorization, scheduleController.delete);
 
+router.post('/:id/like', userController.authorization, scheduleController.like);
+router.delete('/:id/unlike', userController.authorization, scheduleController.unlike);
+
 module.exports = router;

@@ -139,3 +139,49 @@ exports.reorder = async (tripId, tripDay, sequence) => {
     connection.release();
   }
 }
+
+exports.like = async (userId, scheduleId) => {
+  const connection = await poolConnection();
+  const query = `
+    INSERT INTO likes (schedule_id, user_id)  
+    VALUES (?, ?)
+    `;
+
+  try {
+    const [result] = await connection.query(query, [scheduleId, userId]);
+    if (result.affectedRows === 1) {
+      return {
+        id: scheduleId,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    connection.release();
+  }
+}
+
+exports.unlike = async (userId, scheduleId) => {
+  const connection = await poolConnection();
+  const query = `
+    DELETE FROM likes
+    WHERE schedule_id = ? AND user_id = ?
+    `;
+
+  try {
+    const [result] = await connection.query(query, [scheduleId, userId]);
+    if (result.affectedRows === 1) {
+      return {
+        id: scheduleId,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    connection.release();
+  }
+}

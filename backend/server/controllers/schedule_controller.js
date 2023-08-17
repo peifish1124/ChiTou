@@ -131,3 +131,69 @@ exports.delete = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+exports.like = async (req, res) => {
+  console.log('Schedule Like');
+
+  // get id from url
+  const scheduleId = req.params.id;
+  const userId = req.userData.id;
+
+  if (!userId || !scheduleId || Number.isNaN(Number(scheduleId))) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const schedule = await scheduleModel.like(userId, Number(scheduleId));
+    if (schedule === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    console.log('Schedule Like Success');
+    return res.status(200).json({
+      data: {
+        schedule: schedule,
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+}
+
+exports.unlike = async (req, res) => {
+  console.log('Schedule Unlike');
+
+  // get id from url
+  const scheduleId = req.params.id;
+  const userId = req.userData.id;
+
+  if (!userId || !scheduleId || Number.isNaN(Number(scheduleId))) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const schedule = await scheduleModel.unlike(userId, Number(scheduleId));
+    if (schedule === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    console.log('Schedule Unlike Success');
+    return res.status(200).json({
+      data: {
+        schedule: schedule,
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+}
