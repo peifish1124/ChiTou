@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import dayjs from "dayjs";
 import Image from "next/image";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
@@ -35,11 +36,17 @@ export default function CreateMode() {
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
-    if (endDate && date > endDate) {
-      // setError(true);
-    } else {
-      // setError(false);
-    }
+    // console.log(date);
+
+    // 進行格式轉換成所需的格式
+    // const dayjsDate = dayjs(date);
+    // const formattedDate = dayjsDate.format("YYYY-MM-DD");
+    // console.log(formattedDate);
+    // if (endDate && date > endDate) {
+    //   // setError(true);
+    // } else {
+    //   // setError(false);
+    // }
   };
   const handleEndDateChange = (date) => {
     setEndDate(date);

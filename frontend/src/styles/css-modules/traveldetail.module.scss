@@ -9,10 +9,31 @@
     align-items: center;
     justify-content: space-between;
     margin: 0 0 0.5rem 0;
+  }
+
+  .editDaySchedules__header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #525252;
+    display: flex;
+    align-items: center;
+    
+    margin: 0 0 0.5rem 0;
+    .weather {
+      display: none;
+    }
+    .addBtn{
+      position: relative;
+      width: 2rem;
+      height: 2rem;
+    }
     .weather {
       display: none;
     }
   }
+
   .schedule__key {
     font-weight: 500;
     font-size: 1rem;
@@ -88,4 +109,85 @@
     flex-grow: 1;
     justify-content: space-around;
   }
+
+  .schedule{
+    li {
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .note {
+      width: 35%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &.expand {
+        white-space: normal; /* 展開時取消截斷 */
+      }
+    }
+  }
+  .scheduleTitle{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .createSchedule{
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 6rem;
+    
+    input, textarea{
+      font-family: Outfit;
+      font-size: 15px;
+      font-weight: 500;
+      color: #525252;
+    }
+  }
+  .scheduleBtn{
+    display: flex;
+    justify-content: space-between;
+    width: 10%;
+    padding-left: 3%;
+
+    button{
+      position: relative;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+.hiddenDragBtn {
+  position: absolute;
+  left: -1rem;
+
+  button{
+    width: 1rem;
+    height: 1rem;
+  }
+}
+.scheduleListItem .hiddenBtn {
+  justify-content: space-between;
+  width: 10%;
+  padding-left: 3%;
+
+  .editbutton{
+    position: relative;
+    margin-top: 0.1rem;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  .removebutton{
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+.scheduleListItem:hover .hiddenBtn {
+  display: block;
 }
