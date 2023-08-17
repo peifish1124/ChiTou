@@ -1,5 +1,4 @@
 import { useState } from "react";
-import GoogleMapReact from "google-map-react";
 import debounce from "@/utils/debounce.js";
 
 const useTextSearch = () => {
