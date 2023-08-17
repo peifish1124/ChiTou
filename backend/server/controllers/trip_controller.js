@@ -198,13 +198,14 @@ exports.search = async (req, res) => {
   console.log('Trip Search');
   //get keyword
   const { keyword } = req.query;
+  const { 'id': myId } = req.userData;
 
   if (typeof keyword == 'undefined') {
     return res.status(200).json({ data: { trips: [] } });
   }
 
   try {
-    const trips = await tripModel.search(keyword);
+    const trips = await tripModel.search(keyword, myId);
     if (trips === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });

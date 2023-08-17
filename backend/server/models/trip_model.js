@@ -247,17 +247,18 @@ exports.changeSequence = async (trip_id, schedule_sequence) => {
   }
 };
 
-exports.search = async (keyword) => {
+exports.search = async (keyword, userId) => {
   const connection = await poolConnection();
   const query = `
-    SELECT id, name, picture, destination, start_date, end_date, member_count
-    FROM trips
-    WHERE name LIKE ?
+    SELECT T.id, T.name, T.picture, T.destination, T.start_date, T.end_date, T.member_count
+    FROM trips AS T
+    LEFT JOIN members AS M ON T.id = M.trip_id
+    WHERE T.name LIKE ? AND M.user_id = ?
     ORDER BY name DESC, id DESC
     `;
 
   try {
-    const [rows] = await connection.query(query, [`%${keyword}%`]);
+    const [rows] = await connection.query(query, [`%${keyword}%`, userId]);
     if (rows.length === 0) {
       return [];
     }
