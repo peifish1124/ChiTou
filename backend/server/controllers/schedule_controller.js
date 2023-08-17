@@ -131,3 +131,121 @@ exports.delete = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+
+exports.changeSequence = async (req, res) => {
+  console.log('Change Schedule Sequence');
+
+  if (req.headers['content-type'] !== 'application/json') {
+    const [errorCode, errorMessage] = errorRes.contentTypeError();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  const { trip_id, sequence_data } = req.body;
+  if (!trip_id || !sequence_data) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const idArray = sequence_data.map(obj => obj.id);
+    const isUnderSameTrip = await scheduleModel.checkIdsUnderSameTrip(trip_id, idArray);
+    if (isUnderSameTrip === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isUnderSameTrip) {
+      const [errorCode, errorMessage] = errorRes.notTheSameTrip();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    const isAllScheduleIds = await scheduleModel.checkReceiveAllScheduleIds(trip_id, idArray);
+    if (isAllScheduleIds === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isAllScheduleIds) {
+      const [errorCode, errorMessage] = errorRes.sequenceDataNotEnough();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    const new_sequence = await scheduleModel.changeSequence(trip_id, sequence_data);
+    if (new_sequence === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    console.log('Change Schedule Sequence Success');
+    return res.status(200).json({
+      data: { trip: {id: new_sequence} }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+}; 
+
+exports.like = async (req, res) => {
+  console.log('Schedule Like');
+
+  // get id from url
+  const scheduleId = req.params.id;
+  const userId = req.userData.id;
+
+  if (!userId || !scheduleId || Number.isNaN(Number(scheduleId))) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const schedule = await scheduleModel.like(userId, Number(scheduleId));
+    if (schedule === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    console.log('Schedule Like Success');
+    return res.status(200).json({
+      data: {
+        schedule: schedule,
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+}
+
+exports.unlike = async (req, res) => {
+  console.log('Schedule Unlike');
+
+  // get id from url
+  const scheduleId = req.params.id;
+  const userId = req.userData.id;
+
+  if (!userId || !scheduleId || Number.isNaN(Number(scheduleId))) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const schedule = await scheduleModel.unlike(userId, Number(scheduleId));
+    if (schedule === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    console.log('Schedule Unlike Success');
+    return res.status(200).json({
+      data: {
+        schedule: schedule,
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+}
