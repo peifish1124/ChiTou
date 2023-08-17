@@ -141,3 +141,55 @@ exports.uploadPicture = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+exports.changeSequence = async (req, res) => {
+  console.log('Change Schedule Sequence');
+
+  if (req.headers['content-type'] !== 'application/json') {
+    const [errorCode, errorMessage] = errorRes.contentTypeError();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  const { 'id': trip_id, trip_day } = req.params;
+  const { sequence_data } = req.body;
+  if (!sequence_data) {
+    const [errorCode, errorMessage] = errorRes.emptyInput();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+  try {
+    const idArray = sequence_data.map(obj => obj.id);
+    const isUnderSameTrip = await tripModel.checkIdsUnderSameTrip(Number(trip_id), idArray);
+    if (isUnderSameTrip === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isUnderSameTrip) {
+      const [errorCode, errorMessage] = errorRes.notTheSameTrip();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    const isAllScheduleIds = await tripModel.checkReceiveAllScheduleIds(Number(trip_id), Number(trip_day), idArray);
+    if (isAllScheduleIds === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isAllScheduleIds) {
+      const [errorCode, errorMessage] = errorRes.sequenceDataNotEnough();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    const new_sequence = await tripModel.changeSequence(Number(trip_id), sequence_data);
+    if (new_sequence === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    console.log('Change Schedule Sequence Success');
+    return res.status(200).json({
+      data: { trip: {id: new_sequence} }
+    });
+  } catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};

@@ -187,3 +187,62 @@ exports.uploadPicture = async (tripId, filename) => {
     connection.release();
   }
 };
+
+exports.checkIdsUnderSameTrip = async (trip_id, ids) => {
+  const connection = await poolConnection();
+  const query = `SELECT trip_id FROM schedules WHERE id IN (?)`;
+
+  try {
+    const [result] = await connection.query(query, [ids]);
+    return result.every(element => element.trip_id === trip_id);
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
+exports.checkReceiveAllScheduleIds = async (trip_id, trip_day, ids) => {
+  const connection = await poolConnection();
+  const query = `SELECT id FROM schedules WHERE trip_id = ? AND trip_day = ?`;
+
+  try {
+    const [result] = await connection.query(query, [trip_id, trip_day]);
+    const schedule_ids = result.map(obj => obj.id);
+    if (schedule_ids.length !== ids.length) {
+      return false;
+    }
+
+    const sortedArr1 = schedule_ids.slice().sort();
+    const sortedArr2 = ids.slice().sort();
+
+    return sortedArr1.every((element, index) => element === sortedArr2[index]);
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+
+};
+
+exports.changeSequence = async (trip_id, schedule_sequence) => {
+  const connection = await poolConnection();
+  const query = `UPDATE schedules SET sequence = ? WHERE id = ?`;
+
+  try {
+    for (var i = 0; i < schedule_sequence.length; i++) {
+      const id = schedule_sequence[i].id;
+      const sequence = schedule_sequence[i].sequence;
+
+      await connection.query(query, [sequence, id]);
+    }
+    return trip_id;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
