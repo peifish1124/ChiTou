@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import DaySchedules from "./TravelDetail/EditDaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
-export default function TripCard({ trip, schedules }) {
+export default function EditTrip({ trip, schedules }) {
   const groupedSchedules = schedules.reduce((groups, schedule) => {
     const tripDay = schedule.trip_day;
     const newGroups = { ...groups };
@@ -50,9 +50,9 @@ export default function TripCard({ trip, schedules }) {
           />
         ))}
       </div>
-      <div className={tripcard.editBtn}>
+      <div className={tripcard.returnBtn}>
         <button type="button">
-          <Image src="/editBtn.svg" alt="cover" fill objectFit="cover" />
+          <Image src="/returnBtn.svg" alt="return" fill />
         </button>
       </div>
     </div>

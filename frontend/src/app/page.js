@@ -23,6 +23,7 @@ const trip = {
 };
 const schedules = [
   {
+    // 之後改成 trip_id
     id: 1,
     place: "台北101",
     duration: 2,
