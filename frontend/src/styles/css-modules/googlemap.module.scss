@@ -1,0 +1,181 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  .search {
+    width: 110%;
+    height: 3rem;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+    background: #f0f2f5;
+    color: #1a2027;
+    padding: 0.5rem;
+    margin: 0 0 0.5rem 0;
+    font-family:
+      IBM Plex Sans,
+      sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 2px #f3f6f9;
+
+    &:hover {
+      border-color: #87c28f;
+    }
+
+    &:focus {
+      border-color: #87c28f;
+      box-shadow: 0 0 0 3px rgba(24, 107, 46, 0.5);
+    }
+
+    &:focus-visible {
+      outline: 0;
+    }
+  }
+  .filterBar {
+    width: 110%;
+    padding: 0 2.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    .filter {
+      display: flex;
+      width: 4.5rem;
+      height: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      border-radius: 100px;
+      background: #f0f2f5;
+      color: #3d4a35;
+      /* M3/Elevation Light/1 */
+      box-shadow:
+        0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+      &:hover {
+        background: #87c28f;
+        color: #fff;
+      }
+      &:focus {
+        background: #87c28f;
+        color: #fff;
+      }
+      &:focus-visible {
+        outline: 0;
+      }
+      .filterTitle {
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-align: center;
+      }
+    }
+  }
+}
+.selectPlace {
+  position: fixed;
+  bottom: 90px;
+  left: 5%;
+  display: flex;
+  width: 270px;
+  min-height: 330px;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: self-start;
+  border-radius: 12px;
+  border: 1px solid #cac4d0;
+  background: #e0e3da;
+  .placeName {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3d4a35;
+  }
+  .placeRating {
+    width: 100%;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  .placePic {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+  }
+  .placeOperating {
+    width: 100%;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  .funcBtn {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    .addBtn {
+      color: #fff;
+      border-radius: 100px;
+      background: #103727;
+      width: 4.5rem;
+      height: 40px;
+      text-align: center;
+      &:hover {
+        background: transparent;
+        color: #103727;
+        border: 1px solid #103727;
+      }
+      &:focus {
+        background: transparent;
+        color: #103727;
+        border: 1px solid #103727;
+      }
+      &:focus-visible {
+        outline: 0;
+      }
+    }
+    .cancelBtn {
+      color: #103727;;
+      border-radius: 100px;
+      width: 4.5rem;
+      height: 40px;
+      text-align: center;
+      border: 1px solid #103727;
+      &:hover {
+        color: #fff;
+        background: #103727;
+      }
+      &:focus {
+        color: #fff;
+        background: #103727;
+      }
+      &:focus-visible {
+        outline: 0;
+      }
+    }
+  }
+}
