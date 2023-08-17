@@ -48,6 +48,10 @@ module.exports = {
   scheduleNotUnique: () => {
     return [500, 'Trip Day & Sequence with the Id are not Valid'];
   },
+
+  weatherConnectFailed: () => {
+    return [500, 'Server Error - Connecting to Weather API Failed'];
+  },
   
   dbConnectFailed: () => {
     return [500, 'Server Error - Connecting to db Failed'];
