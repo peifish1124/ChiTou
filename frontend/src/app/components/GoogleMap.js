@@ -22,14 +22,15 @@ function MyPositionMarker({ mapZoom }) {
       <Image
         src="/my_position.svg"
         alt="Icon"
-        width={iconWidth}
-        height={iconHeight}
+        width={iconWidth || 40}
+        height={iconHeight || 40}
       />
     </div>
   );
 }
 
 function FilterMarker({ mapZoom, setClickPlace }) {
+  console.log("mapZoom", mapZoom);
   const iconWidth = (27 * mapZoom) / 15;
   const iconHeight = (43 * mapZoom) / 15;
   const xOffset = iconWidth / 2;
@@ -46,8 +47,8 @@ function FilterMarker({ mapZoom, setClickPlace }) {
       <Image
         src="/Spotlight_Marker_Red.svg"
         alt="Icon"
-        width={iconWidth}
-        height={iconHeight}
+        width={iconWidth || 27}
+        height={iconHeight || 43}
       />
     </button>
   );
@@ -152,6 +153,27 @@ export default function GoogleMap() {
         onKeyDown={handleSearchKeyDown}
         autoComplete="off"
       />
+      {searchTextResults && (
+        <div className={styles.searchResult}>
+          {searchTextResults.map((result) => (
+            <button
+              type="button"
+              key={result.id}
+              className={styles.searchResultItem}
+              onClick={() => {
+                console.log(result);
+                setMyPosition({
+                  lat: result.geometry.location.lat(),
+                  lng: result.geometry.location.lng(),
+                });
+                setFilterPlaces([]);
+              }}
+            >
+              {result.formatted_address}
+            </button>
+          ))}
+        </div>
+      )}
       <div className={styles.filterBar}>
         <button
           type="button"
@@ -196,7 +218,7 @@ export default function GoogleMap() {
         onGoogleApiLoaded={({ map, maps }) => {
           handleApiLoaded(map, maps);
         }}
-        onBoundsChange={(center, zoom) => {
+        onBoundsChange={(zoom) => {
           console.log(zoom);
           setMapZoom(zoom);
         }}
