@@ -118,6 +118,7 @@ exports.search = async (keyword) => {
   } catch (err) {
     console.error(err);
     return null;
+  } finally {
+    connection.release();
   }
 };
-
