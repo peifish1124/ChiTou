@@ -193,3 +193,32 @@ exports.changeSequence = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 };
+
+exports.search = async (req, res) => {
+  console.log('Trip Search');
+  //get keyword
+  const { keyword } = req.query;
+
+  if (typeof keyword == 'undefined') {
+    return res.status(200).json({ data: { trips: [] } });
+  }
+
+  try {
+    const trips = await tripModel.search(keyword);
+    if (trips === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
+    // 200 OK
+    return res.status(200).json({
+      data: {
+        trips: trips
+      }
+    });
+  }  catch (err) {
+    console.log(err);
+    const [errorCode, errorMessage] = errorRes.dbConnectFailed();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+};

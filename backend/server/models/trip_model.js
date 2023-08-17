@@ -246,3 +246,38 @@ exports.changeSequence = async (trip_id, schedule_sequence) => {
     connection.release();
   }
 };
+
+exports.search = async (keyword) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT id, name, picture, destination, start_date, end_date, member_count
+    FROM trips
+    WHERE name LIKE ?
+    ORDER BY name DESC, id DESC
+    `;
+
+  try {
+    const [rows] = await connection.query(query, [`%${keyword}%`]);
+    if (rows.length === 0) {
+      return [];
+    }
+
+    const trips = rows.map((row) => {
+      return {
+        id: row.id,
+        name: row.name,
+        picture: row.picture,
+        destination: row.destination,
+        start_date: row.start_date,
+        end_date: row.end_date,
+        member_count: row.member_count
+      }
+    });
+    return trips;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
