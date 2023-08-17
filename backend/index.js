@@ -6,6 +6,7 @@ const userRoute = require('./server/routes/user_route');
 const scheduleRoute = require('./server/routes/schedule_route');
 const tripRoute = require('./server/routes/trip_route');
 const eventRoute = require('./server/routes/event_route');
+const weatherRoute = require('./server/routes/weather_route');
 
 const app = express();
 const port = process.env.WEB_PORT;
@@ -18,6 +19,7 @@ app.use('/users', userRoute);
 app.use('/schedules', scheduleRoute);
 app.use('/trips', tripRoute);
 app.use('/events', eventRoute);
+app.use('/weathers', weatherRoute);
 
 app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');
