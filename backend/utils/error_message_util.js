@@ -37,9 +37,18 @@ module.exports = {
     return [403, 'Signin Failed - Wrong Password'];
   },
 
+  notTheSameTrip: () => {
+    return [500, 'Ids are not under the same trip'];
+  },
+
+  sequenceDataNotEnough: () => {
+    return [500, 'Ids are not enough'];
+  },
+
   scheduleNotUnique: () => {
     return [500, 'Trip Day & Sequence with the Id are not Valid'];
   },
+  
   dbConnectFailed: () => {
     return [500, 'Server Error - Connecting to db Failed'];
   },

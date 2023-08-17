@@ -138,8 +138,7 @@ exports.reorder = async (tripId, tripDay, sequence) => {
   } finally {
     connection.release();
   }
-}
-
+};
 
 exports.checkIdsUnderSameTrip = async (trip_id, ids) => {
   const connection = await poolConnection();
@@ -222,7 +221,7 @@ exports.like = async (userId, scheduleId) => {
   } finally {
     connection.release();
   }
-}
+};
 
 exports.unlike = async (userId, scheduleId) => {
   const connection = await poolConnection();
@@ -245,4 +244,4 @@ exports.unlike = async (userId, scheduleId) => {
   } finally {
     connection.release();
   }
-}
+};
