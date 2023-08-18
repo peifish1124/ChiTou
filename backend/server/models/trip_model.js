@@ -1,11 +1,11 @@
 const poolConnection = require('../../utils/db_connection');
 
-exports.createTrip = async (name, destination, start_date, end_date, user_ids) => {
+exports.createTrip = async (creatorId, name, destination, start_date, end_date, user_ids) => {
     const connection = await poolConnection();
     
     const query = `
-      INSERT INTO trips (name, destination, start_date, end_date, member_count)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO trips (creator_id, name, destination, start_date, end_date, member_count)
+      VALUES (?, ?, ?, ?, ?, ?)
         `;
 
     const valuesTemplate = user_ids.map(() => "(?, ?)").join(",");
@@ -15,7 +15,7 @@ exports.createTrip = async (name, destination, start_date, end_date, user_ids) =
       `
 
     try {
-      const [result] = await connection.query(query, [name, destination, start_date, end_date, user_ids.length]);
+      const [result] = await connection.query(query, [creatorId, name, destination, start_date, end_date, user_ids.length]);
       if(result.affectedRows != 1) return null;
 
       const values = user_ids.flatMap((user_id) => [user_id, result.insertId]);
