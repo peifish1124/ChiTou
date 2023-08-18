@@ -3,10 +3,10 @@
 import Image from "next/image";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
-export default function InfoCard({ setClickPlace }) {
+export default function InfoCard({ placeDetails, setPlaceDetails }) {
   return (
     <div className={styles.selectPlace}>
-      <div className={styles.placeName}>星巴克</div>
+      <div className={styles.placeName}>{placeDetails.name}</div>
       <div className={styles.placeRating}>
         <div className={styles.ratingStar}>
           <svg
@@ -23,16 +23,39 @@ export default function InfoCard({ setClickPlace }) {
           </svg>
         </div>
         <div className={styles.ratingTitle}>評分</div>
-        <div className={styles.ratingScore}>4.5</div>
+        <div className={styles.ratingScore}>{placeDetails.rating}</div>
 
-        <div className={styles.ratingCount}>{`(1000) `}</div>
+        <div className={styles.ratingCount}>
+          ({placeDetails.user_ratings_total})
+        </div>
       </div>
       <div className={styles.placePic}>
-        <Image src="/user-chou.png" alt="starbucks" fill objectFit="cover" />
+        <Image
+          src={placeDetails.photos[0].getUrl()}
+          alt={placeDetails.name}
+          fill
+          objectFit="cover"
+        />
       </div>
       <div className={styles.placeOperating}>
-        <p style={{ color: "green" }}>營業中</p>
-        <div className={styles.placeTime}>營業時間：10:00 - 22:00</div>
+        {placeDetails.current_opening_hours ? (
+          <div
+            style={{
+              color: placeDetails.current_opening_hours.open_now
+                ? "green"
+                : "red",
+            }}
+          >
+            {placeDetails.current_opening_hours.open_now ? "營業中" : "休息中"}
+          </div>
+        ) : (
+          <div>營業時間資訊不可用</div>
+        )}
+        <div className={styles.placeTime}>
+          {placeDetails.current_opening_hours
+            ? `營業時間：${placeDetails.current_opening_hours.periods[0].open.time} - ${placeDetails.current_opening_hours.periods[0].close.time}`
+            : ""}
+        </div>
       </div>
       <div className={styles.funcBtn}>
         <button type="button" className={styles.addBtn}>
@@ -41,7 +64,7 @@ export default function InfoCard({ setClickPlace }) {
         <button
           type="button"
           className={styles.cancelBtn}
-          onClick={() => setClickPlace(false)}
+          onClick={() => setPlaceDetails(null)}
         >
           取消
         </button>

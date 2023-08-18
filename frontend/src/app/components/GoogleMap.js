@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import GoogleMapReact from "google-map-react";
 import InfoCard from "./GoogleMap/InfoCard";
@@ -29,8 +29,7 @@ function MyPositionMarker({ mapZoom }) {
   );
 }
 
-function FilterMarker({ mapZoom, setClickPlace }) {
-  console.log("mapZoom", mapZoom);
+function FilterMarker({ mapZoom, placeId, getPlaceDetail }) {
   const iconWidth = (27 * mapZoom) / 15;
   const iconHeight = (43 * mapZoom) / 15;
   const xOffset = iconWidth / 2;
@@ -42,10 +41,36 @@ function FilterMarker({ mapZoom, setClickPlace }) {
         position: "absolute",
         transform: `translate(-${xOffset}px, -${yOffset}px)`,
       }}
-      onClick={() => setClickPlace(true)}
+      onClick={() => {
+        getPlaceDetail(placeId);
+      }}
     >
       <Image
         src="/Spotlight_Marker_Red.svg"
+        alt="Icon"
+        width={iconWidth || 27}
+        height={iconHeight || 43}
+      />
+    </button>
+  );
+}
+
+function SelectedMarker({ mapZoom = 15, setPlaceDetails }) {
+  const iconWidth = (27 * mapZoom) / 15;
+  const iconHeight = (43 * mapZoom) / 15;
+  const xOffset = iconWidth / 2;
+  const yOffset = iconHeight;
+  return (
+    <button
+      type="button"
+      style={{
+        position: "absolute",
+        transform: `translate(-${xOffset}px, -${yOffset}px)`,
+      }}
+      // onClick={setPlaceDetails(null)}
+    >
+      <Image
+        src="/Spotlight_Marker_Green.svg"
         alt="Icon"
         width={iconWidth || 27}
         height={iconHeight || 43}
@@ -64,14 +89,15 @@ export default function GoogleMap() {
   const [mapInstance, setMapInstance] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [filterPlaces, setFilterPlaces] = useState([]);
+  const [placeDetails, setPlaceDetails] = useState(null);
   const [mapZoom, setMapZoom] = useState(15);
-  const [showPlaceInfo, setShowPlaceInfo] = useState(false);
-  const [clickPlace, setClickPlace] = useState(false);
   const {
     searchText,
     searchTextResults,
     setAutoMapApi,
     handleSearchTextChange,
+    setSearchText,
+    setSearchTextResults,
   } = useTextSearch();
   const handleApiLoaded = (map, maps) => {
     const geocoder = new maps.Geocoder();
@@ -95,14 +121,14 @@ export default function GoogleMap() {
     console.log("載入完成!");
   };
 
-  const findFilterLocation = () => {
+  const findFilterLocation = (keyword) => {
     if (mapApiLoaded) {
       const service = new mapApi.places.PlacesService(mapInstance);
 
       const request = {
         location: myPosition,
         rankBy: mapApi.places.RankBy.DISTANCE,
-        keyword: "餐廳",
+        keyword,
       };
 
       service.nearbySearch(request, (results, status) => {
@@ -114,6 +140,20 @@ export default function GoogleMap() {
     }
     console.log("findFilterLocation");
   };
+  const getPlaceDetail = (placeId) => {
+    const service = new mapApi.places.PlacesService(mapInstance);
+    const request = {
+      placeId,
+      // fields: ["name", "formatted_address", "place_id", "geometry"],
+    };
+    service.getDetails(request, (place, status) => {
+      if (status === mapApi.places.PlacesServiceStatus.OK) {
+        console.log(place);
+        setPlaceDetails(place);
+      }
+    });
+  };
+
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
       console.log("SearchFor");
@@ -140,6 +180,12 @@ export default function GoogleMap() {
     zoom: 15,
   };
 
+  useEffect(() => {
+    console.log("mapZoom", mapZoom);
+  }, [mapZoom]);
+  useEffect(() => {
+    console.log("placeDetails", placeDetails);
+  }, [placeDetails]);
   return (
     <div className={styles.container}>
       <input
@@ -153,23 +199,27 @@ export default function GoogleMap() {
         onKeyDown={handleSearchKeyDown}
         autoComplete="off"
       />
-      {searchTextResults && (
+      {searchTextResults && searchTextResults.length > 0 && (
         <div className={styles.searchResult}>
           {searchTextResults.map((result) => (
             <button
               type="button"
-              key={result.id}
+              key={result.place_id}
               className={styles.searchResultItem}
               onClick={() => {
                 console.log(result);
-                setMyPosition({
-                  lat: result.geometry.location.lat(),
-                  lng: result.geometry.location.lng(),
-                });
+                setSearchTextResults([]);
+                getPlaceDetail(result.place_id);
                 setFilterPlaces([]);
+                setSearchText(result.structured_formatting.main_text);
               }}
             >
-              {result.formatted_address}
+              <span className={styles.main_text}>
+                {result.structured_formatting.main_text}
+              </span>
+              <span className={styles.secondary_text}>
+                {result.structured_formatting.secondary_text}
+              </span>
             </button>
           ))}
         </div>
@@ -189,21 +239,41 @@ export default function GoogleMap() {
         >
           <div className={styles.filterTitle}>餐廳</div>
         </button>
-        <div className={styles.filter}>
+        <button
+          type="button"
+          className={styles.filter}
+          onClick={() => findFilterLocation("咖啡廳")}
+        >
           <div className={styles.filterTitle}>咖啡廳</div>
-        </div>
-        <div className={styles.filter}>
+        </button>
+        <button
+          type="button"
+          className={styles.filter}
+          onClick={() => findFilterLocation("景點")}
+        >
           <div className={styles.filterTitle}>觀光景點</div>
-        </div>
-        <div className={styles.filter}>
+        </button>
+        <button
+          type="button"
+          className={styles.filter}
+          onClick={() => findFilterLocation("住宿")}
+        >
           <div className={styles.filterTitle}>住宿</div>
-        </div>
-        <div className={styles.filter}>
+        </button>
+        <button
+          type="button"
+          className={styles.filter}
+          onClick={() => findFilterLocation("車站")}
+        >
           <div className={styles.filterTitle}>車站</div>
-        </div>
-        <div className={styles.filter}>
+        </button>
+        <button
+          type="button"
+          className={styles.filter}
+          onClick={() => findFilterLocation("購物")}
+        >
           <div className={styles.filterTitle}>購物</div>
-        </div>
+        </button>
       </div>
       <GoogleMapReact
         bootstrapURLKeys={{
@@ -213,12 +283,20 @@ export default function GoogleMap() {
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
         yesIWantToUseGoogleMapApiInternals
-        onChildMouseEnter={() => setShowPlaceInfo(true)}
-        onChildMouseLeave={() => setShowPlaceInfo(false)}
+        // onChildMouseEnter={(key, props) => {
+        //   const { placeId } = props;
+        //   console.log("Mouse enter on placeId:", placeId);
+        //   getPlaceDetail(placeId);
+        // }}
+        // onChildMouseLeave={(key, props) => {
+        //   const { placeId } = props;
+        //   console.log("Mouse leave on placeId:", placeId);
+        //   setPlaceDetails(null);
+        // }}
         onGoogleApiLoaded={({ map, maps }) => {
           handleApiLoaded(map, maps);
         }}
-        onBoundsChange={(zoom) => {
+        onBoundsChange={(center, zoom) => {
           console.log(zoom);
           setMapZoom(zoom);
         }}
@@ -233,18 +311,30 @@ export default function GoogleMap() {
         {filterPlaces.map((place) => (
           <FilterMarker
             icon={place.icon}
-            key={place.id}
+            key={place.place_id}
             lat={place.geometry.location.lat()}
             lng={place.geometry.location.lng()}
             text={place.name}
             placeId={place.place_id}
             mapZoom={mapZoom}
-            setClickPlace={setClickPlace}
+            getPlaceDetail={getPlaceDetail}
           />
         ))}
+        {placeDetails != null && (
+          <SelectedMarker
+            lat={placeDetails.geometry.location.lat()}
+            lng={placeDetails.geometry.location.lng()}
+            text={placeDetails.name}
+            mapZoom={mapZoom}
+            setPlaceDetails={setPlaceDetails}
+          />
+        )}
       </GoogleMapReact>
-      {(showPlaceInfo || clickPlace) && (
-        <InfoCard setClickPlace={setClickPlace} />
+      {placeDetails != null && (
+        <InfoCard
+          placeDetails={placeDetails}
+          setPlaceDetails={setPlaceDetails}
+        />
       )}
     </div>
   );
