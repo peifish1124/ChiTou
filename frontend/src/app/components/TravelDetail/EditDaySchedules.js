@@ -4,20 +4,34 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import dayjs from "dayjs";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Schedule from "./Schedule";
+import { TextField } from "@mui/material";
+import WeatherIcon from "../Button/WeatherIcon";
+import EditSchedule from "./EditSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
-export default function DaySchedules({ startDate, tripDay, daySchedules }) {
+export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
   const [expanded, setExpanded] = useState(true);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
+  const [isNewSchedule, setIsNewSchedule] = useState(false);
+  const [isDragDisabled, setIsDragDisabled] = useState(false);
+  const newSchedule = () => {
+    setIsNewSchedule(true);
+    setIsDragDisabled(true);
+  };
+  const removeNewSchedule = () => {
+    setIsNewSchedule(false);
+    setIsDragDisabled(false);
+  };
+  // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
     [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
-  // const sortedDaySchedules = [...daySchedules].sort(
-  //   (a, b) => a.sequence - b.sequence,
-  // );
+  useEffect(() => {
+    // console.log(sortedDaySchedules);
+  }, [sortedDaySchedules]);
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -29,98 +43,149 @@ export default function DaySchedules({ startDate, tripDay, daySchedules }) {
 
     setSortedDaySchedules(newSortedSchedules);
   };
-  useEffect(() => {
-    // console.log(sortedDaySchedules);
-  }, [sortedDaySchedules]);
   return (
     <div className={styles.daySchedules}>
-      <div className={styles.daySchedules__header}>
-        <h2>
-          {`Day 
-        ${tripDay} (
-        ${targetDate.format("MM/DD")} )`}
-        </h2>
-        <div className={styles.weather}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            viewBox="0 0 30 30"
-            fill="none"
+      <div className={styles.editDaySchedules__header} style={{}}>
+        <div className={styles.daySchedules__header}>
+          <h2>
+            {`Day 
+          ${tripDay} (
+          ${targetDate.format("MM/DD")} )`}
+          </h2>
+          <WeatherIcon />
+          <button
+            type="button"
+            className={styles.daySchedules__header__button}
+            onClick={() => setExpanded(!expanded)}
           >
-            <path d="M6.875 6.875H23.125V23.125H6.875V6.875Z" fill="#FF9800" />
-            <path
-              d="M3.74994 15.0002L14.9998 3.74992L26.2501 14.9998L15.0002 26.2501L3.74994 15.0002Z"
-              fill="#FF9800"
-            />
-            <path
-              d="M8.125 15C8.125 18.7981 11.2019 21.875 15 21.875C18.7975 21.875 21.875 18.7981 21.875 15C21.875 11.2019 18.7975 8.125 15 8.125C11.2019 8.125 8.125 11.2019 8.125 15Z"
-              fill="#FFEB3B"
-            />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              {expanded ? (
+                // up arrow
+                <path
+                  d="M5 12.5L10 7.5L15 12.5"
+                  stroke="#525252"
+                  stroke-width="2.66667"
+                />
+              ) : (
+                // down arrow
+                <path
+                  d="M15 7.5L10 12.5L5 7.5"
+                  stroke="#525252"
+                  stroke-width="2.66667"
+                />
+              )}
+            </svg>
+          </button>
         </div>
-        <button
-          type="button"
-          className={styles.daySchedules__header__button}
-          onClick={() => setExpanded(!expanded)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-          >
-            {expanded ? (
-              // up arrow
-              <path
-                d="M5 12.5L10 7.5L15 12.5"
-                stroke="#525252"
-                stroke-width="2.66667"
-              />
-            ) : (
-              // down arrow
-              <path
-                d="M15 7.5L10 12.5L5 7.5"
-                stroke="#525252"
-                stroke-width="2.66667"
-              />
-            )}
-          </svg>
-        </button>
+        <div className={styles.addBtn}>
+          <button type="button" onClick={newSchedule}>
+            <Image src="/addBtn.svg" alt="add button" fill />
+          </button>
+        </div>
+      </div>
+      <div className={styles.scheduleTitle}>
+        <div style={{ width: "25%" }}>
+          <p>地點</p>
+        </div>
+        <div style={{ width: "25%" }}>
+          <p>停留時間</p>
+        </div>
+        <div style={{ width: "25%" }}>
+          <p>筆記</p>
+        </div>
       </div>
       {expanded && (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="scheduleList">
-            {(provided) => (
-              <ul
-                className={styles.timeline}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {sortedDaySchedules.map((schedule, index) => (
-                  <Draggable
-                    key={schedule.id}
-                    draggableId={schedule.id.toString()}
-                    index={index}
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        <>
+          {isDragDisabled ? (
+            <ul class={styles.schedule}>
+              {sortedDaySchedules.map((schedule) => (
+                <EditSchedule key={schedule.id} schedule={schedule} />
+              ))}
+            </ul>
+          ) : (
+            <DragDropContext
+              onDragEnd={onDragEnd}
+              isDragDisabled={isDragDisabled}
+            >
+              <Droppable droppableId="scheduleList">
+                {(provided) => (
+                  <ul
+                    className={styles.schedule}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                   >
-                    {(provided) => (
-                      <li
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                    {sortedDaySchedules.map((schedule, index) => (
+                      <Draggable
+                        key={schedule.id}
+                        draggableId={schedule.id.toString()}
+                        index={index}
                       >
-                        <Schedule key={schedule.id} schedule={schedule} />
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
+                        {(provided) => (
+                          <li
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <EditSchedule
+                              key={schedule.id}
+                              schedule={schedule}
+                              isDragDisabled={isDragDisabled}
+                            />
+                          </li>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </Droppable>
+            </DragDropContext>
+          )}
+        </>
+      )}
+      {isNewSchedule && (
+        <div className={styles.createSchedule}>
+          <div style={{ width: "25%" }}>
+            <TextField
+              id="standard-basic"
+              // label="左方搜尋"
+              variant="standard"
+              style={{ width: "50%" }}
+            />
+          </div>
+          <div style={{ width: "25%" }}>
+            <TextField
+              id="standard-basic"
+              // label="停留時間"
+              variant="standard"
+              style={{ width: "50%" }}
+            />
+          </div>
+          <div style={{ width: "40%" }}>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              multiline
+              style={{ width: "100%", minHeight: "4rem" }}
+            />
+          </div>
+          <div className={styles.scheduleBtn}>
+            <button type="button">
+              <Image src="/check2.svg" alt="check button" fill />
+            </button>
+            <button type="button" onClick={removeNewSchedule}>
+              <Image src="/trashcan.svg" alt="remove button" fill />
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
