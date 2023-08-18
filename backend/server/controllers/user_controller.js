@@ -13,25 +13,34 @@ exports.signup = async (req, res) => {
     // return res.status(ERROR.code).json({  error: ERROR.message });
   }
 
-  const { name, password } = req.body;
-  if (!name || !password) {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
     const [errorCode, errorMessage] = errorRes.emptyInput();
     return res.status(errorCode).json({ error: errorMessage });
   }
 
+  if(! await userUtil.isValidEmail(email)) {
+    const [errorCode, errorMessage] = errorRes.invalidEmailFormat();
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
   try {
-    const isNameExist = await userModel.nameExist(name);
-    if (isNameExist === null) {
+    const isNameExist = await userModel.isNameExist(name);
+    const isEmailExist = await userModel.isEmailExist(email);
+    if (isNameExist === null || isEmailExist === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });
     } else if (isNameExist) {
       const [errorCode, errorMessage] = errorRes.nameAlreadyExist();
       return res.status(errorCode).json({ error: errorMessage });
+    } else if (isEmailExist) {
+      const [errorCode, errorMessage] = errorRes.emailAlreadyExist();
+      return res.status(errorCode).json({ error: errorMessage });
     }
 
     // register user
     const encryptedPassword = await userUtil.encryptPassword(password);
-    const user = await userModel.createUser(name, encryptedPassword);
+    const user = await userModel.createUser(name, email, encryptedPassword);
     if (user === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });

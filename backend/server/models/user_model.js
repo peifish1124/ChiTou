@@ -1,7 +1,7 @@
 const poolConnection = require('../../utils/db_connection');
 const userUtil = require('../../utils/user_util');
 
-exports.nameExist = async (name) => {
+exports.isNameExist = async (name) => {
   const connection = await poolConnection();
   const query = `
     SELECT COUNT(id)
@@ -11,6 +11,25 @@ exports.nameExist = async (name) => {
   
   try {
     const existingUserCount = await connection.query(query, [name]);
+    return existingUserCount[0][0]['COUNT(id)'] > 0;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
+exports.isEmailExist = async (email) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT COUNT(id)
+    FROM users
+    WHERE email = ?
+    `;
+
+  try {
+    const existingUserCount = await connection.query(query, [email]);
     return existingUserCount[0][0]['COUNT(id)'] > 0;
   } catch (err) {
     console.error(err);
@@ -39,19 +58,20 @@ exports.userAllExist = async (ids) => {
   }
 };
 
-exports.createUser = async (name, password) => {
+exports.createUser = async (name, email, password) => {
   const connection = await poolConnection();
   const query = `
-    INSERT INTO users (name, password)
-    VALUES (?, ?)
+    INSERT INTO users (name, email, password)
+    VALUES (?, ?, ?)
     `;
 
   try {
-    const [result] = await connection.query(query, [name, password]);
+    const [result] = await connection.query(query, [name, email, password]);
     if(result.affectedRows === 1) {
       return {
         id: result.insertId,
         name: name,
+        email: email,
       }
     }
     return null;
