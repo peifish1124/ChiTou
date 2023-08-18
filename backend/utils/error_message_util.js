@@ -9,6 +9,10 @@ module.exports = {
     return [400, 'Input Field should not be Empty'];
   },
 
+  invalidEmailFormat: () => {
+    return [400, 'Invalid Email Format'];
+  },
+
   participantNotExist: () => {
     return [400, 'Participant is not Existed']
   },
@@ -27,6 +31,10 @@ module.exports = {
 
   nameAlreadyExist: () => {
     return [403, 'Name Already Existed'];
+  },
+
+  emailAlreadyExist: () => {
+    return [403, 'Email Already Existed'];
   },
 
   userNotFound: () => {
