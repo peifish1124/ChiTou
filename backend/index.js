@@ -5,6 +5,7 @@ const express = require('express');
 const userRoute = require('./server/routes/user_route');
 const scheduleRoute = require('./server/routes/schedule_route');
 const tripRoute = require('./server/routes/trip_route');
+const eventRoute = require('./server/routes/event_route');
 const weatherRoute = require('./server/routes/weather_route');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use('/images', express.static('static'));
 app.use('/users', userRoute);
 app.use('/schedules', scheduleRoute);
 app.use('/trips', tripRoute);
+app.use('/events', eventRoute);
 app.use('/weathers', weatherRoute);
 
 app.get('/', (req, res) => {

@@ -1,9 +1,12 @@
 const tripModel = require('../models/trip_model');
 const userModel = require('../models/user_model');
+const eventModel = require('../models/event_model');
 const errorRes = require('../../utils/error_message_util');
 
 exports.createTrip = async (req, res) => {
   console.log('Create Trip');
+
+  const { 'id': myId } = req.userData;
 
   if (req.headers['content-type'] !== 'application/json') {
       const [errorCode, errorMessage] = errorRes.contentTypeError();
@@ -16,22 +19,27 @@ exports.createTrip = async (req, res) => {
       return res.status(errorCode).json({ error: errorMessage });
   }
 
-  const isUserAllExist = await userModel.userAllExist(user_ids);
-  if (isUserAllExist === null) {
-    const [errorCode, errorMessage] = errorRes.queryFailed();
-    return res.status(errorCode).json({ error: errorMessage });
-  } else if (!isUserAllExist) {
-    const [errorCode, errorMessage] = errorRes.participantNotExist();
-    return res.status(errorCode).json({ error: errorMessage });
-  }
-
   try {
+    const isUserAllExist = await userModel.userAllExist(user_ids);
+    if (isUserAllExist === null) {
+      const [errorCode, errorMessage] = errorRes.queryFailed();
+      return res.status(errorCode).json({ error: errorMessage });
+    } else if (!isUserAllExist) {
+      const [errorCode, errorMessage] = errorRes.participantNotExist();
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+
     const trip = await tripModel.createTrip(name, destination, start_date, end_date, user_ids);
     if (trip === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });
     }
     console.log('Create Trip Success');
+
+    // create event for all members
+    const isSuccess = await eventModel.create(Number(myId), user_ids, trip.id, 'added_trip');
+    console.log('Create Event Success: ', isSuccess);
+
     return res.status(200).json({
       data: {
         trip: trip
