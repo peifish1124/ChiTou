@@ -2,6 +2,7 @@
 
 import Nav from "@/components/Nav";
 import GoogleMap from "@/components/GoogleMap";
+import useAddSchedule from "@/hooks/useAddSchedule";
 import pagestyles from "@/styles/css-modules/page.module.scss";
 import EditTrip from "@/components/EditTrip";
 
@@ -83,6 +84,14 @@ const schedules = [
 ];
 
 export default function EditPage() {
+  const {
+    isNewSchedule,
+    isDragDisabled,
+    newSchedule,
+    removeNewSchedule,
+    addSchedule,
+    addPlace,
+  } = useAddSchedule();
   return (
     <main className={pagestyles.main}>
       {/* navbar */}
@@ -90,11 +99,23 @@ export default function EditPage() {
       {/* main */}
       <div className={pagestyles.page}>
         <div className={pagestyles.leftPage}>
-          <GoogleMap />
+          <GoogleMap
+            newSchedule={newSchedule}
+            removeNewSchedule={removeNewSchedule}
+            addPlace={addPlace}
+          />
         </div>
 
         <div className={pagestyles.rightPage}>
-          <EditTrip trip={trip} schedules={schedules} />
+          <EditTrip
+            trip={trip}
+            schedules={schedules}
+            isNewSchedule={isNewSchedule}
+            isDragDisabled={isDragDisabled}
+            newSchedule={newSchedule}
+            removeNewSchedule={removeNewSchedule}
+            addSchedule={addSchedule}
+          />
         </div>
       </div>
 

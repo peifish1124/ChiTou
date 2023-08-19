@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
-export default function InfoCard({ placeDetails, setPlaceDetails }) {
+export default function InfoCard({ placeDetails, setPlaceDetails, addPlace }) {
   return (
     <div className={styles.selectPlace}>
       <div className={styles.placeName}>{placeDetails.name}</div>
@@ -29,14 +30,18 @@ export default function InfoCard({ placeDetails, setPlaceDetails }) {
           ({placeDetails.user_ratings_total})
         </div>
       </div>
-      <div className={styles.placePic}>
-        <Image
-          src={placeDetails.photos[0].getUrl()}
-          alt={placeDetails.name}
-          fill
-          objectFit="cover"
-        />
-      </div>
+      <Link href={placeDetails.url} className={styles.placePic} target="_blank">
+        {placeDetails.photos ? (
+          <Image
+            src={placeDetails.photos[0].getUrl()}
+            alt={placeDetails.name}
+            fill
+            objectFit="cover"
+          />
+        ) : (
+          <div>沒有照片</div>
+        )}
+      </Link>
       <div className={styles.placeOperating}>
         {placeDetails.current_opening_hours ? (
           <div
@@ -58,7 +63,14 @@ export default function InfoCard({ placeDetails, setPlaceDetails }) {
         </div>
       </div>
       <div className={styles.funcBtn}>
-        <button type="button" className={styles.addBtn}>
+        <button
+          type="button"
+          className={styles.addBtn}
+          onClick={() => {
+            addPlace(placeDetails.name);
+            setPlaceDetails(null);
+          }}
+        >
           新增
         </button>
         <button

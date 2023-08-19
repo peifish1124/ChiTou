@@ -29,13 +29,14 @@ function MyPositionMarker({ mapZoom }) {
   );
 }
 
-function FilterMarker({ mapZoom, placeId, getPlaceDetail }) {
+function FilterMarker({ mapZoom, placeId, text, getPlaceDetail }) {
   const iconWidth = (27 * mapZoom) / 15;
   const iconHeight = (43 * mapZoom) / 15;
   const xOffset = iconWidth / 2;
   const yOffset = iconHeight;
   return (
     <button
+      id={placeId}
       type="button"
       style={{
         position: "absolute",
@@ -45,17 +46,29 @@ function FilterMarker({ mapZoom, placeId, getPlaceDetail }) {
         getPlaceDetail(placeId);
       }}
     >
+      {mapZoom > 16 && (
+        <div
+          className={styles.markerText}
+          style={{
+            position: "absolute",
+            transform: `translate(-${xOffset}px, -${yOffset}px)`,
+          }}
+        >
+          {text}
+        </div>
+      )}
       <Image
         src="/Spotlight_Marker_Red.svg"
         alt="Icon"
         width={iconWidth || 27}
         height={iconHeight || 43}
+        style={{ zIndex: 3 }}
       />
     </button>
   );
 }
 
-function SelectedMarker({ mapZoom = 15, setPlaceDetails }) {
+function SelectedMarker({ mapZoom = 15 }) {
   const iconWidth = (27 * mapZoom) / 15;
   const iconHeight = (43 * mapZoom) / 15;
   const xOffset = iconWidth / 2;
@@ -79,7 +92,12 @@ function SelectedMarker({ mapZoom = 15, setPlaceDetails }) {
   );
 }
 
-export default function GoogleMap() {
+export default function GoogleMap({
+  trip,
+  newSchedule,
+  removeNewSchedule,
+  addPlace,
+}) {
   // 預設位置
   const [myPosition, setMyPosition] = useState({
     lat: 25.0533789,
@@ -90,7 +108,7 @@ export default function GoogleMap() {
   const [mapApi, setMapApi] = useState(null);
   const [filterPlaces, setFilterPlaces] = useState([]);
   const [placeDetails, setPlaceDetails] = useState(null);
-  const [mapZoom, setMapZoom] = useState(15);
+  const [mapZoom, setMapZoom] = useState(trip ? 15 : 7);
   const {
     searchText,
     searchTextResults,
@@ -103,17 +121,19 @@ export default function GoogleMap() {
     const geocoder = new maps.Geocoder();
     console.log("map", map);
     console.log("maps", maps);
-    geocoder.geocode({ address: "台北市" }, (results, status) => {
-      if (status === "OK") {
-        // map.setCenter(results[0].geometry.location);
-        // setMyPosition({
-        //   lat: results[0].geometry.location.lat(),
-        //   lng: results[0].geometry.location.lng(),
-        // });
-        console.log("lat", results[0].geometry.location.lat());
-        console.log("lng", results[0].geometry.location.lng());
-      }
-    });
+    geocoder.geocode(
+      { address: "台灣" || trip.destination },
+      (results, status) => {
+        if (status === "OK") {
+          setMyPosition({
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          });
+          console.log("lat", results[0].geometry.location.lat());
+          console.log("lng", results[0].geometry.location.lng());
+        }
+      },
+    );
     setMapInstance(map);
     setMapApi(maps);
     setAutoMapApi(maps);
@@ -134,6 +154,13 @@ export default function GoogleMap() {
       service.nearbySearch(request, (results, status) => {
         if (status === mapApi.places.PlacesServiceStatus.OK) {
           setFilterPlaces(results);
+          setPlaceDetails(null);
+          setMyPosition({
+            placeId: results[0].place_id,
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          });
+          setMapZoom(15);
           console.log(results);
         }
       });
@@ -150,6 +177,12 @@ export default function GoogleMap() {
       if (status === mapApi.places.PlacesServiceStatus.OK) {
         console.log(place);
         setPlaceDetails(place);
+        setMyPosition({
+          placeId: place.place_id,
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        });
+        setMapZoom(18);
       }
     });
   };
@@ -167,17 +200,18 @@ export default function GoogleMap() {
       service.textSearch(request, (results, status) => {
         if (status === mapApi.places.PlacesServiceStatus.OK) {
           console.log(results);
+          setSearchTextResults([]);
           setFilterPlaces(results);
+          setPlaceDetails(null);
+          setMyPosition({
+            placeId: results[0].place_id,
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          });
+          setMapZoom(15);
         }
       });
     }
-  };
-  const defaultProps = {
-    center: {
-      lat: 25.0533789,
-      lng: 121.604905,
-    },
-    zoom: 15,
   };
 
   useEffect(() => {
@@ -280,8 +314,8 @@ export default function GoogleMap() {
           key: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY,
           libraries: ["places"],
         }}
-        defaultCenter={defaultProps.center}
-        defaultZoom={defaultProps.zoom}
+        center={myPosition}
+        zoom={mapZoom}
         yesIWantToUseGoogleMapApiInternals
         // onChildMouseEnter={(key, props) => {
         //   const { placeId } = props;
@@ -327,6 +361,7 @@ export default function GoogleMap() {
             text={placeDetails.name}
             mapZoom={mapZoom}
             setPlaceDetails={setPlaceDetails}
+            setMyPosition={setMyPosition}
           />
         )}
       </GoogleMapReact>
@@ -334,6 +369,9 @@ export default function GoogleMap() {
         <InfoCard
           placeDetails={placeDetails}
           setPlaceDetails={setPlaceDetails}
+          newSchedule={newSchedule}
+          removeNewSchedule={removeNewSchedule}
+          addPlace={addPlace}
         />
       )}
     </div>
