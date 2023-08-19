@@ -13,7 +13,7 @@ const useSignup = (handleSwitchMode) => {
       .post("/users/signup", userData)
       .then((response) => {
         if (response.status === 200) {
-          console.log("註冊成功");
+          // console.log("註冊成功");
           handleSwitchMode();
         } else {
           // console.log("註冊失敗");
@@ -24,26 +24,31 @@ const useSignup = (handleSwitchMode) => {
         }
       })
       .catch((signupError) => {
-        // console.log("註冊失敗2");
         setError(signupError.response);
         // console.log(signupError.response);
-        if (error.status >= 500 && error.status < 600) {
+        if (
+          signupError.response.status >= 500 &&
+          signupError.response.status < 600
+        ) {
           Swal.fire({
             icon: "error",
             title: "伺服器出現問題",
             text: "請稍後再試或通知我們的工程團隊。",
           });
         }
-        if (error.status >= 400 && error.status < 500) {
+        if (
+          signupError.response.status >= 400 &&
+          signupError.response.status < 500
+        ) {
           Swal.fire({
             icon: "error",
             title: "註冊失敗",
-            text: error.data.error,
+            text: signupError.response.data.error,
           });
         }
       })
       .finally(() => {
-        setIsLoading(false); // 無論請求成功或失敗，設置 isLoading 為 false
+        setIsLoading(false);
       });
   };
 

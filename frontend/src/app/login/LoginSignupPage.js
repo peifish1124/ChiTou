@@ -24,7 +24,7 @@ function LoginSignupPage({ isLoginMode, handleSwitchMode }) {
       .required("請輸入密碼")
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-        "密碼必須包含大小寫字母和數字，且長度至少為八個字符"
+        "密碼必須包含大小寫字母和數字，且長度至少為八個字符",
       ),
     confirmPassword: isLoginMode
       ? null
@@ -42,7 +42,7 @@ function LoginSignupPage({ isLoginMode, handleSwitchMode }) {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: (values) => {
       // 在提交之前處理 email 字段
       // values.email = values.email.trim();

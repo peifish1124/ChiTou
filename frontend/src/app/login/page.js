@@ -31,7 +31,9 @@ export default function Login() {
             />
           </div>
           <div className={styles.bottomtext}>
-            <span className={styles.lefttext}>尚未成為會員？</span>
+            <span className={styles.lefttext}>
+              {isLoginMode ? "尚未成為" : "已經成為"}會員？
+            </span>
             <span className={styles.righttext} onClick={handleSwitchMode}>
               會員{isLoginMode ? "註冊" : "登入"}
             </span>
