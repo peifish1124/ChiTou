@@ -5,7 +5,15 @@ import dayjs from "dayjs";
 import DaySchedules from "./TravelDetail/EditDaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
-export default function EditTrip({ trip, schedules }) {
+export default function EditTrip({
+  trip,
+  schedules,
+  isNewSchedule,
+  isDragDisabled,
+  newSchedule,
+  removeNewSchedule,
+  addSchedule,
+}) {
   const groupedSchedules = schedules.reduce((groups, schedule) => {
     const tripDay = schedule.trip_day;
     const newGroups = { ...groups };
@@ -47,6 +55,11 @@ export default function EditTrip({ trip, schedules }) {
             startDate={trip.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
+            isNewSchedule={isNewSchedule}
+            isDragDisabled={isDragDisabled}
+            newSchedule={newSchedule}
+            removeNewSchedule={removeNewSchedule}
+            addSchedule={addSchedule}
           />
         ))}
       </div>

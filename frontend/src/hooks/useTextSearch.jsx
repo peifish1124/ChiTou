@@ -10,6 +10,11 @@ const useTextSearch = () => {
     console.log("googleMapAutocomplete");
     console.log(inputText);
     console.log(autoMapApi);
+    if (!autoMapApi) return;
+    if (!inputText) {
+      setSearchTextResults([]);
+      return;
+    }
     const service = new autoMapApi.places.AutocompleteService();
     const request = {
       input: inputText, // input 為 inputText
@@ -29,6 +34,8 @@ const useTextSearch = () => {
     searchTextResults,
     setAutoMapApi,
     handleSearchTextChange,
+    setSearchText,
+    setSearchTextResults,
   };
 };
 
