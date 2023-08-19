@@ -12,19 +12,19 @@ import WeatherIcon from "../Button/WeatherIcon";
 import EditSchedule from "./EditSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
-export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
+export default function EditDaySchedules({
+  startDate,
+  tripDay,
+  daySchedules,
+  isNewSchedule,
+  isDragDisabled,
+  newSchedule,
+  removeNewSchedule,
+  addSchedule,
+}) {
   const [expanded, setExpanded] = useState(true);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
-  const [isNewSchedule, setIsNewSchedule] = useState(false);
-  const [isDragDisabled, setIsDragDisabled] = useState(false);
-  const newSchedule = () => {
-    setIsNewSchedule(true);
-    setIsDragDisabled(true);
-  };
-  const removeNewSchedule = () => {
-    setIsNewSchedule(false);
-    setIsDragDisabled(false);
-  };
+
   // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
     [...daySchedules].sort((a, b) => a.sequence - b.sequence),
@@ -84,7 +84,12 @@ export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
           </button>
         </div>
         <div className={styles.addBtn}>
-          <button type="button" onClick={newSchedule}>
+          <button
+            type="button"
+            onClick={() => {
+              addSchedule(daySchedules, tripDay);
+            }}
+          >
             <Image src="/addBtn.svg" alt="add button" fill />
           </button>
         </div>
@@ -156,9 +161,11 @@ export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
           <div style={{ width: "25%" }}>
             <TextField
               id="standard-basic"
-              // label="左方搜尋"
+              placeholder="左方搜尋"
               variant="standard"
-              style={{ width: "50%" }}
+              style={{ width: "80%" }}
+              value={newSchedule.place}
+              disabled
             />
           </div>
           <div style={{ width: "25%" }}>
@@ -178,7 +185,12 @@ export default function EditDaySchedules({ startDate, tripDay, daySchedules }) {
             />
           </div>
           <div className={styles.scheduleBtn}>
-            <button type="button">
+            <button
+              type="button"
+              onClick={() => {
+                removeNewSchedule();
+              }}
+            >
               <Image src="/check2.svg" alt="check button" fill />
             </button>
             <button type="button" onClick={removeNewSchedule}>

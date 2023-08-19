@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  position: relative;
   .search {
     width: 110%;
     height: 3rem;
@@ -35,6 +36,52 @@
 
     &:focus-visible {
       outline: 0;
+    }
+  }
+  .searchResult {
+    width: 110%;
+    position: absolute;
+    top: 3rem;
+    left: -5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: #f0f2f5;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0px 2px 2px #f3f6f9;
+    z-index: 10;
+    .searchResultItem {
+      width: 100%;
+      min-height: 2rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5rem;
+      border-bottom: 1px solid #d9d9d9;
+      &:hover {
+        background: #fff;
+      }
+      &:focus {
+        background: #fff;
+      }
+      &:focus-visible {
+        outline: 0;
+      }
+      .main_text {
+        font-weight: 700;
+        width: 40%;
+        text-align: left;
+      }
+      .secondary_text {
+        width: 60%;
+        text-align: left;
+        color: #6b6b6b;
+      }
     }
   }
   .filterBar {
@@ -94,13 +141,15 @@
   background: #e0e3da;
   .placeName {
     width: 100%;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
+    height: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 設定顯示的最大行數 */
+    -webkit-box-orient: vertical;
+    font-size: 1rem;
     font-weight: 700;
     color: #3d4a35;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .placeRating {
     width: 100%;
@@ -116,6 +165,10 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    background-color: #cac4d0;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
     img {
       width: 100%;
       height: 100%;
@@ -128,6 +181,7 @@
     height: 1.5rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 1rem;
   }
   .funcBtn {
@@ -159,7 +213,7 @@
       }
     }
     .cancelBtn {
-      color: #103727;;
+      color: #103727;
       border-radius: 100px;
       width: 4.5rem;
       height: 40px;
@@ -178,4 +232,17 @@
       }
     }
   }
+}
+.markerText{
+  width: 250%;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 0.75rem;
+  background-color: #6b6b6b;
+  color: #fff;
+  border-radius: 40%;
 }
