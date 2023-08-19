@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -146,7 +147,6 @@ function LoginSignupPage({ isLoginMode, handleSwitchMode }) {
         type="submit"
         disabled={loginIsLoading || signupIsLoading}
       >
-        {/* loading 時會顯示 "is Loading" */}
         {loginIsLoading || signupIsLoading
           ? "Loading..."
           : isLoginMode
