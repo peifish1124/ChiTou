@@ -25,6 +25,10 @@ const useLogin = () => {
             maxAge: 30 * 24 * 60 * 60,
             // path: "/",
           });
+          setCookie(null, "name", response.data.data.user.name, {
+            maxAge: 30 * 24 * 60 * 60,
+            // path: "/",
+          });
           router.push("/"); // 進入首頁
         } else {
           console.log("登入失敗");
@@ -39,22 +43,21 @@ const useLogin = () => {
           }
         }
       })
-      .catch((error) => {
-        // console.log("登入失敗2", error.response.data.error);
-        // console.log("登入失敗2", error.response.status);
-        setError(error.message);
-        if (error.response.status >= 500 && error.response.status < 600) {
+      .catch((loginError) => {
+        setError(loginError.response);
+        // console.log(loginError.response);
+        if (error.status >= 500 && error.status < 600) {
           Swal.fire({
             icon: "error",
             title: "伺服器出現問題",
             text: "請稍後再試或通知我們的工程團隊。",
           });
         }
-        if (error.response.status >= 400 && error.response.status < 500) {
+        if (error.status >= 400 && error.status < 500) {
           Swal.fire({
             icon: "error",
             title: "登入失敗",
-            text: error.response.data.error,
+            text: error.data.error,
           });
         }
       })

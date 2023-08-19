@@ -23,21 +23,22 @@ const useSignup = (handleSwitchMode) => {
           }
         }
       })
-      .catch((error) => {
+      .catch((signupError) => {
         // console.log("註冊失敗2");
-        setError(error.message);
-        if (error.response.status >= 500 && error.response.status < 600) {
+        setError(signupError.response);
+        // console.log(signupError.response);
+        if (error.status >= 500 && error.status < 600) {
           Swal.fire({
             icon: "error",
             title: "伺服器出現問題",
             text: "請稍後再試或通知我們的工程團隊。",
           });
         }
-        if (error.response.status >= 400 && error.response.status < 500) {
+        if (error.status >= 400 && error.status < 500) {
           Swal.fire({
             icon: "error",
             title: "註冊失敗",
-            text: error.response.data.error,
+            text: error.data.error,
           });
         }
       })
