@@ -27,7 +27,7 @@ export default function EditDaySchedules({
 
   // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
-    [...daySchedules].sort((a, b) => a.sequence - b.sequence)
+    [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
   useEffect(() => {
     // console.log(sortedDaySchedules);
