@@ -78,7 +78,7 @@ exports.signin = async (req, res) => {
 
   try {
 
-    const isNameExist = await userModel.nameExist(name);
+    const isNameExist = await userModel.isNameExist(name);
     if (isNameExist === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });
