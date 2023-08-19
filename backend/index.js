@@ -14,6 +14,13 @@ const port = process.env.WEB_PORT;
 app.use(express.json());
 app.use('/images', express.static('static'));
 
+app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
+
 // routes
 app.use('/users', userRoute);
 app.use('/schedules', scheduleRoute);
