@@ -2,18 +2,22 @@
 
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import Image from "next/image";
+import useUserSearch from "@/hooks/useUserSearch";
 import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
-export default function CreateMode(accessToken) {
+export default function CreateMode({ accessToken }) {
   const { createTrip } = useCreateTrip();
-  const [participantName, setParticipantName] = useState("");
-  const [participantsList, setParticipantsList] = useState([]);
+  const { searchUsers } = useUserSearch(accessToken);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [participantsName, setParticipantsName] = useState([]);
+  const [participantsId, setParticipantsId] = useState([]);
 
   // const validationSchema = yup.object().shape({
   //   end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
@@ -36,30 +40,41 @@ export default function CreateMode(accessToken) {
         destination: values.destination,
         start_date: values.start_date,
         end_date: values.end_date,
-        user_ids: participantsList,
+        user_ids: participantsId,
       };
-      console.log(tripData);
+      // console.log(tripData);
       createTrip(tripData, accessToken);
     },
   });
 
-  // participants
-  const handleInputKeyPress = (e) => {
-    if (e.key === "Enter" && participantName.trim() !== "") {
-      e.preventDefault();
-      setParticipantsList([...participantsList, participantName]);
-      setParticipantName("");
-    }
+  // user search
+  const handleSearchResult = async (e) => {
+    setSearchKeyword(e.target.value);
+    const results = await searchUsers(searchKeyword);
+    setSearchResults(results);
   };
   useEffect(() => {
-    console.log(participantsList);
-  }, [participantsList]);
+    console.log("searchKeyword", searchKeyword);
+    console.log("searchResults: ", searchResults);
+  }, [searchResults, searchKeyword]);
 
-  const handleParticipantRemove = (index) => {
-    const updatedParticipants = [...participantsList];
-    updatedParticipants.splice(index, 1);
-    setParticipantsList(updatedParticipants);
+  // participants
+  const handleSearchResultSelect = async (user) => {
+    setParticipantsName([...participantsName, user.name]);
+    setParticipantsId([...participantsId, user.id]);
+    setSearchKeyword("");
   };
+  const handleParticipantRemove = (index) => {
+    const updatedParticipantsName = [...participantsName];
+    const updatedParticipantsId = [...participantsId];
+    updatedParticipantsName.splice(index, 1);
+    updatedParticipantsId.splice(index, 1);
+    setParticipantsName(updatedParticipantsName);
+    setParticipantsId(updatedParticipantsId);
+  };
+  useEffect(() => {
+    console.log(participantsId);
+  }, [participantsId]);
 
   // start and end date
   const handleStartDateChange = (date) => {
@@ -131,12 +146,16 @@ export default function CreateMode(accessToken) {
                 <input
                   type="text"
                   placeholder="輸入姓名並按 Enter"
-                  value={participantName}
-                  onChange={(e) => setParticipantName(e.target.value)}
-                  onKeyPress={handleInputKeyPress}
+                  value={searchKeyword}
+                  onChange={handleSearchResult}
+                  // onChange={(e) => {
+                  //   setSearchKeyword(e.target.value);
+                  //   searchUsers(e.target.value);
+                  // }}
+                  // onKeyPress={handleInputKeyPress}
                 />
                 <div className={styles.participantsBox}>
-                  {participantsList.map((participant, index) => {
+                  {participantsName.map((participant, index) => {
                     return (
                       // eslint-disable-next-line react/no-array-index-key
                       <div className={styles.participantTag} key={index}>
@@ -156,6 +175,19 @@ export default function CreateMode(accessToken) {
                       </div>
                     );
                   })}
+                </div>
+                <div className={styles.participantsSearchList}>
+                  {searchResults && searchResults.length > 0 ? (
+                    searchResults.map((user) => (
+                      <div className={styles.participantsSearchItem}
+                        key={user.id}
+                      >
+                        <p onClick={() => handleSearchResultSelect(user)}>{user.name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div>No search results found.</div>
+                  )}
                 </div>
               </div>
             </div>

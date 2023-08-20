@@ -7,7 +7,7 @@ function useCreateTrip() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const createTrip = async (tripData, token) => {
+  const createTrip = async (tripData, accessToken) => {
     setIsLoading(true);
     setError(null);
 
@@ -15,7 +15,7 @@ function useCreateTrip() {
       const response = await axiosInstance.post("/trips", tripData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 

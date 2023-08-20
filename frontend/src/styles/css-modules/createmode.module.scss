@@ -109,6 +109,27 @@
                         border-radius: 8px;
                     }
                 }
+                .participantsSearchList{
+                    position: relative; 
+                    width: 90%;
+                    max-height: 5.9rem;
+                    background: white;
+                    overflow: auto; 
+
+                    .participantsSearchItem{
+                        display: flex;
+                        align-items: center;
+                        padding-left: 10%;
+                        gap: 6%;
+                        border-bottom: 1px solid #d9d9d9;
+                        height: 2rem;
+
+                        p{
+                            font-size: 15px;
+                            cursor: pointer;
+                        }
+                    }
+                }
             }
     
             .dataPickerItem{
