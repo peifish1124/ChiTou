@@ -21,16 +21,21 @@
     "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.11.1",
     "autoprefixer": "10.4.15",
+    "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "eslint-plugin-prettier": "^5.0.0",
+    "formik": "^2.4.3",
     "google-map-react": "^2.2.1",
     "next": "13.4.13",
+    "nookies": "^2.5.2",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "sass": "^1.65.1",
-    "tailwindcss": "3.3.3"
+    "sweetalert2": "^11.7.25",
+    "tailwindcss": "3.3.3",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
