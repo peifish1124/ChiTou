@@ -29,7 +29,7 @@ exports.createTrip = async (req, res) => {
       return res.status(errorCode).json({ error: errorMessage });
     }
 
-    const trip = await tripModel.createTrip(name, destination, start_date, end_date, user_ids);
+    const trip = await tripModel.createTrip(myId, name, destination, start_date, end_date, user_ids);
     if (trip === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
       return res.status(errorCode).json({ error: errorMessage });
@@ -158,8 +158,9 @@ exports.changeSequence = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 
+  const { 'id': myId } = req.userData;
   const { 'id': trip_id, trip_day } = req.params;
-  const { sequence_data } = req.body;
+  const { sequence_data, user_ids } = req.body;
   if (!sequence_data) {
     const [errorCode, errorMessage] = errorRes.emptyInput();
     return res.status(errorCode).json({ error: errorMessage });
@@ -192,6 +193,11 @@ exports.changeSequence = async (req, res) => {
     }
 
     console.log('Change Schedule Sequence Success');
+
+    // create event for all members
+    const isSuccess = await eventModel.create(Number(myId), user_ids, trip_id, 'updated_trip');
+    console.log('Create Event Success: ', isSuccess);
+
     return res.status(200).json({
       data: { trip: {id: new_sequence} }
     });
@@ -204,7 +210,7 @@ exports.changeSequence = async (req, res) => {
 
 exports.search = async (req, res) => {
   console.log('Trip Search');
-  //get keyword
+  // get keyword
   const { keyword } = req.query;
   const { 'id': myId } = req.userData;
 
