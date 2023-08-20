@@ -1,16 +1,49 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TextField } from "@mui/material/TextField";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 import Image from "next/image";
+import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
-export default function CreateMode() {
+export default function CreateMode(accessToken) {
+  const { createTrip } = useCreateTrip();
   const [participantName, setParticipantName] = useState("");
   const [participantsList, setParticipantsList] = useState([]);
 
+  // const validationSchema = yup.object().shape({
+  //   end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
+  // });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      destination: "",
+      start_date: "",
+      end_date: "",
+      user_ids: [],
+    },
+    // validationSchema,
+    onSubmit: (values) => {
+      console.log("送出");
+
+      const tripData = {
+        name: values.trip_name,
+        destination: values.destination,
+        start_date: values.start_date,
+        end_date: values.end_date,
+        user_ids: participantsList,
+      };
+      console.log(tripData);
+      createTrip(tripData, accessToken);
+    },
+  });
+
+  // participants
   const handleInputKeyPress = (e) => {
     if (e.key === "Enter" && participantName.trim() !== "") {
       e.preventDefault();
@@ -19,7 +52,7 @@ export default function CreateMode() {
     }
   };
   useEffect(() => {
-    // console.log(participantsList);
+    console.log(participantsList);
   }, [participantsList]);
 
   const handleParticipantRemove = (index) => {
@@ -28,33 +61,16 @@ export default function CreateMode() {
     setParticipantsList(updatedParticipants);
   };
 
-  // Error handling
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  // const [error, setError] = useState(false);
-  // console.log(error);
-
+  // start and end date
   const handleStartDateChange = (date) => {
-    setStartDate(date);
-    // console.log(date);
-
-    // 進行格式轉換成所需的格式
-    // const dayjsDate = dayjs(date);
-    // const formattedDate = dayjsDate.format("YYYY-MM-DD");
-    // console.log(formattedDate);
-    // if (endDate && date > endDate) {
-    //   // setError(true);
-    // } else {
-    //   // setError(false);
-    // }
+    const dayjsDate = dayjs(date);
+    const formattedDate = dayjsDate.format("YYYY-MM-DD");
+    formik.setFieldValue("start_date", formattedDate);
   };
   const handleEndDateChange = (date) => {
-    setEndDate(date);
-    if (startDate && date < startDate) {
-      // setError(true);
-    } else {
-      // setError(false);
-    }
+    const dayjsDate = dayjs(date);
+    const formattedDate = dayjsDate.format("YYYY-MM-DD");
+    formik.setFieldValue("end_date", formattedDate);
   };
 
   return (
@@ -64,31 +80,31 @@ export default function CreateMode() {
       </div>
       <div className={styles.createModeContainer}>
         <h3>創建屬於你們的小旅行</h3>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className={styles.createTripForm}>
             <div className={styles.tripInfoItem}>
               <p>旅行名稱：</p>
               <div className={styles.tripInfoInput}>
-                <input type="text" />
+                <input type="text" {...formik.getFieldProps("trip_name")} />
               </div>
             </div>
             <div className={styles.tripInfoItem}>
               <p>目的地：</p>
               <div className={styles.tripInfoInput}>
-                <input type="text" placeholder="請填入縣市名稱" />
+                <input
+                  type="text"
+                  placeholder="請填入縣市名稱"
+                  {...formik.getFieldProps("destination")}
+                />
               </div>
             </div>
             <div className={styles.dataPickerItem}>
               <p>開始時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/25/2023" /> */}
               <DatePicker
-                value={startDate}
                 onChange={handleStartDateChange}
                 renderInput={(params) => (
-                  <TextField
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...params}
-                  />
+                    <TextField {...params} />
                 )}
               />
             </div>
@@ -96,13 +112,9 @@ export default function CreateMode() {
               <p>結束時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/27/2023" /> */}
               <DatePicker
-                value={endDate}
                 onChange={handleEndDateChange}
                 renderInput={(params) => (
-                  <TextField
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...params}
-                  />
+                    <TextField {...params} />
                 )}
               />
             </div>
@@ -148,6 +160,12 @@ export default function CreateMode() {
               </div>
             </div>
           </div>
+          {/* Error Message */}
+          {/* <div>
+            {formik.touched.end_date && formik.errors.end_date ? (
+              <div className={styles.error}>{formik.errors.end_date}</div>
+            ) : null}
+          </div> */}
           <div className={styles.formBtn}>
             <button type="button">
               <Image
@@ -161,10 +179,10 @@ export default function CreateMode() {
             <button type="submit">
               <Image
                 src="/checkBtn.svg"
-                alt="cancel button"
+                alt="check button"
                 width={30}
                 height={30}
-                objectFit="cover"
+                // objectFit="cover"
               />
             </button>
           </div>

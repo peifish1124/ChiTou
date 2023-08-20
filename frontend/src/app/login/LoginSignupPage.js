@@ -12,13 +12,15 @@ function LoginSignupPage({ isLoginMode, handleSwitchMode }) {
   const { handleLogin, isLoading: loginIsLoading } = useLogin();
 
   const validationSchema = yup.object().shape({
-    name: isLoginMode ? null : yup.string().required("請輸入使用者名稱").trim(),
-    email: yup
-      .string()
-      .email("請輸入有效的電子郵件地址")
-      .required("請輸入電子郵件地址")
-      .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "電子郵件格式不正確")
-      .trim(),
+    name: yup.string().required("請輸入使用者名稱").trim(),
+    email: isLoginMode
+      ? null
+      : yup
+          .string()
+          .email("請輸入有效的電子郵件地址")
+          .required("請輸入電子郵件地址")
+          .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "電子郵件格式不正確")
+          .trim(),
     password: yup
       .string()
       .required("請輸入密碼")
@@ -45,7 +47,8 @@ function LoginSignupPage({ isLoginMode, handleSwitchMode }) {
     validationSchema,
     onSubmit: (values) => {
       // 在提交之前處理 email 字段
-      // values.email = values.email.trim();
+      // eslint-disable-next-line no-param-reassign
+      values.email = values.email.trim();
 
       if (isLoginMode) {
         // 登入表單

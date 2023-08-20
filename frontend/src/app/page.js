@@ -11,6 +11,7 @@ import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
 import styles from "@/styles/css-modules/page.module.scss";
+import useAuthorization from "@/hooks/useAuthorization";
 
 const trip = {
   id: 1,
@@ -90,6 +91,7 @@ const schedules = [
 ];
 
 export default function Home() {
+  const { userId, accessToken, userName } = useAuthorization();
   const [mode, setMode] = useState("start");
 
   return (
@@ -123,7 +125,7 @@ export default function Home() {
             {mode === "detailed" && (
               <TravelDetail trip={trip} schedules={schedules} />
             )}
-            {mode === "create" && <CreateMode />}
+            {mode === "create" && <CreateMode accessToken={accessToken} />}
           </div>
         </div>
       </LocalizationProvider>
