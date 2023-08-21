@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -118,9 +120,7 @@ export default function CreateMode({ accessToken }) {
               {/* <input type="text" placeholder="範例格式: 08/25/2023" /> */}
               <DatePicker
                 onChange={handleStartDateChange}
-                renderInput={(params) => (
-                    <TextField {...params} />
-                )}
+                renderInput={(params) => <TextField {...params} />}
               />
             </div>
             <div className={styles.dataPickerItem}>
@@ -128,9 +128,7 @@ export default function CreateMode({ accessToken }) {
               {/* <input type="text" placeholder="範例格式: 08/27/2023" /> */}
               <DatePicker
                 onChange={handleEndDateChange}
-                renderInput={(params) => (
-                    <TextField {...params} />
-                )}
+                renderInput={(params) => <TextField {...params} />}
               />
             </div>
             <div className={styles.tripInfoItem}>
@@ -148,11 +146,6 @@ export default function CreateMode({ accessToken }) {
                   placeholder="輸入姓名並按 Enter"
                   value={searchKeyword}
                   onChange={handleSearchResult}
-                  // onChange={(e) => {
-                  //   setSearchKeyword(e.target.value);
-                  //   searchUsers(e.target.value);
-                  // }}
-                  // onKeyPress={handleInputKeyPress}
                 />
                 <div className={styles.participantsBox}>
                   {participantsName.map((participant, index) => {
@@ -167,8 +160,8 @@ export default function CreateMode({ accessToken }) {
                           <Image
                             src="/tag-cancel.svg"
                             alt="cancel"
-                            width={20}
-                            height={20}
+                            width={15}
+                            height={15}
                             objectFit="cover"
                           />
                         </button>
@@ -179,14 +172,26 @@ export default function CreateMode({ accessToken }) {
                 <div className={styles.participantsSearchList}>
                   {searchResults && searchResults.length > 0 ? (
                     searchResults.map((user) => (
-                      <div className={styles.participantsSearchItem}
+                      // <div className={styles.participantsSearchItem}
+                      //   key={user.id}
+                      // >
+                      //   <p onClick={() => handleSearchResultSelect(user)}>
+                      //     {user.name}
+                      //   </p>
+                      // </div>
+                      <button
+                        type="button"
+                        className={styles.participantsSearchItem}
                         key={user.id}
+                        onClick={() => handleSearchResultSelect(user)}
                       >
-                        <p onClick={() => handleSearchResultSelect(user)}>{user.name}</p>
-                      </div>
+                        {user.name}
+                      </button>
                     ))
                   ) : (
-                    <div>No search results found.</div>
+                    // <div>No search results found.</div>
+                    // eslint-disable-next-line react/jsx-no-useless-fragment
+                    <></>
                   )}
                 </div>
               </div>

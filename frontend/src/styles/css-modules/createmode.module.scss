@@ -104,17 +104,20 @@
                         padding-right: 0.5rem;
                         justify-content: space-between;
                         min-width: 3rem;
-                        height: 2rem;
+                        height: 1.3rem;
                         background: #A4CFB8;
                         border-radius: 8px;
+                        font-size: 0.5rem;
                     }
                 }
                 .participantsSearchList{
                     position: relative; 
-                    width: 90%;
+                    width: 100%;
                     max-height: 5.9rem;
-                    background: white;
+                    background: #F0F2F5;
                     overflow: auto; 
+                    border-radius: 5px;
+                    border: 1px solid #bebfb8;
 
                     .participantsSearchItem{
                         display: flex;
@@ -123,11 +126,8 @@
                         gap: 6%;
                         border-bottom: 1px solid #d9d9d9;
                         height: 2rem;
-
-                        p{
-                            font-size: 15px;
-                            cursor: pointer;
-                        }
+                        width: 100%;
+                        font-size: 15px;
                     }
                 }
             }
