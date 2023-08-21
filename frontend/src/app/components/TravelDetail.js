@@ -5,8 +5,8 @@ import dayjs from "dayjs";
 import DaySchedules from "./TravelDetail/DaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
-export default function TripCard({ trip, schedules }) {
-  const groupedSchedules = schedules.reduce((groups, schedule) => {
+export default function TripCard({ tripDetail }) {
+  const groupedSchedules = tripDetail.schedules.reduce((groups, schedule) => {
     const tripDay = schedule.trip_day;
     const newGroups = { ...groups };
     if (!newGroups[tripDay]) {
@@ -27,24 +27,31 @@ export default function TripCard({ trip, schedules }) {
       }}
     >
       <div className={tripcard.cover}>
-        <Image src="/default-cover.svg" alt="cover" fill objectFit="cover" />
+        <Image
+          src={tripDetail.picture ? tripDetail.picture : "/default-cover.svg"}
+          alt="cover"
+          fill
+          objectFit="cover"
+        />
       </div>
       <div className={tripcard.tripInfo}>
         <div className={tripcard.tripInfoTop}>
-          <h2>{trip.name}</h2>
-          <p>目的地： {trip.destination}</p>
+          <h2>{tripDetail.name}</h2>
+          <p>目的地： {tripDetail.destination}</p>
         </div>
         <div className={tripcard.tripInfoBottom}>
           <p>
-            日期： {dayjs(trip.start_date).format("YYYY/MM/DD")} ~{" "}
-            {dayjs(trip.end_date).format("YYYY/MM/DD")}
+            日期： {dayjs(tripDetail.start_date).format("YYYY/MM/DD")} ~{" "}
+            {dayjs(tripDetail.end_date).format("YYYY/MM/DD")}
           </p>
-          <p>參與者: 胡抽抽,聖鬥士,羅志祥</p>
+          <p>
+            參與者: {tripDetail.members.map((member) => member.name).join(", ")}
+          </p>
         </div>
         {Object.keys(groupedSchedules).map((tripDay) => (
           <DaySchedules
             key={tripDay}
-            startDate={trip.start_date}
+            startDate={tripDetail.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
           />

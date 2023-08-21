@@ -1,7 +1,7 @@
 // useSignup.js
 import { useState } from "react";
 import Swal from "sweetalert2";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "@/api/axiosInstance";
 
 const useSignup = (handleSwitchMode) => {
   const [isLoading, setIsLoading] = useState(false);
