@@ -60,6 +60,14 @@ module.exports = {
   weatherConnectFailed: () => {
     return [500, 'Server Error - Connecting to Weather API Failed'];
   },
+
+  googleSearchConnectFailed: () => {
+    return [500, 'Server Error - Connecting to Google Search API Failed'];
+  },
+
+  openAIConnectFailed: () => {
+    return [500, 'Server Error - Connecting to OpenAI API Failed'];
+  },
   
   dbConnectFailed: () => {
     return [500, 'Server Error - Connecting to db Failed'];
