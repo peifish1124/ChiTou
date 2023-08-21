@@ -18,6 +18,8 @@ const useTextSearch = () => {
     const service = new autoMapApi.places.AutocompleteService();
     const request = {
       input: inputText, // input 為 inputText
+      language: "zh-TW",
+      componentRestrictions: { country: "tw" },
     };
 
     service.getPlacePredictions(request, (results) => {
