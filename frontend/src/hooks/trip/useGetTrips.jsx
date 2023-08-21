@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axiosAuth from "@/api/axiosAuth";
+import useLogout from "../useLogout";
 
 export default function useGetTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { handleLogout } = useLogout();
 
   const getTrips = async () => {
     setLoading(true);
@@ -41,6 +43,8 @@ export default function useGetTrips() {
           icon: "error",
           title: "Token expired or not valid",
           text: "Please login again.",
+        }).then(() => {
+          handleLogout();
         });
       } else if (error === 500) {
         Swal.fire({
