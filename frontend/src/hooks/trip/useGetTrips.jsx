@@ -18,7 +18,7 @@ export default function useGetTrips() {
       const { status } = err.response;
       console.error("獲取旅行失敗:", status);
       setLoading(false);
-      setError(err);
+      setError(status);
     }
   };
 
@@ -37,7 +37,7 @@ export default function useGetTrips() {
       } else if (error === 403) {
         Swal.fire({
           icon: "error",
-          title: "Token expired",
+          title: "Token expired or not valid",
           text: "Please login again.",
         });
       } else if (error === 500) {
@@ -49,8 +49,8 @@ export default function useGetTrips() {
       } else {
         Swal.fire({
           icon: "error",
-          title: "Email or password is incorrect",
-          text: "Plaese make sure you have entered the correct email and password.",
+          title: "Error",
+          text: "Please try again later or contact the administrator.",
         });
       }
       setError(null);
