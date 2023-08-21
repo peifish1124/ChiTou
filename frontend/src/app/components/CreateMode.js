@@ -23,6 +23,7 @@ export default function CreateMode({ accessToken, userName, userId }) {
   const [searchResults, setSearchResults] = useState([]);
   const [participantsName, setParticipantsName] = useState([userName]);
   const [participantsId, setParticipantsId] = useState([parseInt(userId, 10)]);
+  const [showSearchList, setShowSearchList] = useState(false);
 
   const validationSchema = yup.object().shape({
     end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
@@ -69,6 +70,7 @@ export default function CreateMode({ accessToken, userName, userId }) {
     setParticipantsName([...participantsName, user.name]);
     setParticipantsId([...participantsId, user.id]);
     setSearchKeyword("");
+    setShowSearchList(false);
   };
   const handleParticipantRemove = (index) => {
     if (index === 0) {
@@ -161,6 +163,8 @@ export default function CreateMode({ accessToken, userName, userId }) {
                     type="text"
                     placeholder="輸入邀請對象"
                     value={searchKeyword}
+                    onFocus={() => setShowSearchList(true)}
+                    // onBlur={() => setShowSearchList(false)}
                     onChange={handleSearchResult}
                   />
                   <div className={styles.participantsBox}>
@@ -186,31 +190,33 @@ export default function CreateMode({ accessToken, userName, userId }) {
                     })}
                   </div>
                 </div>
-                <div className={styles.participantsSearchList}>
-                  {searchResults && searchResults.length > 0 ? (
-                    searchResults.map((user) => (
-                      // <div className={styles.participantsSearchItem}
-                      //   key={user.id}
-                      // >
-                      //   <p onClick={() => handleSearchResultSelect(user)}>
-                      //     {user.name}
-                      //   </p>
-                      // </div>
-                      <button
-                        type="button"
-                        className={styles.participantsSearchItem}
-                        key={user.id}
-                        onClick={() => handleSearchResultSelect(user)}
-                      >
-                        {user.name}
-                      </button>
-                    ))
-                  ) : (
-                    // <div>No search results found.</div>
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <></>
-                  )}
-                </div>
+                {showSearchList && (
+                  <div className={styles.participantsSearchList}>
+                    {searchResults && searchResults.length > 0 ? (
+                      searchResults.map((user) => (
+                        // <div className={styles.participantsSearchItem}
+                        //   key={user.id}
+                        // >
+                        //   <p onClick={() => handleSearchResultSelect(user)}>
+                        //     {user.name}
+                        //   </p>
+                        // </div>
+                        <button
+                          type="button"
+                          className={styles.participantsSearchItem}
+                          key={user.id}
+                          onClick={() => handleSearchResultSelect(user)}
+                        >
+                          {user.name}
+                        </button>
+                      ))
+                    ) : (
+                      // <div>No search results found.</div>
+                      // eslint-disable-next-line react/jsx-no-useless-fragment
+                      <></>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
