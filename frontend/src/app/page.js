@@ -14,8 +14,10 @@ import useGetTrips from "@/hooks/trip/useGetTrips";
 // import useSearchTrip from "@/hooks/trip/useSearchTrip";
 import useTripDetail from "@/hooks/trip/useTripDetail";
 import styles from "@/styles/css-modules/page.module.scss";
+import useAuthorization from "@/hooks/useAuthorization";
 
 export default function Home() {
+  const { accessToken } = useAuthorization();
   const [mode, setMode] = useState("start");
   const { trips } = useGetTrips();
   const { tripDetail, getTripDetail } = useTripDetail();
@@ -56,7 +58,7 @@ export default function Home() {
           <div className={styles.rightPage}>
             {mode === "start" && <StartMode />}
             {mode === "detailed" && <TravelDetail tripDetail={tripDetail} />}
-            {mode === "create" && <CreateMode />}
+            {mode === "create" && <CreateMode accessToken={accessToken} />}
           </div>
         </div>
       </LocalizationProvider>
