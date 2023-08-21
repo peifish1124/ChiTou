@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance from "@/api/axiosInstance";
 
 function useCreateTrip() {
   const router = useRouter();

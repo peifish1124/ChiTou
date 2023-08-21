@@ -23,7 +23,7 @@ export default function CityDistrictSelector({
       selectedCityOrDistrictToLatLng("台灣", 7);
     } else {
       setSelectedDistrict(selectedDistrictName);
-      selectedCityOrDistrictToLatLng(selectedDistrictName, 14);
+      selectedCityOrDistrictToLatLng(selectedCity + selectedDistrictName, 14);
     }
   };
   console.log(selectedCity);

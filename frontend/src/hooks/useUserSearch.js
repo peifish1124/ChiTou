@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance from "@/api/axiosInstance";
 
 const useUserSearch = (accessToken) => {
   const [searchResults, setSearchResults] = useState([]);

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { setCookie } from "nookies";
 import Swal from "sweetalert2";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "@/api/axiosInstance";
 
 const useLogin = () => {
   const router = useRouter();
