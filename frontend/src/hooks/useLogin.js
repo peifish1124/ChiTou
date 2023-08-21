@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { setCookie } from "nookies";
 import Swal from "sweetalert2";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 const useLogin = () => {
   const router = useRouter();
@@ -17,15 +17,15 @@ const useLogin = () => {
       .then((response) => {
         if (response.status === 200) {
           // console.log("登入成功");
-          setCookie(null, "access_token", response.data.data.access_token, {
+          setCookie(null, "accessToken", response.data.data.access_token, {
             maxAge: 30 * 24 * 60 * 60,
             // path: "/",
           });
-          setCookie(null, "user_id", response.data.data.user.id, {
+          setCookie(null, "userId", response.data.data.user.id, {
             maxAge: 30 * 24 * 60 * 60,
             // path: "/",
           });
-          setCookie(null, "name", response.data.data.user.name, {
+          setCookie(null, "userName", response.data.data.user.name, {
             maxAge: 30 * 24 * 60 * 60,
             // path: "/",
           });
