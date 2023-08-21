@@ -9,7 +9,7 @@ module.exports = {
             name: user.name,
         };
         
-        const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '7d' });
         return token;
     },
     decodePayload: async (token) => {
