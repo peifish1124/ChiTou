@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import useCreateSchedule from "./schedules/useCreateSchedule";
 
-export default function useAddSchedule() {
-  const [isNewSchedule, setIsNewSchedule] = useState(false);
+export default function useAddSchedule(tripDetail) {
+  console.log("useAddSchedule");
+  console.log(tripDetail);
+  const [isNewSchedule, setIsNewSchedule] = useState(null);
   const [newSchedule, setNewSchedule] = useState({
     trip_id: "",
     user_ids: [],
@@ -12,16 +16,18 @@ export default function useAddSchedule() {
     note: "",
   });
   const [isDragDisabled, setIsDragDisabled] = useState(false);
+  const { createSchedule } = useCreateSchedule();
   const addSchedule = (daySchedules, tripDay) => {
-    const maxSequence = daySchedules
-      ? daySchedules.reduce((max, schedule) => {
-          return schedule.sequence > max ? schedule.sequence : max;
-        }, -Infinity)
-      : 0;
-    setIsNewSchedule(true);
+    const maxSequence =
+      daySchedules.length !== 0
+        ? daySchedules.reduce((max, schedule) => {
+            return schedule.sequence > max ? schedule.sequence : max;
+          }, -Infinity)
+        : 0;
+    setIsNewSchedule(tripDay);
     setNewSchedule({
-      trip_id: "",
-      user_ids: [],
+      trip_id: tripDetail.id,
+      user_ids: tripDetail.members,
       place: "",
       trip_day: parseInt(tripDay, 10) || 1,
       sequence: maxSequence + 1,
@@ -33,8 +39,30 @@ export default function useAddSchedule() {
   const addPlace = (place) => {
     setNewSchedule((prev) => ({ ...prev, place }));
   };
+  const addDuration = (duration) => {
+    setNewSchedule((prev) => ({ ...prev, duration }));
+  };
+  const addNote = (note) => {
+    setNewSchedule((prev) => ({ ...prev, note }));
+  };
+  const submitNewSchedule = () => {
+    if (!newSchedule.place) {
+      Swal.fire({
+        icon: "error",
+        title: "請輸入行程地點",
+        text: "請重新輸入。",
+      });
+      setIsNewSchedule(null);
+      setIsDragDisabled(false);
+      return;
+    }
+    console.log("submitNewSchedule");
+    createSchedule(newSchedule);
+    setIsNewSchedule(null);
+    setIsDragDisabled(false);
+  };
   const removeNewSchedule = () => {
-    setIsNewSchedule(false);
+    setIsNewSchedule(null);
     setIsDragDisabled(false);
   };
   useEffect(() => {
@@ -49,5 +77,8 @@ export default function useAddSchedule() {
     setNewSchedule,
     addSchedule,
     addPlace,
+    addDuration,
+    addNote,
+    submitNewSchedule,
   };
 }

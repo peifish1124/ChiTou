@@ -10,7 +10,7 @@ import useTextSearch from "@/hooks/useTextSearch";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
 export default function GoogleMap({
-  trip,
+  tripDetail,
   newSchedule,
   removeNewSchedule,
   addPlace,
@@ -25,7 +25,7 @@ export default function GoogleMap({
   const [mapApi, setMapApi] = useState(null);
   const [filterPlaces, setFilterPlaces] = useState([]);
   const [placeDetails, setPlaceDetails] = useState(null);
-  const [mapZoom, setMapZoom] = useState(trip ? 15 : 7);
+  const [mapZoom, setMapZoom] = useState(tripDetail ? 10 : 7);
   const {
     searchText,
     searchTextResults,
@@ -39,7 +39,7 @@ export default function GoogleMap({
     console.log("map", map);
     console.log("maps", maps);
     geocoder.geocode(
-      { address: trip ? trip.destination : "台灣" },
+      { address: tripDetail ? tripDetail.destination : "台灣" },
       (results, status) => {
         if (status === "OK") {
           setMyPosition({
@@ -189,7 +189,7 @@ export default function GoogleMap({
       )}
       <div className={styles.filterBar}>
         <CityDistrictSelector
-          city={trip ? trip.destination : null}
+          destinationCity={tripDetail ? tripDetail.destination : null}
           selectedCityOrDistrictToLatLng={selectedCityOrDistrictToLatLng}
         />
         <button

@@ -1,22 +1,28 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import dayjs from "dayjs";
 import DaySchedules from "./TravelDetail/DaySchedules";
+import useTripDetail from "@/hooks/trip/useTripDetail";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
-export default function TripCard({ tripDetail }) {
-  const groupedSchedules = tripDetail.schedules.reduce((groups, schedule) => {
-    const tripDay = schedule.trip_day;
-    const newGroups = { ...groups };
-    if (!newGroups[tripDay]) {
-      newGroups[tripDay] = [];
-    }
-    newGroups[tripDay].push(schedule);
-    return newGroups;
+export default function TripDetail({ tripId }) {
+  const { tripDetail, loading } = useTripDetail(tripId);
+  if (loading) {
+    return <div>loading...</div>;
+  }
+  const startDate = dayjs(tripDetail.start_date);
+  const endDate = dayjs(tripDetail.end_date);
+  const daysCount = endDate.diff(startDate, "day") + 1;
+  const dayList = Array.from({ length: daysCount }, (_, index) => index + 1);
+  const groupedSchedules = dayList.reduce((groups, tripDay) => {
+    const schedulesOnDay = tripDetail.schedules.filter(
+      (schedule) => schedule.trip_day === tripDay,
+    );
+    return { ...groups, [tripDay]: schedulesOnDay };
   }, {});
-
-  // console.log("dggdgd", groupedSchedules);
+  console.log(groupedSchedules);
   return (
     <div
       className={tripcard.tripCard}
@@ -58,9 +64,9 @@ export default function TripCard({ tripDetail }) {
         ))}
       </div>
       <div className={tripcard.editBtn}>
-        <button type="button">
+        <Link href={`/trip/${tripDetail.id}/edit`}>
           <Image src="/editBtn.svg" alt="cover" fill objectFit="cover" />
-        </button>
+        </Link>
       </div>
     </div>
   );

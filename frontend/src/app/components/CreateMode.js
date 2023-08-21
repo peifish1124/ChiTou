@@ -13,7 +13,7 @@ import useUserSearch from "@/hooks/useUserSearch";
 import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
-export default function CreateMode({ accessToken }) {
+export default function CreateMode({ accessToken, getTrips }) {
   const { createTrip } = useCreateTrip();
   const { searchUsers } = useUserSearch(accessToken);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -46,13 +46,14 @@ export default function CreateMode({ accessToken }) {
       };
       // console.log(tripData);
       createTrip(tripData, accessToken);
+      getTrips();
     },
   });
 
   // user search
   const handleSearchResult = async (e) => {
     setSearchKeyword(e.target.value);
-    const results = await searchUsers(searchKeyword);
+    const results = await searchUsers(e.target.value);
     setSearchResults(results);
   };
   useEffect(() => {
