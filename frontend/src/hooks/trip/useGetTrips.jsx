@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import axiosAuth from "@/api/axiosAuth";
 import Swal from "sweetalert2";
+import axiosAuth from "@/api/axiosAuth";
 
 export default function useGetTrips() {
   const [trips, setTrips] = useState([]);
