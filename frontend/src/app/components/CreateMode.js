@@ -155,41 +155,36 @@ export default function CreateMode({ accessToken, userName, userId }) {
             </div>
             <div className={styles.tripInfoItem}>
               <p>參與者：</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  width: "100%",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="輸入姓名並按 Enter"
-                  value={searchKeyword}
-                  onChange={handleSearchResult}
-                />
-                <div className={styles.participantsBox}>
-                  {participantsName.map((participant, index) => {
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div className={styles.participantTag} key={index}>
-                        {participant}
-                        <button
-                          type="button"
-                          onClick={() => handleParticipantRemove(index)}
-                        >
-                          <Image
-                            src="/tag-cancel.svg"
-                            alt="cancel"
-                            width={15}
-                            height={15}
-                            objectFit="cover"
-                          />
-                        </button>
-                      </div>
-                    );
-                  })}
+              <div className={styles.participantsItem}>
+                <div className={styles.participantsInput}>
+                  <input
+                    type="text"
+                    placeholder="輸入邀請對象"
+                    value={searchKeyword}
+                    onChange={handleSearchResult}
+                  />
+                  <div className={styles.participantsBox}>
+                    {participantsName.map((participant, index) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div className={styles.participantTag} key={index}>
+                          {participant}
+                          <button
+                            type="button"
+                            onClick={() => handleParticipantRemove(index)}
+                          >
+                            <Image
+                              src="/tag-cancel.svg"
+                              alt="cancel"
+                              width={15}
+                              height={15}
+                              objectFit="cover"
+                            />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className={styles.participantsSearchList}>
                   {searchResults && searchResults.length > 0 ? (
