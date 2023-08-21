@@ -21,7 +21,6 @@ export default function Home() {
   const [mode, setMode] = useState("start");
   const { trips } = useGetTrips();
   const { tripDetail, getTripDetail } = useTripDetail();
-
   return (
     <main className={styles.main}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -37,7 +36,7 @@ export default function Home() {
               {trips.map((trip) => (
                 <TripCard
                   key={trip.id}
-                  trip
+                  trip={trip}
                   changeToDetail={() => {
                     setMode("detailed");
                     getTripDetail(trip.id);
