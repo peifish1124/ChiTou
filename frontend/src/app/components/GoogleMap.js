@@ -1,96 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import GoogleMapReact from "google-map-react";
 import InfoCard from "./GoogleMap/InfoCard";
+import CityDistrictSelector from "./GoogleMap/CityDistrictSelector";
+import FilterMarker from "./GoogleMap/FilterMarker";
+import SelectedMarker from "./GoogleMap/SelectedMarker";
 import useTextSearch from "@/hooks/useTextSearch";
 import styles from "@/styles/css-modules/googlemap.module.scss";
-
-function MyPositionMarker({ mapZoom }) {
-  const iconWidth = (40 * mapZoom) / 15;
-  const iconHeight = (40 * mapZoom) / 15;
-  const xOffset = iconWidth / 2;
-  const yOffset = iconHeight;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        transform: `translate(-${xOffset}px, -${yOffset}px)`,
-      }}
-    >
-      <Image
-        src="/my_position.svg"
-        alt="Icon"
-        width={iconWidth || 40}
-        height={iconHeight || 40}
-      />
-    </div>
-  );
-}
-
-function FilterMarker({ mapZoom, placeId, text, getPlaceDetail }) {
-  const iconWidth = (27 * mapZoom) / 15;
-  const iconHeight = (43 * mapZoom) / 15;
-  const xOffset = iconWidth / 2;
-  const yOffset = iconHeight;
-  return (
-    <button
-      id={placeId}
-      type="button"
-      style={{
-        position: "absolute",
-        transform: `translate(-${xOffset}px, -${yOffset}px)`,
-      }}
-      onClick={() => {
-        getPlaceDetail(placeId);
-      }}
-    >
-      {mapZoom > 16 && (
-        <div
-          className={styles.markerText}
-          style={{
-            position: "absolute",
-            transform: `translate(-${xOffset}px, -${yOffset}px)`,
-          }}
-        >
-          {text}
-        </div>
-      )}
-      <Image
-        src="/Spotlight_Marker_Red.svg"
-        alt="Icon"
-        width={iconWidth || 27}
-        height={iconHeight || 43}
-        style={{ zIndex: 3 }}
-      />
-    </button>
-  );
-}
-
-function SelectedMarker({ mapZoom = 15 }) {
-  const iconWidth = (27 * mapZoom) / 15;
-  const iconHeight = (43 * mapZoom) / 15;
-  const xOffset = iconWidth / 2;
-  const yOffset = iconHeight;
-  return (
-    <button
-      type="button"
-      style={{
-        position: "absolute",
-        transform: `translate(-${xOffset}px, -${yOffset}px)`,
-      }}
-      // onClick={setPlaceDetails(null)}
-    >
-      <Image
-        src="/Spotlight_Marker_Green.svg"
-        alt="Icon"
-        width={iconWidth || 27}
-        height={iconHeight || 43}
-      />
-    </button>
-  );
-}
 
 export default function GoogleMap({
   trip,
@@ -122,7 +39,7 @@ export default function GoogleMap({
     console.log("map", map);
     console.log("maps", maps);
     geocoder.geocode(
-      { address: "台灣" || trip.destination },
+      { address: trip ? trip.destination : "台灣" },
       (results, status) => {
         if (status === "OK") {
           setMyPosition({
@@ -144,23 +61,21 @@ export default function GoogleMap({
   const findFilterLocation = (keyword) => {
     if (mapApiLoaded) {
       const service = new mapApi.places.PlacesService(mapInstance);
-
       const request = {
         location: myPosition,
         rankBy: mapApi.places.RankBy.DISTANCE,
         keyword,
       };
-
       service.nearbySearch(request, (results, status) => {
         if (status === mapApi.places.PlacesServiceStatus.OK) {
           setFilterPlaces(results);
           setPlaceDetails(null);
-          setMyPosition({
-            placeId: results[0].place_id,
-            lat: results[0].geometry.location.lat(),
-            lng: results[0].geometry.location.lng(),
-          });
-          setMapZoom(15);
+          // setMyPosition({
+          //   placeId: results[0].place_id,
+          //   lat: results[0].geometry.location.lat(),
+          //   lng: results[0].geometry.location.lng(),
+          // });
+          setMapZoom(14);
           console.log(results);
         }
       });
@@ -183,6 +98,20 @@ export default function GoogleMap({
           lng: place.geometry.location.lng(),
         });
         setMapZoom(18);
+      }
+    });
+  };
+  const selectedCityOrDistrictToLatLng = (selectedCityOrDistrict, zoom) => {
+    const geocoder = new mapApi.Geocoder();
+    geocoder.geocode({ address: selectedCityOrDistrict }, (results, status) => {
+      if (status === "OK") {
+        setMyPosition({
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng(),
+        });
+        setMapZoom(zoom);
+        console.log("lat", results[0].geometry.location.lat());
+        console.log("lng", results[0].geometry.location.lng());
       }
     });
   };
@@ -259,13 +188,10 @@ export default function GoogleMap({
         </div>
       )}
       <div className={styles.filterBar}>
-        <button
-          type="button"
-          className={styles.filter}
-          onClick={() => findFilterLocation("cafe")}
-        >
-          <div className={styles.filterTitle}>coffee</div>
-        </button>
+        <CityDistrictSelector
+          city={trip ? trip.destination : null}
+          selectedCityOrDistrictToLatLng={selectedCityOrDistrictToLatLng}
+        />
         <button
           type="button"
           className={styles.filter}
@@ -335,13 +261,6 @@ export default function GoogleMap({
           setMapZoom(zoom);
         }}
       >
-        <MyPositionMarker
-          lat={myPosition.lat}
-          lng={myPosition.lng}
-          text="My Position"
-          mapZoom={mapZoom}
-        />
-
         {filterPlaces.map((place) => (
           <FilterMarker
             icon={place.icon}
