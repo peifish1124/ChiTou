@@ -5,7 +5,7 @@
 
 import { parseCookies } from "nookies";
 
-const useAuthorization = () => {
+const getCookies = () => {
   const cookies = parseCookies();
   const userId = cookies["userId"];
   const userName = cookies["userName"];
@@ -13,4 +13,4 @@ const useAuthorization = () => {
   return { userId, userName, accessToken };
 };
 
-export default useAuthorization;
+export default getCookies;

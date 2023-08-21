@@ -13,13 +13,13 @@ import useUserSearch from "@/hooks/useUserSearch";
 import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
 
-export default function CreateMode({ accessToken }) {
+export default function CreateMode({ accessToken, userName, userId }) {
   const { createTrip } = useCreateTrip();
   const { searchUsers } = useUserSearch(accessToken);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [participantsName, setParticipantsName] = useState([]);
-  const [participantsId, setParticipantsId] = useState([]);
+  const [participantsName, setParticipantsName] = useState([userName]);
+  const [participantsId, setParticipantsId] = useState([parseInt(userId, 10)]);
 
   // const validationSchema = yup.object().shape({
   //   end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
@@ -35,8 +35,6 @@ export default function CreateMode({ accessToken }) {
     },
     // validationSchema,
     onSubmit: (values) => {
-      console.log("送出");
-
       const tripData = {
         name: values.trip_name,
         destination: values.destination,
@@ -52,12 +50,12 @@ export default function CreateMode({ accessToken }) {
   // user search
   const handleSearchResult = async (e) => {
     setSearchKeyword(e.target.value);
-    const results = await searchUsers(searchKeyword);
+    const results = await searchUsers(e.target.value);
     setSearchResults(results);
   };
   useEffect(() => {
-    console.log("searchKeyword", searchKeyword);
-    console.log("searchResults: ", searchResults);
+    // console.log("searchKeyword", searchKeyword);
+    // console.log("searchResults: ", searchResults);
   }, [searchResults, searchKeyword]);
 
   // participants
@@ -67,6 +65,10 @@ export default function CreateMode({ accessToken }) {
     setSearchKeyword("");
   };
   const handleParticipantRemove = (index) => {
+    if (index === 0) {
+      // 不能刪除自己
+      return;
+    }
     const updatedParticipantsName = [...participantsName];
     const updatedParticipantsId = [...participantsId];
     updatedParticipantsName.splice(index, 1);
@@ -75,7 +77,7 @@ export default function CreateMode({ accessToken }) {
     setParticipantsId(updatedParticipantsId);
   };
   useEffect(() => {
-    console.log(participantsId);
+    console.log(participantsName);
   }, [participantsId]);
 
   // start and end date

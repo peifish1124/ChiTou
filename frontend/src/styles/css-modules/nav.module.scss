@@ -18,16 +18,16 @@
   .user {
     display: flex;
     align-items: center;
-    .userName {
+    .userNameBox {
       margin: 0 1rem;
       display: flex;
       color: #000;
       text-align: center;
       font-family: Outfit;
       // font-family: "Noto Sans TC", sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-style: normal;
-      font-weight: 700;
+      font-weight: 500;
       line-height: 24px;
     }
     .userPic {
