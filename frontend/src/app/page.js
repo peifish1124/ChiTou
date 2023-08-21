@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Nav changeToStart={() => setMode("start")} userName={userName} />
+        <Nav userName={userName} changeToStart={() => setMode("start")} />
 
         <div className={styles.page}>
           <div className={styles.leftPage}>

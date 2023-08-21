@@ -66,6 +66,23 @@
         
                     .tripInfoInput{
                         width: 100%;
+                        height: 2.4rem;
+
+                        .destinationCitySelect{
+                            max-height: 4rem;
+                            overflow-y: auto;
+                            padding: 3%;
+                            padding-left: 1rem;
+                            background: #F8FAF0;
+                            border: 1px solid #bebfb8;
+                            border-radius: 5px;
+                            outline: none;
+                            width: 100%;
+                            
+                
+                            color: #5C5C5C;
+                            font-size: 15px;
+                        }
                     }
             
                     input{
@@ -135,22 +152,28 @@
                     display: flex;
                     justify-content: space-between;
                     min-height: 2.5rem;
-        
-                    .tripInfoInput{
+                    flex-shrink: 0;
+
+                    .dataPickerInput{
                         width: 100%;
+                        height: 2.4rem;
+                        input{
+                            padding: 3%;
+                            padding-left: 1rem;
+                            width: 100%;
+                            height: 1.6rem;
+                
+                            font-family: Outfit;
+                            font-size: 15px;
+                            font-weight: 500;
+                            color: #6d6e6a;
+                            outline: none; 
+                            input:focus {
+                                outline: none; 
+                            }
+                        } 
+                        
                     }
-        
-                    input{
-                        padding: 3%;
-                        padding-left: 1rem;
-                        width: 20vw;
-                        height: 1.8rem;
-            
-                        font-family: Outfit;
-                        font-size: 15px;
-                        font-weight: 500;
-                        color: #6d6e6a;
-                    } 
                 }
             }
             .formBtn{
