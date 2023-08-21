@@ -91,7 +91,7 @@ const schedules = [
 ];
 
 export default function Home() {
-  const { userId, accessToken, userName } = useAuthorization();
+  const { accessToken } = useAuthorization();
   const [mode, setMode] = useState("start");
 
   return (
