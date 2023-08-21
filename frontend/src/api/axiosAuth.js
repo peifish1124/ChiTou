@@ -4,7 +4,7 @@ import { parseCookies } from "nookies";
 const axiosAuth = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    Authorization: `Bearer ${parseCookies().access_token}`,
+    Authorization: `Bearer ${parseCookies().accessToken}`,
   },
 });
 

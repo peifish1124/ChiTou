@@ -12,7 +12,8 @@ export default function useGetTrips() {
     console.log("get trips");
     try {
       const response = await axiosAuth.get("/trips");
-      setTrips(response.data);
+      console.log("get trips response", response.data.data.trips);
+      setTrips(response.data.data.trips);
       setLoading(false);
     } catch (err) {
       const { status } = err.response;
@@ -26,6 +27,7 @@ export default function useGetTrips() {
     getTrips();
     console.log("first time get trips");
   }, []);
+
   useEffect(() => {
     if (error !== null) {
       if (error === 401) {
@@ -56,5 +58,6 @@ export default function useGetTrips() {
       setError(null);
     }
   }, [error]);
+
   return { trips, loading, error, getTrips };
 }

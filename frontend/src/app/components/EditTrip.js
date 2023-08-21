@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import dayjs from "dayjs";
-import DaySchedules from "./TravelDetail/EditDaySchedules";
+import EditDaySchedules from "./TravelDetail/EditDaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function EditTrip({
@@ -50,7 +50,7 @@ export default function EditTrip({
           <p>參與者: 胡抽抽,聖鬥士,羅志祥</p>
         </div>
         {Object.keys(groupedSchedules).map((tripDay) => (
-          <DaySchedules
+          <EditDaySchedules
             key={tripDay}
             startDate={trip.start_date}
             tripDay={tripDay}

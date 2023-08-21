@@ -74,7 +74,7 @@ export default function CityDistrictSelector({
             {cityData
               .find(
                 (city) =>
-                  city.name.toString() === selectedCity.replace("台", "臺")
+                  city.name.toString() === selectedCity.replace("台", "臺"),
               )
               .districts.map((district) => (
                 <option key={district.name} value={district.name}>

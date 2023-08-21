@@ -11,14 +11,15 @@ export default function useTripDetail() {
     console.log("get trip id", id);
     try {
       const response = await axiosAuth.get(`/trips/${id}`);
-      setTripDetail(response.data);
+      console.log("get trip detail response", response.data.data.trip);
+      setTripDetail(response.data.data.trip);
       setLoading(false);
     } catch (err) {
       console.error("獲取旅行失敗:", err.response);
       const { status } = err.response;
       console.error("獲取旅行失敗:", status);
       setLoading(false);
-      setError(err);
+      setError(status);
     }
   };
 
