@@ -6,25 +6,28 @@ import EditDaySchedules from "./TravelDetail/EditDaySchedules";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function EditTrip({
-  trip,
-  schedules,
+  tripDetail,
   isNewSchedule,
   isDragDisabled,
   newSchedule,
   removeNewSchedule,
   addSchedule,
+  addDuration,
+  addNote,
+  submitNewSchedule,
+  getTripDetail,
 }) {
-  const groupedSchedules = schedules.reduce((groups, schedule) => {
-    const tripDay = schedule.trip_day;
-    const newGroups = { ...groups };
-    if (!newGroups[tripDay]) {
-      newGroups[tripDay] = [];
-    }
-    newGroups[tripDay].push(schedule);
-    return newGroups;
+  const startDate = dayjs(tripDetail.start_date);
+  const endDate = dayjs(tripDetail.end_date);
+  const daysCount = endDate.diff(startDate, "day") + 1;
+  const dayList = Array.from({ length: daysCount }, (_, index) => index + 1);
+  const groupedSchedules = dayList.reduce((groups, tripDay) => {
+    const schedulesOnDay = tripDetail.schedules.filter(
+      (schedule) => schedule.trip_day === tripDay,
+    );
+    return { ...groups, [tripDay]: schedulesOnDay };
   }, {});
-
-  // console.log("dggdgd", groupedSchedules);
+  console.log(groupedSchedules);
   return (
     <div
       className={tripcard.tripCard}
@@ -39,20 +42,22 @@ export default function EditTrip({
       </div>
       <div className={tripcard.tripInfo}>
         <div className={tripcard.tripInfoTop}>
-          <h2>{trip.name}</h2>
-          <p>目的地： {trip.destination}</p>
+          <h2>{tripDetail.name}</h2>
+          <p>目的地： {tripDetail.destination}</p>
         </div>
         <div className={tripcard.tripInfoBottom}>
           <p>
-            日期： {dayjs(trip.start_date).format("YYYY/MM/DD")} ~{" "}
-            {dayjs(trip.end_date).format("YYYY/MM/DD")}
+            日期： {dayjs(tripDetail.start_date).format("YYYY/MM/DD")} ~{" "}
+            {dayjs(tripDetail.end_date).format("YYYY/MM/DD")}
           </p>
-          <p>參與者: 胡抽抽,聖鬥士,羅志祥</p>
+          <p>
+            參與者: {tripDetail.members.map((member) => member.name).join(",")}
+          </p>
         </div>
         {Object.keys(groupedSchedules).map((tripDay) => (
           <EditDaySchedules
             key={tripDay}
-            startDate={trip.start_date}
+            startDate={tripDetail.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
             isNewSchedule={isNewSchedule}
@@ -60,6 +65,10 @@ export default function EditTrip({
             newSchedule={newSchedule}
             removeNewSchedule={removeNewSchedule}
             addSchedule={addSchedule}
+            addDuration={addDuration}
+            addNote={addNote}
+            submitNewSchedule={submitNewSchedule}
+            getTripDetail={getTripDetail}
           />
         ))}
       </div>

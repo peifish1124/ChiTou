@@ -4,19 +4,32 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import Image from "next/image";
 import ScheduleNote from "@/components/TravelDetail/ScheduleNote";
+import useUpdateSchedule from "@/hooks/schedules/useUpdateSchedule";
+import useDeleteSchedule from "@/hooks/schedules/useDeleteSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
-export default function EditSchedule({ schedule }) {
+export default function EditSchedule({ schedule, getTripDetail }) {
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   // const [DragDisabled, setDragDisabled] = useState(isDragDisabled);
+  const [editSchedule, setEditSchedule] = useState(schedule);
+  const { updateSchedule } = useUpdateSchedule(schedule.id);
+  const { deleteSchedule } = useDeleteSchedule(schedule.id);
 
   const handleEditClick = () => {
     setIsEdit(true);
-    // setDragDisabled(!isDragDisabled);
+  };
+  const handleDeleteClick = () => {
+    deleteSchedule();
+    getTripDetail();
   };
   const handleCancelEditClick = () => {
     setIsEdit(false);
+  };
+  const handleEditConfirmClick = () => {
+    setIsEdit(false);
+    updateSchedule(editSchedule);
+    getTripDetail();
   };
   return (
     <li
@@ -38,26 +51,38 @@ export default function EditSchedule({ schedule }) {
           <div style={{ width: "25%" }}>
             <TextField
               id="standard-basic"
-              value={schedule.duration}
+              value={editSchedule.duration}
               variant="standard"
               style={{ width: "50%" }}
+              onChange={(e) => {
+                setEditSchedule({
+                  ...editSchedule,
+                  duration: e.target.value,
+                });
+              }}
             />
           </div>
           <div style={{ width: "40%" }}>
             <TextField
               id="outlined-basic"
-              value={schedule.note}
+              value={editSchedule.note}
               variant="outlined"
               multiline
               style={{ width: "100%", minHeight: "4rem" }}
+              onChange={(e) => {
+                setEditSchedule({
+                  ...editSchedule,
+                  note: e.target.value,
+                });
+              }}
             />
           </div>
           <div className={styles.scheduleBtn}>
-            <button type="button">
+            <button type="button" onClick={handleEditConfirmClick}>
               <Image src="/check2.svg" alt="check button" fill />
             </button>
             <button type="button" onClick={handleCancelEditClick}>
-              <Image src="/trashcan.svg" alt="remove button" fill />
+              <Image src="/cancelEdit.svg" alt="remove button" fill />
             </button>
           </div>
         </div>
@@ -92,7 +117,11 @@ export default function EditSchedule({ schedule }) {
             >
               <Image src="/editBtn2.svg" alt="edit button" fill />
             </button>
-            <button type="button" className={styles.removebutton}>
+            <button
+              type="button"
+              className={styles.removebutton}
+              onClick={handleDeleteClick}
+            >
               <Image src="/trashcan.svg" alt="remove button" fill />
             </button>
           </div>

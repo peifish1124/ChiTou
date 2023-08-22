@@ -5,7 +5,6 @@ import Link from "next/link";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
 export default function InfoCard({ placeDetails, setPlaceDetails, addPlace }) {
-  const pictureUrl = placeDetails.photos[0].getUrl();
   return (
     <div className={styles.selectPlace}>
       <div className={styles.placeName}>{placeDetails.name}</div>
@@ -34,7 +33,7 @@ export default function InfoCard({ placeDetails, setPlaceDetails, addPlace }) {
       <Link href={placeDetails.url} className={styles.placePic} target="_blank">
         {placeDetails.photos ? (
           <Image
-            src={pictureUrl}
+            src={placeDetails.photos[0].getUrl()}
             alt={placeDetails.name}
             fill
             objectFit="cover"
