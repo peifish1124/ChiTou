@@ -142,3 +142,30 @@ exports.search = async (keyword) => {
     connection.release();
   }
 };
+
+exports.getUserById = async (id) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT id, name, email
+    FROM users
+    WHERE id = ?
+    `;
+
+  try {
+    const [rows] = await connection.query(query, [id]);
+    if (rows.length === 0) {
+      return null;
+    }
+    const user = rows[0];
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    }
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};

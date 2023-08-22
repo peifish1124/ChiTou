@@ -12,18 +12,18 @@ exports.getEvents = async (userId) => {
     `;
 
   function summary(type, senderName, tripName, tripStartDate) {
-    if(type === 'added_trip')
+    if (type === 'added_trip')
       return `${senderName} 將你加入 ${tripName}`;
-    else if(type === 'updated_trip')
+    else if (type === 'updated_trip')
       return `${senderName} 更新了 ${tripName} 的行程`;
-    else if(type === 'pre_trip')
+    else if (type === 'pre_trip')
       return `${tripName} 將於 ${tripStartDate} 開始`;
     return '';
   }
-  
+
   try {
     const [rows] = await connection.query(query, [userId]);
-    if(rows.length === 0) {
+    if (rows.length === 0) {
       return [];
     }
 
@@ -37,6 +37,34 @@ exports.getEvents = async (userId) => {
       }
     });
     return events;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
+exports.getMemberInfo = async (myId, userIds) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT name, email
+    FROM users
+    WHERE id IN (?) AND id != ? AND id<10
+    `;
+
+  try {
+    const [rows] = await connection.query(query, [userIds, myId]);
+    if (rows.length === 0) {
+      return [];
+    }
+    const receivers = rows.map((row) => {
+      return {
+        name: row.name,
+        email: row.email
+      }
+    });
+    return receivers;
   } catch (err) {
     console.error(err);
     return null;
@@ -79,14 +107,14 @@ exports.create = async (senderId, receiverIdArr, tripId, type) => {
 
     for (const receiverId of receiverIdArr) {
       if (senderId === receiverId) continue;
-      
+
       const [result] = await connection.query(query, [senderId, receiverId, tripId, type]);
       if (result.affectedRows === 1) {
         successCount++;
       }
     }
 
-    return successCount === receiverIdArr.length-1;
+    return successCount === receiverIdArr.length - 1;
   } catch (err) {
     console.error(err);
     return null;
