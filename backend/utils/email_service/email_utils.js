@@ -27,6 +27,17 @@ async function sendMailWithOption (options) {
 }
 
 // set options and call send mail function
+exports.sendSignupEmail = async (receiver, name) => {
+  const [subject, html] = mailOptions.signup(name);
+  const options = {
+    from: process.env.SYSTEM_FROM,
+    to: receiver+','+process.env.SYSTEM_EMAIL,
+    subject: subject,
+    html: html,
+  };
+  await sendMailWithOption(options);
+}
+
 exports.sendAddedTripEmail = async (receivers, senderName, recipientName, tripName) => {
   const [subject, html] = mailOptions.addedTrip(senderName, recipientName, tripName);
   const options = {
