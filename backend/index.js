@@ -54,7 +54,7 @@ const client = new line.Client(config);
 app.post('/line-webhook', line.middleware(config), async (req, res) => {
     try {
       for (const event of req.body.events) {
-        await handleEvent(event);
+        await lineBotUtil.handleEvent(event, client);
       }
       res.json({ success: true });
     } catch (error) {
