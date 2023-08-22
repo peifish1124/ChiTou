@@ -42,6 +42,7 @@ exports.getTrips = async (myId) => {
       FROM members AS M LEFT JOIN trips AS T
       ON M.trip_id = T.id
       WHERE M.user_id = ?
+      ORDER BY M.trip_id DESC
         `;
 
     try {
@@ -254,7 +255,7 @@ exports.search = async (keyword, userId) => {
     FROM trips AS T
     LEFT JOIN members AS M ON T.id = M.trip_id
     WHERE T.name LIKE ? AND M.user_id = ?
-    ORDER BY name DESC, id DESC
+    ORDER BY id DESC
     `;
 
   try {
