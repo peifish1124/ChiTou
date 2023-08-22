@@ -34,37 +34,25 @@ app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');
 });
 
-const line = require('@line/bot-sdk');
-const config = {
-    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+var linebot = require("linebot");
+var bot = linebot({
+    channelId: process.env.CHANNEL_ID,
     channelSecret: process.env.CHANNEL_SECRET,
-};
-const client = new line.Client(config);
-
-app.post('/line-webhook', line.middleware(config), async (req, res) => {
-    try {
-      for (const event of req.body.events) {
-        await handleEvent(event);
-      }
-      res.json({ success: true });
-    } catch (error) {
-      console.error(error);
-      res.status(500).end();
-    }
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 });
+const linebotParser = bot.parser();
 
-async function handleEvent(event) {
-    if (event.type === 'message' && event.message.type === 'text') {
-        const messageText = event.message.text;
-        if (messageText === 'Hello') {
-        await client.replyMessage(event.replyToken, {
-            type: 'text',
-            text: 'Hello, how can I help you?',
-        });
-        }
-    }
-// 如果不需要回應，可以直接返回
-}
+// 當有人傳送訊息給 Bot 時
+bot.on("message", function (event) {
+    // event.message.text 是使用者傳給bot的訊息
+    console.log(event.message.text);
+    event.reply(
+        "不知道該問什麼嗎？ 歡迎透過以下的關鍵字與我互動！"
+    );
+});
+  
+// 送出帶有 line-bot 需要資訊的 POST 請求
+app.post("/", linebotParser);
 
 app.listen(port, () => {
     console.log('running successfully');
