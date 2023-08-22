@@ -42,6 +42,7 @@ export default function EditPage({ params }) {
             newSchedule={newSchedule}
             removeNewSchedule={removeNewSchedule}
             addPlace={addPlace}
+            addNote={addNote}
           />
         </div>
 

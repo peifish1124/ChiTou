@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import useGetGoogleSearch from "@/hooks/search/useGetGoogleSearch";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
-export default function InfoCard({ placeDetails, setPlaceDetails, addPlace }) {
+export default function InfoCard({ placeDetails, setPlaceDetails, addPlace,addNote }) {
+  const { googleSearch } = useGetGoogleSearch(placeDetails.name);
   return (
     <div className={styles.selectPlace}>
       <div className={styles.placeName}>{placeDetails.name}</div>
@@ -66,8 +68,9 @@ export default function InfoCard({ placeDetails, setPlaceDetails, addPlace }) {
         <button
           type="button"
           className={styles.addBtn}
-          onClick={() => {
+          onClick={async () => {
             addPlace(placeDetails.name);
+            addNote(googleSearch);
             setPlaceDetails(null);
           }}
         >
