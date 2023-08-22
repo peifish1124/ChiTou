@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import getCookies from "@/utils/getCookies";
 import Nav from "@/components/Nav";
 import GoogleMap from "@/components/GoogleMap";
 import useAddSchedule from "@/hooks/useAddSchedule";
@@ -10,6 +11,7 @@ import EditTrip from "@/components/EditTrip";
 
 export default function EditPage({ params }) {
   const { tripDetail, loading, getTripDetail } = useTripDetail(params.id);
+  const { userName } = getCookies();
   const {
     isNewSchedule,
     isDragDisabled,
@@ -31,7 +33,7 @@ export default function EditPage({ params }) {
   return (
     <main className={pagestyles.main}>
       {/* navbar */}
-      <Nav />
+      <Nav userName={userName} />
       {/* main */}
       <div className={pagestyles.page}>
         <div className={pagestyles.leftPage}>
