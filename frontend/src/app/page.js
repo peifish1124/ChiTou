@@ -13,17 +13,17 @@ import TravelDetail from "@/components/TravelDetail";
 import useGetTrips from "@/hooks/trip/useGetTrips";
 // import useSearchTrip from "@/hooks/trip/useSearchTrip";
 import styles from "@/styles/css-modules/page.module.scss";
-import useAuthorization from "@/hooks/useAuthorization";
+import getCookies from "@/utils/getCookies";
 
 export default function Home() {
-  const { accessToken } = useAuthorization();
+  const { accessToken, userName, userId } = getCookies();
   const [mode, setMode] = useState("start");
   const [tripId, setTripId] = useState(null);
   const { trips, getTrips } = useGetTrips();
   return (
     <main className={styles.main}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Nav changeToStart={() => setMode("start")} />
+        <Nav userName={userName} changeToStart={() => setMode("start")} />
 
         <div className={styles.page}>
           <div className={styles.leftPage}>
@@ -57,7 +57,12 @@ export default function Home() {
             {mode === "start" && <StartMode />}
             {mode === "detailed" && <TravelDetail tripId={tripId} />}
             {mode === "create" && (
-              <CreateMode accessToken={accessToken} getTrips={getTrips} />
+              <CreateMode
+                accessToken={accessToken}
+                userName={userName}
+                userId={userId}
+                getTrips={getTrips}
+              />
             )}
           </div>
         </div>

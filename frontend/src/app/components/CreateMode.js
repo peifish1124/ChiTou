@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
-// import * as yup from "yup";
+import * as yup from "yup";
 import { TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -12,18 +12,26 @@ import Image from "next/image";
 import useUserSearch from "@/hooks/useUserSearch";
 import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
+import cityData from "@/data/taiwan-district-zip-code.json";
 
-export default function CreateMode({ accessToken, getTrips }) {
+export default function CreateMode({
+  accessToken,
+  getTrips,
+  userName,
+  userId,
+}) {
   const { createTrip } = useCreateTrip();
   const { searchUsers } = useUserSearch(accessToken);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [participantsName, setParticipantsName] = useState([]);
-  const [participantsId, setParticipantsId] = useState([]);
+  const [participantsName, setParticipantsName] = useState([userName]);
+  const [participantsId, setParticipantsId] = useState([parseInt(userId, 10)]);
 
-  // const validationSchema = yup.object().shape({
-  //   end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
-  // });
+  const validationSchema = yup.object().shape({
+    end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -33,15 +41,13 @@ export default function CreateMode({ accessToken, getTrips }) {
       end_date: "",
       user_ids: [],
     },
-    // validationSchema,
+    validationSchema,
     onSubmit: (values) => {
-      console.log("送出");
-
       const tripData = {
         name: values.trip_name,
         destination: values.destination,
-        start_date: values.start_date,
-        end_date: values.end_date,
+        start_date: startDate,
+        end_date: endDate,
         user_ids: participantsId,
       };
       // console.log(tripData);
@@ -57,17 +63,24 @@ export default function CreateMode({ accessToken, getTrips }) {
     setSearchResults(results);
   };
   useEffect(() => {
-    console.log("searchKeyword", searchKeyword);
-    console.log("searchResults: ", searchResults);
+    // console.log("searchKeyword", searchKeyword);
+    // console.log("searchResults: ", searchResults);
   }, [searchResults, searchKeyword]);
 
   // participants
   const handleSearchResultSelect = async (user) => {
+    if (participantsName.includes(user.name)) {
+      return; // 不能輸入重複的使用者
+    }
     setParticipantsName([...participantsName, user.name]);
     setParticipantsId([...participantsId, user.id]);
     setSearchKeyword("");
   };
   const handleParticipantRemove = (index) => {
+    if (index === 0) {
+      // 不能刪除自己
+      return;
+    }
     const updatedParticipantsName = [...participantsName];
     const updatedParticipantsId = [...participantsId];
     updatedParticipantsName.splice(index, 1);
@@ -76,19 +89,21 @@ export default function CreateMode({ accessToken, getTrips }) {
     setParticipantsId(updatedParticipantsId);
   };
   useEffect(() => {
-    console.log(participantsId);
-  }, [participantsId]);
+    console.log(participantsName);
+  }, [participantsId, participantsName]);
 
   // start and end date
   const handleStartDateChange = (date) => {
     const dayjsDate = dayjs(date);
     const formattedDate = dayjsDate.format("YYYY-MM-DD");
-    formik.setFieldValue("start_date", formattedDate);
+    setStartDate(formattedDate);
+    formik.setFieldValue("start_date", date);
   };
   const handleEndDateChange = (date) => {
     const dayjsDate = dayjs(date);
     const formattedDate = dayjsDate.format("YYYY-MM-DD");
-    formik.setFieldValue("end_date", formattedDate);
+    setEndDate(formattedDate);
+    formik.setFieldValue("end_date", date);
   };
 
   return (
@@ -109,17 +124,26 @@ export default function CreateMode({ accessToken, getTrips }) {
             <div className={styles.tripInfoItem}>
               <p>目的地：</p>
               <div className={styles.tripInfoInput}>
-                <input
-                  type="text"
-                  placeholder="請填入縣市名稱"
+                <select
+                  className={styles.destinationCitySelect}
                   {...formik.getFieldProps("destination")}
-                />
+                >
+                  <option value="" disabled>
+                    選擇目的地縣市
+                  </option>
+                  {cityData.map((city) => (
+                    <option key={city.name} value={city.name}>
+                      {city.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className={styles.dataPickerItem}>
               <p>開始時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/25/2023" /> */}
               <DatePicker
+                className={styles.dataPickerInput}
                 onChange={handleStartDateChange}
                 renderInput={(params) => <TextField {...params} />}
               />
@@ -127,10 +151,13 @@ export default function CreateMode({ accessToken, getTrips }) {
             <div className={styles.dataPickerItem}>
               <p>結束時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/27/2023" /> */}
+              {/* <div className={styles.tripInfoInput}> */}
               <DatePicker
+                className={styles.dataPickerInput}
                 onChange={handleEndDateChange}
                 renderInput={(params) => <TextField {...params} />}
               />
+              {/* </div> */}
             </div>
             <div className={styles.tripInfoItem}>
               <p>參與者：</p>
@@ -199,11 +226,11 @@ export default function CreateMode({ accessToken, getTrips }) {
             </div>
           </div>
           {/* Error Message */}
-          {/* <div>
+          <div>
             {formik.touched.end_date && formik.errors.end_date ? (
               <div className={styles.error}>{formik.errors.end_date}</div>
             ) : null}
-          </div> */}
+          </div>
           <div className={styles.formBtn}>
             <button type="button">
               <Image

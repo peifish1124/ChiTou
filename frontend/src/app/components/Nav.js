@@ -2,21 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import nav from "@/styles/css-modules/nav.module.scss";
 
-const user = {
-  name: "胡抽抽",
-};
-export default function Nav({ changeToStart }) {
+export default function Nav({ changeToStart, userName }) {
   return (
     <nav className={nav.navbar}>
       <Link href="/" className={nav.logo} onClick={changeToStart}>
         ChiTou
       </Link>
       <div className={nav.user}>
-        <div className={nav.userName}>{user.name}</div>
+        <div className={nav.userNameBox}>{userName}</div>
         <div className={nav.userPic}>
           <Image
             className="image"
-            src={user.picture || "/user-chou.png"}
+            // src={user.picture || "/user-chou.png"}
+            src="/user-chou.png"
             width={36}
             height={36}
             alt="user picture"
