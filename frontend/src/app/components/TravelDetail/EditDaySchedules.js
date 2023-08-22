@@ -55,8 +55,8 @@ export default function EditDaySchedules({
     setSortedDaySchedules(newSortedSchedules);
     // getTripDetail();
   };
-  const handleCheckButtonClick = () => {
-    submitNewSchedule();
+  const handleCheckButtonClick = async () => {
+    await submitNewSchedule();
     getTripDetail();
   };
   useEffect(() => {
@@ -207,6 +207,7 @@ export default function EditDaySchedules({
               id="standard-basic"
               // label="停留時間"
               variant="standard"
+              type="number"
               style={{ width: "50%" }}
               autoComplete="off"
               onChange={(e) => addDuration(e.target.value)}
