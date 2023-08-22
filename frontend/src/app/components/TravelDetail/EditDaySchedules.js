@@ -10,9 +10,12 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TextField } from "@mui/material";
 import WeatherIcon from "../Button/WeatherIcon";
 import EditSchedule from "./EditSchedule";
+import useChangeSequence from "@/hooks/trip/useChangeSequence";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
 export default function EditDaySchedules({
+  tripId,
+  tripMember,
   startDate,
   tripDay,
   daySchedules,
@@ -27,6 +30,7 @@ export default function EditDaySchedules({
   getTripDetail,
 }) {
   const [expanded, setExpanded] = useState(true);
+  const { changeSequence } = useChangeSequence(tripId, tripDay, tripMember);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
   // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
@@ -40,11 +44,13 @@ export default function EditDaySchedules({
     const newSortedSchedules = Array.from(sortedDaySchedules);
     const [movedItem] = newSortedSchedules.splice(source.index, 1);
     newSortedSchedules.splice(destination.index, 0, movedItem);
-
+    console.log("haha ggggdrag", newSortedSchedules);
+    changeSequence(newSortedSchedules);
     setSortedDaySchedules(newSortedSchedules);
+    // getTripDetail();
   };
-  const handleCheckButtonClick = () => {
-    submitNewSchedule();
+  const handleCheckButtonClick = async () => {
+    await submitNewSchedule();
     getTripDetail();
   };
   useEffect(() => {
@@ -192,6 +198,7 @@ export default function EditDaySchedules({
               id="standard-basic"
               // label="停留時間"
               variant="standard"
+              type="number"
               style={{ width: "50%" }}
               autoComplete="off"
               onChange={(e) => addDuration(e.target.value)}
