@@ -11,7 +11,7 @@ import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
 import useGetTrips from "@/hooks/trip/useGetTrips";
-// import useSearchTrip from "@/hooks/trip/useSearchTrip";
+import useSearchTrip from "@/hooks/trip/useSearchTrip";
 import styles from "@/styles/css-modules/page.module.scss";
 import getCookies from "@/utils/getCookies";
 
@@ -20,6 +20,8 @@ export default function Home() {
   const [mode, setMode] = useState("start");
   const [tripId, setTripId] = useState(null);
   const { trips, getTrips } = useGetTrips();
+  const { tripsSearchKeyword, tripsSearchResult, handleInputChange } =
+    useSearchTrip();
   return (
     <main className={styles.main}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -28,21 +30,37 @@ export default function Home() {
         <div className={styles.page}>
           <div className={styles.leftPage}>
             <div className={styles.searchTripCard}>
-              <SearchTripCard />
+              <SearchTripCard handleInputChange={handleInputChange} />
             </div>
 
-            <div className={styles.tripcard}>
-              {trips.map((trip) => (
-                <TripCard
-                  key={trip.id}
-                  trip={trip}
-                  changeToDetail={() => {
-                    setMode("detailed");
-                    setTripId(trip.id);
-                  }}
-                />
-              ))}
-            </div>
+            {tripsSearchResult.length > 0 && (
+              <div className={styles.tripcard}>
+                {tripsSearchResult.map((trip) => (
+                  <TripCard
+                    key={trip.id}
+                    trip={trip}
+                    changeToDetail={() => {
+                      setMode("detailed");
+                      setTripId(trip.id);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            {!tripsSearchKeyword && (
+              <div className={styles.tripcard}>
+                {trips.map((trip) => (
+                  <TripCard
+                    key={trip.id}
+                    trip={trip}
+                    changeToDetail={() => {
+                      setMode("detailed");
+                      setTripId(trip.id);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
             <button
               type="button"
