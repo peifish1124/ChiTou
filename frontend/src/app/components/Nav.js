@@ -25,12 +25,12 @@ export default function Nav({ changeToStart, userName }) {
       cancelButtonText: "取消",
     }).then((result) => {
       if (result.isConfirmed) {
-        // 執行登出操作
-        destroyCookie(null, "access_token");
-        destroyCookie(null, "user_id");
-        console.log("登出");
+        destroyCookie(null, "accessToken");
+        destroyCookie(null, "userId");
+        destroyCookie(null, "userName");
+        // console.log("登出");
         router.push("/login");
-        console.log("登出且轉向至 /login");
+        // console.log("登出且轉向至 /login");
       }
     });
   };
