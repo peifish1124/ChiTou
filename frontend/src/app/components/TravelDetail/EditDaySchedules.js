@@ -10,9 +10,12 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TextField } from "@mui/material";
 import WeatherIcon from "../Button/WeatherIcon";
 import EditSchedule from "./EditSchedule";
+import useChangeSequence from "@/hooks/trip/useChangeSequence";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
 export default function EditDaySchedules({
+  tripId,
+  tripMember,
   startDate,
   tripDay,
   daySchedules,
@@ -27,6 +30,7 @@ export default function EditDaySchedules({
   getTripDetail,
 }) {
   const [expanded, setExpanded] = useState(true);
+  const { changeSequence } = useChangeSequence(tripId, tripDay, tripMember);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
   // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
@@ -40,8 +44,16 @@ export default function EditDaySchedules({
     const newSortedSchedules = Array.from(sortedDaySchedules);
     const [movedItem] = newSortedSchedules.splice(source.index, 1);
     newSortedSchedules.splice(destination.index, 0, movedItem);
-
+    console.log("haha ggggdrag", newSortedSchedules);
+    // const updatedSchedules = newSortedSchedules.map((schedule, index) => ({
+    //   ...schedule,
+    //   sequence: index + 1,
+    // }));
+    // changeSequence(updatedSchedules);
+    // setSortedDaySchedules(updatedSchedules);
+    changeSequence(newSortedSchedules);
     setSortedDaySchedules(newSortedSchedules);
+    // getTripDetail();
   };
   const handleCheckButtonClick = () => {
     submitNewSchedule();
@@ -52,6 +64,9 @@ export default function EditDaySchedules({
       [...daySchedules].sort((a, b) => a.sequence - b.sequence),
     );
   }, [daySchedules]);
+  useEffect(() => {
+    console.log("haha drag", sortedDaySchedules);
+  }, [sortedDaySchedules]);
   const handleRemoveButtonClick = () => {
     removeNewSchedule();
   };

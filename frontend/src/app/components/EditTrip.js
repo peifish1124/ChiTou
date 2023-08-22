@@ -57,6 +57,8 @@ export default function EditTrip({
         {Object.keys(groupedSchedules).map((tripDay) => (
           <EditDaySchedules
             key={tripDay}
+            tripId={tripDetail.id}
+            tripMember={tripDetail.members}
             startDate={tripDetail.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
