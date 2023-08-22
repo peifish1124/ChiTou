@@ -32,9 +32,6 @@ export default function EditDaySchedules({
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
     [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
-  useEffect(() => {
-    // console.log(sortedDaySchedules);
-  }, [sortedDaySchedules]);
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -46,9 +43,9 @@ export default function EditDaySchedules({
 
     setSortedDaySchedules(newSortedSchedules);
   };
-  const handleCheckButtonClick = async () => {
+  const handleCheckButtonClick = () => {
     submitNewSchedule();
-    await getTripDetail();
+    getTripDetail();
   };
   useEffect(() => {
     setSortedDaySchedules(
@@ -216,7 +213,7 @@ export default function EditDaySchedules({
               <Image src="/check2.svg" alt="check button" fill />
             </button>
             <button type="button" onClick={handleRemoveButtonClick}>
-              <Image src="/trashcan.svg" alt="remove button" fill />
+              <Image src="/cancelEdit.svg" alt="remove button" fill />
             </button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { TextField } from "@mui/material";
 import Image from "next/image";
 import ScheduleNote from "@/components/TravelDetail/ScheduleNote";
 import useUpdateSchedule from "@/hooks/schedules/useUpdateSchedule";
+import useDeleteSchedule from "@/hooks/schedules/useDeleteSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
 export default function EditSchedule({ schedule, getTripDetail }) {
@@ -13,9 +14,14 @@ export default function EditSchedule({ schedule, getTripDetail }) {
   // const [DragDisabled, setDragDisabled] = useState(isDragDisabled);
   const [editSchedule, setEditSchedule] = useState(schedule);
   const { updateSchedule } = useUpdateSchedule(schedule.id);
+  const { deleteSchedule } = useDeleteSchedule(schedule.id);
 
   const handleEditClick = () => {
     setIsEdit(true);
+  };
+  const handleDeleteClick = () => {
+    deleteSchedule();
+    getTripDetail();
   };
   const handleCancelEditClick = () => {
     setIsEdit(false);
@@ -76,7 +82,7 @@ export default function EditSchedule({ schedule, getTripDetail }) {
               <Image src="/check2.svg" alt="check button" fill />
             </button>
             <button type="button" onClick={handleCancelEditClick}>
-              <Image src="/trashcan.svg" alt="remove button" fill />
+              <Image src="/cancelEdit.svg" alt="remove button" fill />
             </button>
           </div>
         </div>
@@ -111,7 +117,11 @@ export default function EditSchedule({ schedule, getTripDetail }) {
             >
               <Image src="/editBtn2.svg" alt="edit button" fill />
             </button>
-            <button type="button" className={styles.removebutton}>
+            <button
+              type="button"
+              className={styles.removebutton}
+              onClick={handleDeleteClick}
+            >
               <Image src="/trashcan.svg" alt="remove button" fill />
             </button>
           </div>
