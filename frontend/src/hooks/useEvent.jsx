@@ -7,7 +7,7 @@ const apiEventGet = async () => {
 };
 
 const apiEventRead = async (id) => {
-  const response = await axiosAuth.post(`/events/${id}/read`);
+  const response = await axiosAuth.put(`/events/${id}/read`);
   return response;
 };
 
