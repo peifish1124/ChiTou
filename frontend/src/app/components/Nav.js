@@ -51,14 +51,8 @@ export default function Nav({ changeToStart, userName }) {
             alt="user picture"
           />
         </div>
-        <button className={nav.userPic} type="button" onClick={handleLogout}>
-          <Image
-            className="image"
-            src="/logout-color.png"
-            width={36}
-            height={36}
-            alt="user picture"
-          />
+        <button className={nav.logout} type="button" onClick={handleLogout}>
+          <Image src="/logout-color.png" fill alt="user picture" />
         </button>
       </div>
       <div className={nav.notifIcon} style={{ display: "none" }}>
