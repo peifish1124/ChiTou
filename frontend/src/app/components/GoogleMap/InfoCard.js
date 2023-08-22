@@ -5,7 +5,12 @@ import Link from "next/link";
 import useGetGoogleSearch from "@/hooks/search/useGetGoogleSearch";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
-export default function InfoCard({ placeDetails, setPlaceDetails, addPlace,addNote }) {
+export default function InfoCard({
+  placeDetails,
+  setPlaceDetails,
+  addPlace,
+  addNote,
+}) {
   const { googleSearch } = useGetGoogleSearch(placeDetails.name);
   return (
     <div className={styles.selectPlace}>
