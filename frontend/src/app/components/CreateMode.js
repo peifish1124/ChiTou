@@ -28,6 +28,7 @@ export default function CreateMode({
   const [searchResults, setSearchResults] = useState([]);
   const [participantsName, setParticipantsName] = useState([userName]);
   const [participantsId, setParticipantsId] = useState([parseInt(userId, 10)]);
+  const [showSearchList, setShowSearchList] = useState(false);
 
   const validationSchema = yup.object().shape({
     end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
@@ -75,6 +76,7 @@ export default function CreateMode({
     setParticipantsName([...participantsName, user.name]);
     setParticipantsId([...participantsId, user.id]);
     setSearchKeyword("");
+    setShowSearchList(false);
   };
   const handleParticipantRemove = (index) => {
     if (index === 0) {
@@ -161,67 +163,66 @@ export default function CreateMode({
             </div>
             <div className={styles.tripInfoItem}>
               <p>參與者：</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  width: "100%",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="輸入姓名並按 Enter"
-                  value={searchKeyword}
-                  onChange={handleSearchResult}
-                />
-                <div className={styles.participantsBox}>
-                  {participantsName.map((participant, index) => {
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div className={styles.participantTag} key={index}>
-                        {participant}
+              <div className={styles.participantsItem}>
+                <div className={styles.participantsInput}>
+                  <input
+                    type="text"
+                    placeholder="輸入邀請對象"
+                    value={searchKeyword}
+                    onFocus={() => setShowSearchList(true)}
+                    // onBlur={() => setShowSearchList(false)}
+                    onChange={handleSearchResult}
+                  />
+                  <div className={styles.participantsBox}>
+                    {participantsName.map((participant, index) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div className={styles.participantTag} key={index}>
+                          {participant}
+                          <button
+                            type="button"
+                            onClick={() => handleParticipantRemove(index)}
+                          >
+                            <Image
+                              src="/tag-cancel.svg"
+                              alt="cancel"
+                              width={15}
+                              height={15}
+                              objectFit="cover"
+                            />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                {showSearchList && (
+                  <div className={styles.participantsSearchList}>
+                    {searchResults && searchResults.length > 0 ? (
+                      searchResults.map((user) => (
+                        // <div className={styles.participantsSearchItem}
+                        //   key={user.id}
+                        // >
+                        //   <p onClick={() => handleSearchResultSelect(user)}>
+                        //     {user.name}
+                        //   </p>
+                        // </div>
                         <button
                           type="button"
-                          onClick={() => handleParticipantRemove(index)}
+                          className={styles.participantsSearchItem}
+                          key={user.id}
+                          onClick={() => handleSearchResultSelect(user)}
                         >
-                          <Image
-                            src="/tag-cancel.svg"
-                            alt="cancel"
-                            width={15}
-                            height={15}
-                            objectFit="cover"
-                          />
+                          {user.name}
                         </button>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className={styles.participantsSearchList}>
-                  {searchResults && searchResults.length > 0 ? (
-                    searchResults.map((user) => (
-                      // <div className={styles.participantsSearchItem}
-                      //   key={user.id}
-                      // >
-                      //   <p onClick={() => handleSearchResultSelect(user)}>
-                      //     {user.name}
-                      //   </p>
-                      // </div>
-                      <button
-                        type="button"
-                        className={styles.participantsSearchItem}
-                        key={user.id}
-                        onClick={() => handleSearchResultSelect(user)}
-                      >
-                        {user.name}
-                      </button>
-                    ))
-                  ) : (
-                    // <div>No search results found.</div>
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <></>
-                  )}
-                </div>
+                      ))
+                    ) : (
+                      // <div>No search results found.</div>
+                      // eslint-disable-next-line react/jsx-no-useless-fragment
+                      <></>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
