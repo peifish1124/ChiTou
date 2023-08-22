@@ -1,4 +1,5 @@
 const poolConnection = require('../../utils/db_connection');
+const logger = require('../../utils/logger');
 
 exports.getEvents = async (userId) => {
   const connection = await poolConnection();
@@ -117,6 +118,10 @@ exports.create = async (senderId, receiverIdArr, tripId, type) => {
     return successCount === receiverIdArr.length - 1;
   } catch (err) {
     console.error(err);
+
+    // save error msg to log file
+    await logger.saveToLogFile((err.name+': '+err.message+'\n'+err.sql + '\n' + err.stack));
+
     return null;
   } finally {
     connection.release();
