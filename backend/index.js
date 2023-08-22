@@ -51,10 +51,10 @@ const config = {
 };
 const client = new line.Client(config);
 
-app.post('/line-webhook', line.middleware(config), async (req, res) => {
+app.post('/line-webhook', async (req, res) => {
     try {
       for (const event of req.body.events) {
-        await lineBotUtil.handleEvent(event, client);
+        await handleEvent(event);
       }
       res.json({ success: true });
     } catch (error) {
@@ -62,6 +62,18 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
       res.status(500).end();
     }
 });
+
+async function handleEvent(event) {
+    if (event.type === 'message' && event.message.type === 'text') {
+        const messageText = event.message.text;
+        if (messageText === 'Hello') {
+        await client.replyMessage(event.replyToken, {
+            type: 'text',
+            text: 'Hello, how can I help you?',
+        });
+        }
+    }
+}
 
 app.listen(port, () => {
     console.log('running successfully');
