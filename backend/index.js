@@ -9,10 +9,10 @@ const line = require('@line/bot-sdk');
 // const weatherRoute = require('./server/routes/weather_route');
 // const searchRoute = require('./server/routes/search_route');
 
-// const app = express();
-// const port = process.env.WEB_PORT;
+const app = express();
+const port = process.env.WEB_PORT;
 
-// app.use(express.json());
+app.use(express.json());
 // app.use('/images', express.static('static'));
 
 // app.all('*', (req, res, next) => {
