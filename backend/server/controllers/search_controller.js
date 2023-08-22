@@ -5,16 +5,8 @@ const searchModel = require('../models/search_model');
 exports.getGoogleSearch = async (req, res) => {
   console.log('Get Google Search');
 
-  if (req.headers['content-type'] !== 'application/json') {
-    const [errorCode, errorMessage] = errorRes.contentTypeError();
-    return res.status(errorCode).json({ error: errorMessage });
-  }
-
-  const { place_name } = req.body;
-  if (!place_name) {
-    const [errorCode, errorMessage] = errorRes.emptyInput();
-    return res.status(errorCode).json({ error: errorMessage });
-  }
+  const { place_name } = req.query;
+  if(typeof place_name == 'undefined') return res.status(200).json({data: {search: ''}});
 
   try {
     var summary = '';

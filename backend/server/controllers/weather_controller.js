@@ -4,16 +4,8 @@ const axios = require('axios');
 exports.getWeather = async (req, res) => {
   console.log('Get Weather');
 
-  if (req.headers['content-type'] !== 'application/json') {
-    const [errorCode, errorMessage] = errorRes.contentTypeError();
-    return res.status(errorCode).json({ error: errorMessage });
-  }
-
-  const { date, location_name } = req.body;
-  if (!date || !location_name) {
-    const [errorCode, errorMessage] = errorRes.emptyInput();
-    return res.status(errorCode).json({ error: errorMessage });
-  }
+  const { date, location_name } = req.query;
+  if(typeof date == 'undefined' || typeof location_name == 'undefined') return res.status(200).json({data: {weather: {}}});
 
   try {
     const weatherApiUrl = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=${process.env.API_KEY}&format=JSON&locationName=${location_name}&elementName=WeatherDescription`;
