@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const line = require('@line/bot-sdk');
 // routes require
 const userRoute = require('./server/routes/user_route');
 const scheduleRoute = require('./server/routes/schedule_route');
@@ -12,7 +11,7 @@ const searchRoute = require('./server/routes/search_route');
 const app = express();
 const port = process.env.WEB_PORT;
 
-app.use(express.json());
+// app.use(express.json());
 app.use('/images', express.static('static'));
 
 app.all('*', (req, res, next) => {
@@ -34,34 +33,35 @@ app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');
 });
 
+const line = require('@line/bot-sdk');
 const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET,
 };
-
 const client = new line.Client(config);
-app.post('/callback', line.middleware(config), (req, res) => {
-    console.log('---------callback---------')
-    Promise
-        .all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result))
-        .catch((err) => {
-        console.error(err);
-        res.status(500).end();
-        });
+
+app.post('/line-webhook', line.middleware(config), async (req, res) => {
+    try {
+      for (const event of req.body.events) {
+        await handleEvent(event);
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).end();
+    }
 });
 
-function handleEvent(event) {
-    if (event.type !== 'message' || event.message.type !== 'text') {
-        // ignore non-text-message event
-        return Promise.resolve(null);
+async function handleEvent(event) {
+    if (event.type === 'message' && event.message.type === 'text') {
+        const messageText = event.message.text;
+        if (messageText === 'Hello') {
+        await client.replyMessage(event.replyToken, {
+            type: 'text',
+            text: 'Hello, how can I help you?',
+        });
+        }
     }
-
-    // create a echoing text message
-    const echo = { type: 'text', text: event.message.text };
-
-    // use reply API
-    return client.replyMessage(event.replyToken, echo);
 }
 
 app.listen(port, () => {
