@@ -51,7 +51,7 @@ const config = {
 };
 const client = new line.Client(config);
 
-app.post('/line-webhook', async (req, res) => {
+app.post('/line-webhook', line.middleware(config), async (req, res) => {
     try {
       for (const event of req.body.events) {
         await handleEvent(event);
