@@ -45,12 +45,6 @@ export default function EditDaySchedules({
     const [movedItem] = newSortedSchedules.splice(source.index, 1);
     newSortedSchedules.splice(destination.index, 0, movedItem);
     console.log("haha ggggdrag", newSortedSchedules);
-    // const updatedSchedules = newSortedSchedules.map((schedule, index) => ({
-    //   ...schedule,
-    //   sequence: index + 1,
-    // }));
-    // changeSequence(updatedSchedules);
-    // setSortedDaySchedules(updatedSchedules);
     changeSequence(newSortedSchedules);
     setSortedDaySchedules(newSortedSchedules);
     // getTripDetail();
@@ -64,9 +58,6 @@ export default function EditDaySchedules({
       [...daySchedules].sort((a, b) => a.sequence - b.sequence),
     );
   }, [daySchedules]);
-  useEffect(() => {
-    console.log("haha drag", sortedDaySchedules);
-  }, [sortedDaySchedules]);
   const handleRemoveButtonClick = () => {
     removeNewSchedule();
   };
