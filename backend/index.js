@@ -12,6 +12,15 @@ const app = express();
 const port = process.env.WEB_PORT;
 
 // app.use(express.json());
+function excludeJsonMiddleware(req, res, next) {
+    if (req.path === '/line-webhook') {
+      next();
+    } else {
+      express.json()(req, res, next);
+    }
+}
+app.use(excludeJsonMiddleware);
+
 app.use('/images', express.static('static'));
 
 app.all('*', (req, res, next) => {
