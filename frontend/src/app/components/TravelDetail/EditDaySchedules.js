@@ -44,7 +44,6 @@ export default function EditDaySchedules({
     const newSortedSchedules = Array.from(sortedDaySchedules);
     const [movedItem] = newSortedSchedules.splice(source.index, 1);
     newSortedSchedules.splice(destination.index, 0, movedItem);
-    console.log("haha ggggdrag", newSortedSchedules);
     changeSequence(newSortedSchedules);
     setSortedDaySchedules(newSortedSchedules);
     // getTripDetail();
@@ -209,6 +208,7 @@ export default function EditDaySchedules({
               id="outlined-basic"
               variant="outlined"
               placeholder="輸入筆記"
+              defaultValue={newSchedule.note}
               multiline
               style={{ width: "100%", minHeight: "4rem" }}
               autoComplete="off"

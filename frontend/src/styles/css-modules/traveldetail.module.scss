@@ -136,7 +136,7 @@
   .timeline {
     li {
       width: 100%;
-      margin: 0.5rem 0;
+      padding: 0.5rem 0;
       box-sizing: border-box;
       position: relative;
       display: flex;
@@ -202,10 +202,44 @@
   .schedule{
     li {
       width: 100%;
+      padding: 0.5rem 0;
       box-sizing: border-box;
       position: relative;
       display: flex;
       align-items: center;
+      &:nth-child(n)::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        width: 1px;
+        top: 0;
+        height: 100%;
+        background-color: #d1d3cb;
+        right: calc(50% + 20px);
+      }
+
+      &:nth-last-child(1)::after {
+        height: 50%;
+      }
+
+      &:nth-child(1)::after {
+        top: 50%;
+        height: 50%;
+      }
+
+      &:nth-child(n)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: calc(50% + 16px);
+        bottom: 0;
+        margin: auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #181426;
+        z-index: 2;
+      }
     }
     .note {
       width: 35%;

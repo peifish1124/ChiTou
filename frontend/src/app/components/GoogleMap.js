@@ -14,6 +14,7 @@ export default function GoogleMap({
   newSchedule,
   removeNewSchedule,
   addPlace,
+  addNote,
 }) {
   // 預設位置
   const [myPosition, setMyPosition] = useState({
@@ -291,6 +292,7 @@ export default function GoogleMap({
           newSchedule={newSchedule}
           removeNewSchedule={removeNewSchedule}
           addPlace={addPlace}
+          addNote={addNote}
         />
       )}
     </div>
