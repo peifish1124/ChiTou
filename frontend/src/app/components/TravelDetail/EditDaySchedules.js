@@ -21,17 +21,17 @@ export default function EditDaySchedules({
   newSchedule,
   removeNewSchedule,
   addSchedule,
+  addDuration,
+  addNote,
+  submitNewSchedule,
+  getTripDetail,
 }) {
   const [expanded, setExpanded] = useState(true);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
-
   // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
     [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
-  useEffect(() => {
-    // console.log(sortedDaySchedules);
-  }, [sortedDaySchedules]);
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -43,9 +43,21 @@ export default function EditDaySchedules({
 
     setSortedDaySchedules(newSortedSchedules);
   };
+  const handleCheckButtonClick = () => {
+    submitNewSchedule();
+    getTripDetail();
+  };
+  useEffect(() => {
+    setSortedDaySchedules(
+      [...daySchedules].sort((a, b) => a.sequence - b.sequence),
+    );
+  }, [daySchedules]);
+  const handleRemoveButtonClick = () => {
+    removeNewSchedule();
+  };
   return (
     <div className={styles.daySchedules}>
-      <div className={styles.editDaySchedules__header} style={{}}>
+      <div className={styles.editDaySchedules__header}>
         <div className={styles.daySchedules__header}>
           <h2>
             {`Day 
@@ -94,24 +106,30 @@ export default function EditDaySchedules({
           </button>
         </div>
       </div>
-      <div className={styles.scheduleTitle}>
-        <div style={{ width: "25%" }}>
-          <p>地點</p>
+      {expanded && (
+        <div className={styles.scheduleTitle}>
+          <div style={{ width: "25%", fontSize: "700" }}>
+            <p>地點</p>
+          </div>
+          <div style={{ width: "25%", fontSize: "700" }}>
+            <p>停留時間</p>
+          </div>
+          <div style={{ width: "25%", fontSize: "700" }}>
+            <p>筆記</p>
+          </div>
         </div>
-        <div style={{ width: "25%" }}>
-          <p>停留時間</p>
-        </div>
-        <div style={{ width: "25%" }}>
-          <p>筆記</p>
-        </div>
-      </div>
+      )}
       {expanded && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
           {isDragDisabled ? (
             <ul class={styles.schedule}>
               {sortedDaySchedules.map((schedule) => (
-                <EditSchedule key={schedule.id} schedule={schedule} />
+                <EditSchedule
+                  key={schedule.id}
+                  schedule={schedule}
+                  getTripDetail={getTripDetail}
+                />
               ))}
             </ul>
           ) : (
@@ -143,6 +161,7 @@ export default function EditDaySchedules({
                               key={schedule.id}
                               schedule={schedule}
                               isDragDisabled={isDragDisabled}
+                              getTripDetail={getTripDetail}
                             />
                           </li>
                         )}
@@ -156,7 +175,7 @@ export default function EditDaySchedules({
           )}
         </>
       )}
-      {isNewSchedule && (
+      {isNewSchedule === tripDay && (
         <div className={styles.createSchedule}>
           <div style={{ width: "25%" }}>
             <TextField
@@ -174,27 +193,27 @@ export default function EditDaySchedules({
               // label="停留時間"
               variant="standard"
               style={{ width: "50%" }}
+              autoComplete="off"
+              onChange={(e) => addDuration(e.target.value)}
             />
           </div>
           <div style={{ width: "40%" }}>
             <TextField
               id="outlined-basic"
               variant="outlined"
+              placeholder="輸入筆記"
               multiline
               style={{ width: "100%", minHeight: "4rem" }}
+              autoComplete="off"
+              onChange={(e) => addNote(e.target.value)}
             />
           </div>
           <div className={styles.scheduleBtn}>
-            <button
-              type="button"
-              onClick={() => {
-                removeNewSchedule();
-              }}
-            >
+            <button type="button" onClick={handleCheckButtonClick}>
               <Image src="/check2.svg" alt="check button" fill />
             </button>
-            <button type="button" onClick={removeNewSchedule}>
-              <Image src="/trashcan.svg" alt="remove button" fill />
+            <button type="button" onClick={handleRemoveButtonClick}>
+              <Image src="/cancelEdit.svg" alt="remove button" fill />
             </button>
           </div>
         </div>

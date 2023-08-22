@@ -71,9 +71,9 @@ export default function DaySchedules({ startDate, tripDay, daySchedules }) {
       {expanded && (
         <>
           <div className={styles.schedule__key}>
-            <p style={{ width: "25%" }}>地點</p>
-            <p style={{ width: "25%" }}>停留時間</p>
-            <p style={{ width: "50%" }}>備註</p>
+            <p style={{ width: "25%", fontWeight: "700" }}>地點</p>
+            <p style={{ width: "25%", fontWeight: "700" }}>停留時間</p>
+            <p style={{ width: "50%", fontWeight: "700" }}>備註</p>
           </div>
           <ul class={styles.timeline}>
             {sortedDaySchedules.map((schedule) => (

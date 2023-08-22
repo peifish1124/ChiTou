@@ -14,7 +14,12 @@ import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
 import cityData from "@/data/taiwan-district-zip-code.json";
 
-export default function CreateMode({ accessToken, userName, userId }) {
+export default function CreateMode({
+  accessToken,
+  getTrips,
+  userName,
+  userId,
+}) {
   const { createTrip } = useCreateTrip();
   const { searchUsers } = useUserSearch(accessToken);
   const [startDate, setStartDate] = useState("");
@@ -47,6 +52,7 @@ export default function CreateMode({ accessToken, userName, userId }) {
       };
       // console.log(tripData);
       createTrip(tripData, accessToken);
+      getTrips();
     },
   });
 

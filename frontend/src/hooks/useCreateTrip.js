@@ -21,7 +21,7 @@ function useCreateTrip() {
 
       if (response.status === 200) {
         console.log("創建旅行成功");
-        router.push("/trip/edit");
+        router.push(`/trip/${response.data.data.trip.id}/edit`);
       }
     } catch (tripCreatedError) {
       console.error("創建旅行失敗:", tripCreatedError);

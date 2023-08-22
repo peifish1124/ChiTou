@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cityData from "@/data/taiwan-district-zip-code.json";
 import styles from "@/styles/css-modules/components/CityDistrictSelector.module.scss";
 
@@ -26,8 +26,11 @@ export default function CityDistrictSelector({
       selectedCityOrDistrictToLatLng(selectedCity + selectedDistrictName, 14);
     }
   };
-  console.log(selectedCity);
-
+  useEffect(() => {
+    if (destinationCity) {
+      setSelectedCity(destinationCity);
+    }
+  }, [destinationCity]);
   return (
     <div className={styles.cityDistrictSelector}>
       {!selectedCity && (
