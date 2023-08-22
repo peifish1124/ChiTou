@@ -3,14 +3,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { destroyCookie } from "nookies";
+import Swal from "sweetalert2";
 import nav from "@/styles/css-modules/nav.module.scss";
 
 export default function Nav({ changeToStart, userName }) {
+  const router = useRouter();
   const [name, setName] = useState("");
   useEffect(() => {
     setName(userName);
     console.log(name);
   }, [userName]);
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "確定要登出嗎？",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "確定",
+      cancelButtonText: "取消",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 執行登出操作
+        destroyCookie(null, "access_token");
+        destroyCookie(null, "user_id");
+        console.log("登出");
+        router.push("/login");
+        console.log("登出且轉向至 /login");
+      }
+    });
+  };
   return (
     <nav className={nav.navbar}>
       <Link href="/" className={nav.logo} onClick={changeToStart}>
@@ -28,6 +51,15 @@ export default function Nav({ changeToStart, userName }) {
             alt="user picture"
           />
         </div>
+        <button className={nav.userPic} type="button" onClick={handleLogout}>
+          <Image
+            className="image"
+            src="/logout-color.png"
+            width={36}
+            height={36}
+            alt="user picture"
+          />
+        </button>
       </div>
       <div className={nav.notifIcon} style={{ display: "none" }}>
         <svg
