@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["maps.googleapis.com"],
+    domains: ["maps.googleapis.com", "18.177.177.173"],
   },
   async redirects() {
     return [

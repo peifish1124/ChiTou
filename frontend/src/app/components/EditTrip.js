@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import dayjs from "dayjs";
+import { useState } from "react";
+import Link from "next/link";
 import EditDaySchedules from "./TravelDetail/EditDaySchedules";
+import useUploadPic from "@/hooks/trip/useUploadPic";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function EditTrip({
@@ -17,6 +20,9 @@ export default function EditTrip({
   submitNewSchedule,
   getTripDetail,
 }) {
+  const { uploadPic } = useUploadPic(tripDetail.id);
+  const [isDragging, setIsDragging] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const startDate = dayjs(tripDetail.start_date);
   const endDate = dayjs(tripDetail.end_date);
   const daysCount = endDate.diff(startDate, "day") + 1;
@@ -28,6 +34,25 @@ export default function EditTrip({
     return { ...groups, [tripDay]: schedulesOnDay };
   }, {});
   console.log(groupedSchedules);
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    console.log("llllll", file);
+    if (file) {
+      const previewImageUrl = URL.createObjectURL(file);
+      setPreviewUrl(previewImageUrl);
+      const formData = new FormData();
+      formData.append("picture", file);
+      try {
+        uploadPic(formData);
+      } catch (error) {
+        console.error("上傳失敗:", error);
+      }
+    }
+  };
+
   return (
     <div
       className={tripcard.tripCard}
@@ -37,8 +62,29 @@ export default function EditTrip({
         background: "#F8FAF0",
       }}
     >
-      <div className={tripcard.cover}>
-        <Image src="/default-cover.svg" alt="cover" fill objectFit="cover" />
+      <div className={`${tripcard.cover}`}>
+        <div
+          className={`${tripcard.overlay} ${
+            isDragging ? tripcard.dragging : ""
+          }`}
+          onDrop={handleDrop}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+        >
+          拖曳照片到此處以上傳
+        </div>
+        {!previewUrl ? (
+          <Image
+            src={tripDetail.picture || "/default-cover.svg"}
+            alt="cover"
+            fill
+            objectFit="cover"
+          />
+        ) : (
+          <Image src={previewUrl} alt="cover" fill objectFit="cover" />
+        )}
       </div>
       <div className={tripcard.tripInfo}>
         <div className={tripcard.tripInfoTop}>
@@ -75,9 +121,9 @@ export default function EditTrip({
         ))}
       </div>
       <div className={tripcard.returnBtn}>
-        <button type="button">
+        <Link href="/">
           <Image src="/returnBtn.svg" alt="return" fill />
-        </button>
+        </Link>
       </div>
     </div>
   );
