@@ -60,6 +60,7 @@ export default function TripDetail({ tripId }) {
             startDate={tripDetail.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
+            destination={tripDetail.destination}
           />
         ))}
       </div>

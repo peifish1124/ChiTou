@@ -1,7 +1,8 @@
 .daySchedules {
   width: 100%;
   .daySchedules__header {
-    width: 33%;
+    // width: 33%;
+    width: 100%;
     font-size: 1.125rem;
     font-weight: 700;
     color: #525252;
@@ -10,9 +11,20 @@
     justify-content: space-between;
     margin: 0 0 0.5rem 0;
 
+    .daySchedules__title {
+      display: flex;
+      width:70%;
+    }
+
     h2{
       width: 8rem;
       flex-shrink: 0;
+    }
+
+    .weatherInfo{
+      position: relative;
+        width: 36px;
+        height: 36px;
     }
   }
 
@@ -34,8 +46,79 @@
       width: 2rem;
       height: 2rem;
     }
-    .weather {
-      display: none;
+  }
+  .weatherInfoCard {
+    display: flex;
+    width: 100%;
+    height: 10rem;
+    border:#181426;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      color: #5C5C5C;
+      font-family: Outfit;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    p {
+      color: #5C5C5C;
+      font-family: Outfit;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .temperatureBox {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 25%;
+      height: 100%;
+      padding-left: 5%;
+      background: #EAF1F5;
+      border-radius: 10px;
+    }
+    .weatherInfoBox {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      gap: 0.5rem;
+
+      .threeWeather {
+        display: flex;
+        gap: 0.5rem;
+
+        .threeWeatherItem {
+          display: flex;
+          padding: 3%;
+          justify-content: space-between;
+          width: 30%;
+          height: 4rem;
+          background: #EAF1F5;
+          border-radius: 10px;
+
+          .threeWeatherItemIndo {
+            width: 2rem;
+          }
+        }
+      }
+
+      .weatherSummary {
+        padding:6%;
+        width: 100%;
+        height: 100%;
+        background: #EAF1F5;
+        border-radius: 10px;
+
+        p {
+          font-size: 14px;
+        }
+      }
     }
   }
 

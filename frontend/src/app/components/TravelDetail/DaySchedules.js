@@ -1,73 +1,128 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import Image from "next/image";
 import Schedule from "./Schedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
+import useGetWeather from "@/hooks/useGetWeather";
+import formatTemperatureRange from "@/utils/formatTemperatureRange";
+import formatRainProbability from "@/utils/formatRainProbability";
 
-export default function DaySchedules({ startDate, tripDay, daySchedules }) {
+export default function DaySchedules({
+  startDate,
+  tripDay,
+  daySchedules,
+  destination,
+}) {
   const [expanded, setExpanded] = useState(true);
+  const [weatherInfoVisible, setWeatherInfoVisible] = useState(false);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
   const sortedDaySchedules = [...daySchedules].sort(
     (a, b) => a.sequence - b.sequence,
   );
+  // Fetch weather data
+  const { getWeather } = useGetWeather();
+  const [weatherData, setWeatherData] = useState("");
+  useEffect(async () => {
+    try {
+      const results = await getWeather(targetDate.format("YYYY-MM-DD"), destination);
+      setWeatherData(results);
+      // console.log("results", results);
+    } catch (error) {
+      // console.error("Error fetching weather data:", error);
+    }
+  }, []);
+
+  const toggleWeatherInfo = () => {
+    setWeatherInfoVisible(!weatherInfoVisible);
+  };
   return (
     <div className={styles.daySchedules}>
       <div className={styles.daySchedules__header}>
-        <h2>
-          {`Day 
-        ${tripDay} (
-        ${targetDate.format("MM/DD")} )`}
-        </h2>
-        <button
-          type="button"
-          className={styles.daySchedules__header__button}
-          onClick={() => setExpanded(!expanded)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
+        <div className={styles.daySchedules__title}>
+          <h2>
+            {`Day 
+          ${tripDay} (
+          ${targetDate.format("MM/DD")} )`}
+          </h2>
+          <button
+            type="button"
+            className={styles.daySchedules__header__button}
+            onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? (
-              // up arrow
-              <path
-                d="M5 12.5L10 7.5L15 12.5"
-                stroke="#525252"
-                stroke-width="2.66667"
-              />
-            ) : (
-              // down arrow
-              <path
-                d="M15 7.5L10 12.5L5 7.5"
-                stroke="#525252"
-                stroke-width="2.66667"
-              />
-            )}
-          </svg>
-        </button>
-        <div className={styles.weather}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            viewBox="0 0 30 30"
-            fill="none"
-          >
-            <path d="M6.875 6.875H23.125V23.125H6.875V6.875Z" fill="#FF9800" />
-            <path
-              d="M3.74994 15.0002L14.9998 3.74992L26.2501 14.9998L15.0002 26.2501L3.74994 15.0002Z"
-              fill="#FF9800"
-            />
-            <path
-              d="M8.125 15C8.125 18.7981 11.2019 21.875 15 21.875C18.7975 21.875 21.875 18.7981 21.875 15C21.875 11.2019 18.7975 8.125 15 8.125C11.2019 8.125 8.125 11.2019 8.125 15Z"
-              fill="#FFEB3B"
-            />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              {expanded ? (
+                // up arrow
+                <path
+                  d="M5 12.5L10 7.5L15 12.5"
+                  stroke="#525252"
+                  stroke-width="2.66667"
+                />
+              ) : (
+                // down arrow
+                <path
+                  d="M15 7.5L10 12.5L5 7.5"
+                  stroke="#525252"
+                  stroke-width="2.66667"
+                />
+              )}
+            </svg>
+          </button>
         </div>
+        <button type="button" className={styles.weather}>
+          <Image
+            src="/weather.png"
+            width={30}
+            height={30}
+            alt="weather icon"
+            onClick={toggleWeatherInfo}
+          />
+        </button>
       </div>
+      {/* Weather information */}
+      {weatherInfoVisible && (
+        <div className={styles.weatherInfoCard}>
+          <div className={styles.temperatureBox}>
+            <h3>{destination}</h3>
+            <p>{formatTemperatureRange(weatherData.temperature)}</p>
+          </div>
+          <div className={styles.weatherInfoBox}>
+            <div className={styles.threeWeather}>
+              <div className={styles.threeWeatherItem}>
+                <div className={styles.threeWeatherItemInfo}>
+                  <p>降雨機率</p>
+                  <h2>{formatRainProbability(weatherData.PoP)}</h2>
+                </div>
+                <Image src="/rain.png" width={10} height={10} alt="rain icon" />
+              </div>
+              <div className={styles.threeWeatherItem}>
+                <div className={styles.threeWeatherItemInfo}>
+                  <p>相對濕度</p>
+                  <h2>{formatRainProbability(weatherData.humidity)}</h2>
+                </div>
+                <Image src="/temp.png" width={40} height={40} alt="rain icon" />
+              </div>
+              <div className={styles.threeWeatherItem}>
+                <div className={styles.threeWeatherItemInfo}>
+                  <p>{weatherData.wind}</p>
+                </div>
+                <Image src="/wind.png" width={40} height={40} alt="rain icon" />
+              </div>
+            </div>
+            <div className={styles.weatherSummary}>
+              <p>天氣總結: {weatherData.summary}</p>
+              <p>體感描述: {weatherData.feeling}</p>
+            </div>
+          </div>
+        </div>
+      )}
       {expanded && (
         <>
           <div className={styles.schedule__key}>
