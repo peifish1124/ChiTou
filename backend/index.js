@@ -75,13 +75,13 @@ function handleEvent(event) {
 // const linebotParser = bot.parser();
 
 // 當有人傳送訊息給 Bot 時
-bot.on("message", function (event) {
-    // event.message.text 是使用者傳給bot的訊息
-    console.log(event.message.text);
-    event.reply(
-        "不知道該問什麼嗎？ 歡迎透過以下的關鍵字與我互動！"
-    );
-});
+// bot.on("message", function (event) {
+//     // event.message.text 是使用者傳給bot的訊息
+//     console.log(event.message.text);
+//     event.reply(
+//         "不知道該問什麼嗎？ 歡迎透過以下的關鍵字與我互動！"
+//     );
+// });
   
 // 送出帶有 line-bot 需要資訊的 POST 請求
 // app.post("/", linebotParser);
