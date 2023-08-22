@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 
+// import discordbot
+const discordBot = require('./utils/discordbot_service/discordbot');
+
 // routes require
 const userRoute = require('./server/routes/user_route');
 const scheduleRoute = require('./server/routes/schedule_route');
@@ -37,3 +40,6 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log('running successfully');
 });
+
+// start discord bot
+discordBot.startDiscordBot();
