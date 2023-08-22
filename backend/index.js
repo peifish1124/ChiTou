@@ -8,10 +8,11 @@ const eventRoute = require('./server/routes/event_route');
 const weatherRoute = require('./server/routes/weather_route');
 const searchRoute = require('./server/routes/search_route');
 
+const lineBotUtil = require('./utils/line_bot');
+
 const app = express();
 const port = process.env.WEB_PORT;
 
-// app.use(express.json());
 function excludeJsonMiddleware(req, res, next) {
     if (req.path === '/line-webhook') {
       next();
@@ -42,6 +43,7 @@ app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');
 });
 
+// line bot
 const line = require('@line/bot-sdk');
 const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -52,7 +54,7 @@ const client = new line.Client(config);
 app.post('/line-webhook', line.middleware(config), async (req, res) => {
     try {
       for (const event of req.body.events) {
-        await handleEvent(event);
+        await lineBotUtil.handleEvent(event, client);
       }
       res.json({ success: true });
     } catch (error) {
@@ -60,18 +62,6 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
       res.status(500).end();
     }
 });
-
-async function handleEvent(event) {
-    if (event.type === 'message' && event.message.type === 'text') {
-        const messageText = event.message.text;
-        if (messageText === 'Hello') {
-        await client.replyMessage(event.replyToken, {
-            type: 'text',
-            text: 'Hello, how can I help you?',
-        });
-        }
-    }
-}
 
 app.listen(port, () => {
     console.log('running successfully');
