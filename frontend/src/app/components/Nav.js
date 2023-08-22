@@ -1,15 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import nav from "@/styles/css-modules/nav.module.scss";
 
 export default function Nav({ changeToStart, userName }) {
+  const [name, setName] = useState("");
+  useEffect(() => {
+    setName(userName);
+    console.log(name);
+  }, [userName]);
   return (
     <nav className={nav.navbar}>
       <Link href="/" className={nav.logo} onClick={changeToStart}>
         ChiTou
       </Link>
       <div className={nav.user}>
-        <div className={nav.userNameBox}>{userName}</div>
+        <div className={nav.userNameBox}>{name}</div>
         <div className={nav.userPic}>
           <Image
             className="image"
