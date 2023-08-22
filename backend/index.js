@@ -63,18 +63,6 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
     }
 });
 
-async function handleEvent(event) {
-    if (event.type === 'message' && event.message.type === 'text') {
-        const messageText = event.message.text;
-        if (messageText === 'Hello') {
-        await client.replyMessage(event.replyToken, {
-            type: 'text',
-            text: 'Hello, how can I help you?',
-        });
-        }
-    }
-}
-
 app.listen(port, () => {
     console.log('running successfully');
 });
