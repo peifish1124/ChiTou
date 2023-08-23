@@ -4,7 +4,6 @@ import useCreateSchedule from "./schedules/useCreateSchedule";
 
 export default function useAddSchedule(tripDetail) {
   console.log("useAddSchedule");
-  console.log(tripDetail);
   const [isNewSchedule, setIsNewSchedule] = useState(null);
   const [newSchedule, setNewSchedule] = useState({
     trip_id: "",
@@ -24,10 +23,11 @@ export default function useAddSchedule(tripDetail) {
             return schedule.sequence > max ? schedule.sequence : max;
           }, -Infinity)
         : 0;
+    const userIds = tripDetail.members.map((member) => member.id);
     setIsNewSchedule(tripDay);
     setNewSchedule({
       trip_id: tripDetail.id,
-      user_ids: tripDetail.members,
+      user_ids: userIds,
       place: "",
       trip_day: parseInt(tripDay, 10) || 1,
       sequence: maxSequence + 1,

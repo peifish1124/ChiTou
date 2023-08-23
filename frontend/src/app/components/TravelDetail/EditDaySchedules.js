@@ -15,7 +15,7 @@ import styles from "@/styles/css-modules/traveldetail.module.scss";
 
 export default function EditDaySchedules({
   tripId,
-  tripMember,
+  userIds,
   startDate,
   tripDay,
   daySchedules,
@@ -30,9 +30,8 @@ export default function EditDaySchedules({
   getTripDetail,
 }) {
   const [expanded, setExpanded] = useState(true);
-  const { changeSequence } = useChangeSequence(tripId, tripDay, tripMember);
+  const { changeSequence } = useChangeSequence(tripId, tripDay, userIds);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
-  // draggable
   const [sortedDaySchedules, setSortedDaySchedules] = useState(
     [...daySchedules].sort((a, b) => a.sequence - b.sequence),
   );
@@ -46,7 +45,6 @@ export default function EditDaySchedules({
     newSortedSchedules.splice(destination.index, 0, movedItem);
     changeSequence(newSortedSchedules);
     setSortedDaySchedules(newSortedSchedules);
-    // getTripDetail();
   };
   const handleCheckButtonClick = async () => {
     await submitNewSchedule();
@@ -165,6 +163,7 @@ export default function EditDaySchedules({
                             <EditSchedule
                               key={schedule.id}
                               schedule={schedule}
+                              userIds={userIds}
                               isDragDisabled={isDragDisabled}
                               getTripDetail={getTripDetail}
                             />

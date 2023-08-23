@@ -1,11 +1,19 @@
 import Swal from "sweetalert2";
 import axiosTypeAndAuth from "@/api/axiosTypeAndAuth";
 
-export default function useUpdateSchedule(id) {
+export default function useUpdateSchedule(id, userIds) {
   const updateSchedule = async (schedule) => {
     console.log("create schedule");
+    const requestBody = {
+      ...schedule,
+      user_ids: userIds,
+    };
+    console.log("requestBody", requestBody);
     try {
-      const response = await axiosTypeAndAuth.put(`/schedules/${id}`, schedule);
+      const response = await axiosTypeAndAuth.put(
+        `/schedules/${id}`,
+        requestBody,
+      );
       console.log("create schedule response", response.data.data.schedule);
     } catch (err) {
       const { status } = err.response;

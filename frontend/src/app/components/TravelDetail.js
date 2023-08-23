@@ -4,13 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import dayjs from "dayjs";
 import DaySchedules from "./TravelDetail/DaySchedules";
+import EditPageSkeleton from "./EditPageSkeleton";
 import useTripDetail from "@/hooks/trip/useTripDetail";
 import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function TripDetail({ tripId }) {
   const { tripDetail, loading } = useTripDetail(tripId);
   if (loading) {
-    return <div>loading...</div>;
+    return <EditPageSkeleton />;
   }
   const startDate = dayjs(tripDetail.start_date);
   const endDate = dayjs(tripDetail.end_date);
