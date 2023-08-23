@@ -35,7 +35,7 @@ export default function TripDetail({ tripId }) {
     >
       <div className={tripcard.cover}>
         <Image
-          src={tripDetail.picture ? tripDetail.picture : "/default-cover.svg"}
+          src={tripDetail.picture ? tripDetail.picture : "/cover.png"}
           alt="cover"
           fill
           objectFit="cover"

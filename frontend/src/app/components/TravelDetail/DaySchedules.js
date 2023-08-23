@@ -6,10 +6,7 @@ import Image from "next/image";
 import Schedule from "./Schedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 import useGetWeather from "@/hooks/useGetWeather";
-import formatTemperatureRange from "@/utils/formatTemperatureRange";
-import formatRainProbability from "@/utils/formatRainProbability";
-import formatWeatherText from "@/utils/formatWeatherText";
-import WeatherIcon from "@/components/WeatherIcon";
+import WeatherInfoCard from "../WeatherInfoCard";
 
 export default function DaySchedules({
   startDate,
@@ -25,19 +22,31 @@ export default function DaySchedules({
   );
   // Fetch weather data
   const { getWeather } = useGetWeather();
-  const [weatherData, setWeatherData] = useState("");
-  useEffect(async () => {
-    try {
-      const results = await getWeather(
-        targetDate.format("YYYY-MM-DD"),
-        destination,
-      );
-      setWeatherData(results);
-      // console.log("results", results);
-    } catch (error) {
-      // console.error("Error fetching weather data:", error);
-    }
+  const [weatherData, setWeatherData] = useState(null);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchWeather = async () => {
+      try {
+        const results = await getWeather(
+          targetDate.format("YYYY-MM-DD"),
+          destination,
+        );
+        if (isMounted) {
+          setWeatherData(results);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setWeatherData(null);
+        }
+        // Handle error
+      }
+    };
+    fetchWeather();
+    return () => {
+      isMounted = false;
+    };
   }, []);
+  // console.log(weatherData);
 
   const toggleWeatherInfo = () => {
     setWeatherInfoVisible(!weatherInfoVisible);
@@ -92,44 +101,14 @@ export default function DaySchedules({
         </button>
       </div>
       {/* Weather information */}
-      {weatherInfoVisible && (
-        <div className={styles.weatherInfoCard}>
-          <div className={styles.temperatureBox}>
-            <WeatherIcon weatherText={weatherData.summary} />
-            <h2>{destination}</h2>
-            <p>{formatTemperatureRange(weatherData.temperature)}</p>
-          </div>
-          <div className={styles.weatherInfoBox}>
-            <div className={styles.threeWeather}>
-              <div className={styles.threeWeatherItem}>
-                <div className={styles.threeWeatherItemInfo}>
-                  <p>降雨機率</p>
-                  <h2>{formatRainProbability(weatherData.PoP)}</h2>
-                </div>
-                <Image src="/rain2.svg" width={30} height={30} alt="rain" />
-              </div>
-              <div className={styles.threeWeatherItem}>
-                <div className={styles.threeWeatherItemInfo}>
-                  <p>相對濕度</p>
-                  <h2>{formatRainProbability(weatherData.humidity)}</h2>
-                </div>
-                <Image src="/temp2.svg" width={30} height={30} alt="humidity" />
-              </div>
-              <div className={styles.threeWeatherItem}>
-                <div className={styles.threeWeatherItemInfo}>
-                  <p>風速</p>
-                  <h2>{formatWeatherText(weatherData.wind).windSpeed}m/s</h2>
-                </div>
-                <Image src="/wind2.svg" width={30} height={30} alt="wind" />
-              </div>
-            </div>
-            <div className={styles.weatherSummary}>
-              <p>天氣總結: {weatherData.summary}</p>
-              <p>體感描述: {weatherData.feeling}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {weatherInfoVisible &&
+        weatherData &&
+        Object.keys(weatherData).length > 0 && (
+          <WeatherInfoCard
+            destination={destination}
+            weatherData={weatherData}
+          />
+        )}
       {expanded && (
         <>
           <div className={styles.schedule__key}>
