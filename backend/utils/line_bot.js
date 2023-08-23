@@ -20,6 +20,13 @@ module.exports = {
             text: `Hello ${tripName} 的小夥伴們，之後行程有任何變更我都會通知你們呦～`,
         });
       }
+
+      if(messageText === '這是模擬帳戶的訊息。'){
+        await client.replyMessage(event.replyToken, {
+          type: 'text',
+          text: `Hello Hello`,
+      });
+      }
     }
   }
 }

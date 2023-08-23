@@ -67,6 +67,23 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
     }
 });
 
+app.post('/simulate-message', async (req, res) => {
+  try {
+    const userId = '891124sophia';
+    const message = {
+      type: 'text',
+      text: '這是模擬帳戶的訊息。',
+    };
+
+    await client.pushMessage(userId, message);
+
+    res.status(200).json({ message: '訊息已成功發送給機器人。' });
+  } catch (error) {
+    console.error('發送訊息時發生錯誤：', error);
+    res.status(500).json({ error: '發送訊息時發生錯誤。' });
+  }
+});
+
 app.listen(port, () => {
     console.log('running successfully');
 });
