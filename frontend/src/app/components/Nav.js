@@ -179,6 +179,26 @@ export default function Nav({ changeToStart, userName }) {
             </div>
           </div>
         </div>
+        <div className={nav.chatIcon}>
+          <Image
+            className="image"
+            // src={user.picture || "/user-chou.png"}
+            src="/chat.svg"
+            width={36}
+            height={36}
+            alt="user picture"
+          />
+          <div className={nav.joinLinebot}>
+            <div className={nav.joinLinebotBox}>
+              <div className={nav.inviteTitle}>邀請 Line Bot</div>
+              <div className={nav.inviteCode}>
+                <Link href="https://lin.ee/OwSvgjI">
+                  https://lin.ee/OwSvgjI
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
         <button className={nav.userPic} type="button" onClick={handleLogout}>
           <Image
             // className="image"
