@@ -6,11 +6,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import Swal from "sweetalert2";
+import QRCode from "qrcode.react";
 import useEvent from "@/hooks/useEvent";
 import nav from "@/styles/css-modules/nav.module.scss";
 import EventBar from "./Nav/EventBar.jsx";
 
 export default function Nav({ changeToStart, userName }) {
+  const qrCodeData = "https://lin.ee/OwSvgjI";
   const router = useRouter();
   const [name, setName] = useState("");
   const { events, eventCounts, unreadEvents, fetchEvent, handleEventRead } =
@@ -192,9 +194,8 @@ export default function Nav({ changeToStart, userName }) {
             <div className={nav.joinLinebotBox}>
               <div className={nav.inviteTitle}>邀請 Line Bot</div>
               <div className={nav.inviteCode}>
-                <Link href="https://lin.ee/OwSvgjI">
-                  https://lin.ee/OwSvgjI
-                </Link>
+                <Link href={qrCodeData}>{qrCodeData}</Link>
+                <QRCode value={qrCodeData} />
               </div>
             </div>
           </div>
