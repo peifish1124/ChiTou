@@ -72,6 +72,25 @@ exports.getTrips = async (myId) => {
     }
 };
 
+exports.getTripName = async (id) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT name
+    FROM trips 
+    WHERE id = ?
+    `;
+  
+  try {
+    const [trip] = await connection.query(query, [id]);
+    return trip[0].name;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+}
+
 exports.tripExist = async (id) => {
   const connection = await poolConnection();
   const query = `
