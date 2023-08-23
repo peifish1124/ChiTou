@@ -181,7 +181,7 @@ export default function Nav({ changeToStart, userName }) {
         </div>
         <button className={nav.userPic} type="button" onClick={handleLogout}>
           <Image
-            className="image"
+            // className="image"
             src="/logout-color.png"
             width={36}
             height={36}
