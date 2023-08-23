@@ -19,6 +19,7 @@ export default function EditTrip({
   addNote,
   submitNewSchedule,
   getTripDetail,
+  tripId,
 }) {
   const { uploadPic } = useUploadPic(tripDetail.id);
   const [isDragging, setIsDragging] = useState(false);
@@ -99,7 +100,10 @@ export default function EditTrip({
       </div>
       <div className={tripcard.tripInfo}>
         <div className={tripcard.tripInfoTop}>
-          <h2>{tripDetail.name}</h2>
+          <div>
+            <h2>{tripDetail.name}</h2>
+            <p>Trip ID: {tripId}</p>
+          </div>
           <p>目的地： {tripDetail.destination}</p>
         </div>
         <div className={tripcard.tripInfoBottom}>
