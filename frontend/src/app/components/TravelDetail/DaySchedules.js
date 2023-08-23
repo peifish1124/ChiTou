@@ -8,6 +8,8 @@ import styles from "@/styles/css-modules/traveldetail.module.scss";
 import useGetWeather from "@/hooks/useGetWeather";
 import formatTemperatureRange from "@/utils/formatTemperatureRange";
 import formatRainProbability from "@/utils/formatRainProbability";
+import formatWeatherText from "@/utils/formatWeatherText";
+import WeatherIcon from "@/components/WeatherIcon";
 
 export default function DaySchedules({
   startDate,
@@ -26,7 +28,10 @@ export default function DaySchedules({
   const [weatherData, setWeatherData] = useState("");
   useEffect(async () => {
     try {
-      const results = await getWeather(targetDate.format("YYYY-MM-DD"), destination);
+      const results = await getWeather(
+        targetDate.format("YYYY-MM-DD"),
+        destination,
+      );
       setWeatherData(results);
       // console.log("results", results);
     } catch (error) {
@@ -90,7 +95,8 @@ export default function DaySchedules({
       {weatherInfoVisible && (
         <div className={styles.weatherInfoCard}>
           <div className={styles.temperatureBox}>
-            <h3>{destination}</h3>
+            <WeatherIcon weatherText={weatherData.summary} />
+            <h2>{destination}</h2>
             <p>{formatTemperatureRange(weatherData.temperature)}</p>
           </div>
           <div className={styles.weatherInfoBox}>
@@ -100,20 +106,21 @@ export default function DaySchedules({
                   <p>降雨機率</p>
                   <h2>{formatRainProbability(weatherData.PoP)}</h2>
                 </div>
-                <Image src="/rain.png" width={10} height={10} alt="rain icon" />
+                <Image src="/rain2.svg" width={30} height={30} alt="rain" />
               </div>
               <div className={styles.threeWeatherItem}>
                 <div className={styles.threeWeatherItemInfo}>
                   <p>相對濕度</p>
                   <h2>{formatRainProbability(weatherData.humidity)}</h2>
                 </div>
-                <Image src="/temp.png" width={40} height={40} alt="rain icon" />
+                <Image src="/temp2.svg" width={30} height={30} alt="humidity" />
               </div>
               <div className={styles.threeWeatherItem}>
                 <div className={styles.threeWeatherItemInfo}>
-                  <p>{weatherData.wind}</p>
+                  <p>風速</p>
+                  <h2>{formatWeatherText(weatherData.wind).windSpeed}m/s</h2>
                 </div>
-                <Image src="/wind.png" width={40} height={40} alt="rain icon" />
+                <Image src="/wind2.svg" width={30} height={30} alt="wind" />
               </div>
             </div>
             <div className={styles.weatherSummary}>
