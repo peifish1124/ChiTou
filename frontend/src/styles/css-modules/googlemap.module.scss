@@ -245,3 +245,28 @@
   color: #fff;
   border-radius: 40%;
 }
+.more{
+  width: 4rem;
+  height: 1.5rem;
+  position: absolute;
+  bottom: -1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #3d4a35;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  &:hover {
+    color: #fff;
+    background: #87c28f;
+  }
+  &:focus {
+    color: #fff;
+    background: #87c28f;
+  }
+  &:focus-visible {
+    outline: 0;
+  }
+}
