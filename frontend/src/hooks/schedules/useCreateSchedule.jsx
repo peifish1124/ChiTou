@@ -3,7 +3,7 @@ import axiosTypeAndAuth from "@/api/axiosTypeAndAuth";
 
 export default function useCreateSchedule() {
   const createSchedule = async (schedule) => {
-    console.log("create schedule");
+    console.log("create schedule", schedule);
     try {
       const response = await axiosTypeAndAuth.post("/schedules", schedule);
       console.log("create schedule response", response.data.data.schedule);

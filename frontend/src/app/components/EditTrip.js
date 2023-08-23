@@ -23,18 +23,19 @@ export default function EditTrip({
   const { uploadPic } = useUploadPic(tripDetail.id);
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
+  // const [groupedSchedules, setGroupedSchedules] = useState({});
   const startDate = dayjs(tripDetail.start_date);
   const endDate = dayjs(tripDetail.end_date);
   const daysCount = endDate.diff(startDate, "day") + 1;
   const dayList = Array.from({ length: daysCount }, (_, index) => index + 1);
   const groupedSchedules = dayList.reduce((groups, tripDay) => {
     const schedulesOnDay = tripDetail.schedules.filter(
-      (schedule) => schedule.trip_day === tripDay,
+      (schedule) => schedule.trip_day === tripDay
     );
     return { ...groups, [tripDay]: schedulesOnDay };
   }, {});
   console.log(groupedSchedules);
-
+  const userIds = tripDetail.members.map((member) => member.id);
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
@@ -52,6 +53,16 @@ export default function EditTrip({
       }
     }
   };
+  // useEffect(() => {
+  //   setGroupedSchedules(
+  //     dayList.reduce((groups, tripDay) => {
+  //       const schedulesOnDay = tripDetail.schedules.filter(
+  //         (schedule) => schedule.trip_day === tripDay
+  //       );
+  //       return { ...groups, [tripDay]: schedulesOnDay };
+  //     }, {})
+  //   );
+  // }, [tripDetail]);
 
   return (
     <div
@@ -104,7 +115,7 @@ export default function EditTrip({
           <EditDaySchedules
             key={tripDay}
             tripId={tripDetail.id}
-            tripMember={tripDetail.members}
+            userIds={userIds}
             startDate={tripDetail.start_date}
             tripDay={tripDay}
             daySchedules={groupedSchedules[tripDay]}
