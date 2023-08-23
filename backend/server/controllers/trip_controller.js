@@ -2,11 +2,12 @@ const tripModel = require('../models/trip_model');
 const userModel = require('../models/user_model');
 const eventModel = require('../models/event_model');
 const errorRes = require('../../utils/error_message_util');
+const emailUtils = require('../../utils/email_service/email_utils');
 
 exports.createTrip = async (req, res) => {
   console.log('Create Trip');
 
-  const { 'id': myId } = req.userData;
+  const { 'id': myId, 'name': myName } = req.userData;
 
   if (req.headers['content-type'] !== 'application/json') {
       const [errorCode, errorMessage] = errorRes.contentTypeError();
@@ -39,6 +40,15 @@ exports.createTrip = async (req, res) => {
     // create event for all members
     const isSuccess = await eventModel.create(Number(myId), user_ids, trip.id, 'added_trip');
     console.log('Create Event Success: ', isSuccess);
+
+    // send email to all members
+    const myInfo = await userModel.getUserById(myId);
+    await emailUtils.sendCreateTripEmail(myInfo.email, myInfo.name, name);
+    const receivers = await eventModel.getMemberInfo(myId, user_ids);
+    for ( const receiver of receivers ) {
+        await emailUtils.sendAddedTripEmail(receiver.email, myName, receiver.name, name);
+    }
+    console.log('Send Email Success');
 
     return res.status(200).json({
       data: {

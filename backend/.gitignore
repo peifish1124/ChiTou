@@ -3,3 +3,6 @@ node_modules
 
 # back-end environment
 .env
+
+# log files
+logs

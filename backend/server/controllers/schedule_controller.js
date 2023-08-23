@@ -1,4 +1,5 @@
 const scheduleModel = require('../models/schedule_model');
+const eventModel = require('../models/event_model');
 const errorRes = require('../../utils/error_message_util');
 
 exports.create = async (req, res) => {
@@ -9,7 +10,8 @@ exports.create = async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 
-  const { trip_id: tripId, place, trip_day: tripDay, sequence } = req.body;  // required
+  const { 'id': myId } = req.userData;
+  const { trip_id: tripId, user_ids: userIds, place, trip_day: tripDay, sequence } = req.body;  // required
   const { duration, note } = req.body;  // optional
   if (!tripId || !place || !tripDay || !sequence) {
     const [errorCode, errorMessage] = errorRes.emptyInput();
@@ -35,6 +37,11 @@ exports.create = async (req, res) => {
 
     // 200 OK
     console.log('Schedule Created Success');
+
+    // create event for all members
+    const isSuccess = await eventModel.create(Number(myId), userIds, tripId, 'updated_trip');
+    console.log('Create Event Success: ', isSuccess);
+
     return res.status(200).json({
       data: {
         schedule: scheduleId,
@@ -58,7 +65,9 @@ exports.update = async (req, res) => {
   // get id from url
   const scheduleId = req.params.id;
 
-  const { place } = req.body;  // required
+  // get myId
+  const { 'id': myId } = req.userData;
+  const { trip_id: tripId, user_ids: userIds, place } = req.body;  // required
   const { duration, note } = req.body;  // optional
   if (!place || !scheduleId || Number.isNaN(Number(scheduleId))) {
     const [errorCode, errorMessage] = errorRes.emptyInput();
@@ -74,6 +83,11 @@ exports.update = async (req, res) => {
 
     // 200 OK
     console.log('Schedule Update Success');
+
+    // create event for all members
+    const isSuccess = await eventModel.create(Number(myId), userIds, tripId, 'updated_trip');
+    console.log('Create Event Success: ', isSuccess);
+
     return res.status(200).json({
       data: {
         schedule: schedule,

@@ -1,0 +1,1 @@
+ALTER TABLE events AUTO_INCREMENT = 1;
