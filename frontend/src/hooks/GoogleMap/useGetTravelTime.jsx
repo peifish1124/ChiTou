@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Client} from "@googlemaps/google-maps-services-js";
+import { Client } from "@googlemaps/google-maps-services-js";
 
 export default function useGetTravelTime() {
   const [travelTime, setTravelTime] = useState("");
@@ -28,5 +28,5 @@ export default function useGetTravelTime() {
     getTravelTime();
   }, []);
 
-  return { travelTime,getTravelTime };
+  return { travelTime, getTravelTime };
 }
