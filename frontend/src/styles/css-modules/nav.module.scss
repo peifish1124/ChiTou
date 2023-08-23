@@ -43,6 +43,7 @@
       width: 36px;
       height: 36px;
       position: relative;
+      cursor: pointer;
 
       &:hover .joinLinebot {
         // cursor: pointer;
@@ -127,6 +128,7 @@
       align-items: center;
       height: min-content;
       position: relative;
+      cursor: pointer;
       &:hover .notifMenu {
         // cursor: pointer;
         visibility: visible;

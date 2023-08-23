@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import Swal from "sweetalert2";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import QRCode from "qrcode.react";
 import useEvent from "@/hooks/useEvent";
 import nav from "@/styles/css-modules/nav.module.scss";
@@ -26,7 +27,7 @@ export default function Nav({ changeToStart, userName }) {
   };
   useEffect(() => {
     setName(userName);
-    console.log(name);
+    // console.log(name);
   }, [userName]);
 
   const handleLogout = () => {
