@@ -30,14 +30,9 @@ exports.saveToLogFile = async (message) => {
 
 exports.readLogFile = async () => {
   try {
-    const now = new Date();
-
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-  
     // log file
-    const logFileName = `log-${year}-${month}-${day}.txt`;
+    dateString = this.getDate();
+    const logFileName = `log-${dateString}.txt`;
     const logFilePath = path.join(__dirname, '../logs', logFileName);
 
     const logContent = fs.readFileSync(logFilePath, 'utf8');
@@ -48,16 +43,26 @@ exports.readLogFile = async () => {
   }
 }
 
+exports.readAccessLogFile = async () => {
+  try { 
+    // log file
+    const dateString = this.getDate();
+    const logFileName = `access-log-${dateString}.txt`;
+    const logFilePath = path.join(__dirname, '../logs', logFileName);
+
+    const logContent = fs.readFileSync(logFilePath, 'utf8');
+    return logContent;
+  } catch (err) {
+    console.error('Error reading access log file:', err);
+    return 'Error reading access log file.';
+  }
+}
+
 exports.clearLogFile = async () => {
   try {
-    const now = new Date();
-
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-  
     // log file
-    const logFileName = `log-${year}-${month}-${day}.txt`;
+    const dateString = this.getDate();
+    const logFileName = `log-${dateString}.txt`;
     const logFilePath = path.join(__dirname, '../logs', logFileName);
 
     fs.writeFileSync(logFilePath, '');
@@ -65,4 +70,14 @@ exports.clearLogFile = async () => {
   } catch (err) {
     console.error('Error clearing log file:', err);
   }
+}
+
+exports.getDate = () => {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
