@@ -6,7 +6,7 @@ import InfoCard from "./GoogleMap/InfoCard";
 import CityDistrictSelector from "./GoogleMap/CityDistrictSelector";
 import FilterMarker from "./GoogleMap/FilterMarker";
 import SelectedMarker from "./GoogleMap/SelectedMarker";
-import useTextSearch from "@/hooks/useTextSearch";
+import useTextSearch from "@/hooks/GoogleMap/useTextSearch";
 import styles from "@/styles/css-modules/googlemap.module.scss";
 
 export default function GoogleMap({
@@ -25,8 +25,11 @@ export default function GoogleMap({
   const [mapInstance, setMapInstance] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [filterPlaces, setFilterPlaces] = useState([]);
+  const [paginationFunction, setPagination] = useState(null);
   const [placeDetails, setPlaceDetails] = useState(null);
   const [mapZoom, setMapZoom] = useState(tripDetail ? 10 : 7);
+  const [isMoreEnabled, setIsMoreEnabled] = useState(false);
+
   const {
     searchText,
     searchTextResults,
@@ -67,17 +70,23 @@ export default function GoogleMap({
         rankBy: mapApi.places.RankBy.DISTANCE,
         keyword,
       };
-      service.nearbySearch(request, (results, status) => {
+      service.nearbySearch(request, (results, status, pagination) => {
         if (status === mapApi.places.PlacesServiceStatus.OK) {
           setFilterPlaces(results);
           setPlaceDetails(null);
+          setIsMoreEnabled(false);
           // setMyPosition({
           //   placeId: results[0].place_id,
           //   lat: results[0].geometry.location.lat(),
           //   lng: results[0].geometry.location.lng(),
           // });
+          setPagination(pagination);
           setMapZoom(14);
           console.log(results);
+          if (pagination && pagination.hasNextPage) {
+            setIsMoreEnabled(true);
+            // pagination.nextPage();
+          }
         }
       });
     }
@@ -116,7 +125,6 @@ export default function GoogleMap({
       }
     });
   };
-
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
       console.log("SearchFor");
@@ -143,7 +151,12 @@ export default function GoogleMap({
       });
     }
   };
-
+  const getMorePlaces = () => {
+    console.log("getMorePlaces");
+    if (paginationFunction && paginationFunction.hasNextPage) {
+      paginationFunction.nextPage();
+    }
+  };
   useEffect(() => {
     console.log("mapZoom", mapZoom);
   }, [mapZoom]);
@@ -260,6 +273,11 @@ export default function GoogleMap({
         onBoundsChange={(center, zoom) => {
           console.log(zoom);
           setMapZoom(zoom);
+          setMyPosition({
+            // center.lat() 與 center.lng() 會回傳正中心的經緯度
+            lat: center.lat,
+            lng: center.lng,
+          });
         }}
       >
         {filterPlaces.map((place) => (
@@ -294,6 +312,11 @@ export default function GoogleMap({
           addPlace={addPlace}
           addNote={addNote}
         />
+      )}
+      {isMoreEnabled && (
+        <button type="button" onClick={getMorePlaces} className={styles.more}>
+          more
+        </button>
       )}
     </div>
   );
