@@ -2,6 +2,7 @@ const scheduleModel = require('../models/schedule_model');
 const eventModel = require('../models/event_model');
 const tripModel = require('../models/trip_model');
 const errorRes = require('../../utils/error_message_util');
+const {client} = require('../../utils/line_bot');
 
 exports.create = async (req, res) => {
   console.log('Schedule Create');
@@ -47,7 +48,6 @@ exports.create = async (req, res) => {
         type: 'text',
         text: JSON.stringify(tripDetail.schedules),
       };
-
       await client.pushMessage(groupId, message);
     }
 
