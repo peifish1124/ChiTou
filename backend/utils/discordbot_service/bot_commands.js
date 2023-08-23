@@ -5,11 +5,14 @@ const { Routes } = require('discord-api-types/v9');
 const commands = [{
   name: 'log',
   description: 'Get System Log File'
-},{
+}, {
+  name: 'accesslog',
+  description: 'Get Access Log File'
+}, {
   name: 'report',
-  description: 'Get System Report in 7 Days'
+  description: 'Get System Report File'
 }
-]; 
+];
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_BOT_TOKEN);
 

@@ -1,5 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
+var morgan = require('morgan');
+const moment = require("moment-timezone");
+
+// improt logger
+const logger = require('./utils/logger');
 
 // import discordbot
 const discordBot = require('./utils/discordbot_service/discordbot');
@@ -29,6 +36,25 @@ function excludeJsonMiddleware(req, res, next) {
 app.use(excludeJsonMiddleware);
 
 app.use('/images', express.static('static'));
+
+const logFileName = `access-log-${logger.getDate()}.txt`;
+var accessLogStream = fs.createWriteStream(path.join(__dirname, './logs', logFileName), { flags: 'a' })
+
+app.use(morgan('short'));
+
+app.use(morgan(function (tokens, req, res) {
+    const taiwanTime = moment().tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
+
+    return [
+        `[${taiwanTime}]\n`,
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms',
+        '\n',
+    ].join(' ');
+}, { stream: accessLogStream, skip: function (req, res) { return res.statusCode < 400 }}));
 
 app.all('*', (req, res, next) => {
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");

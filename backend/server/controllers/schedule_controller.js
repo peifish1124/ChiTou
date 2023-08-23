@@ -5,8 +5,6 @@ const errorRes = require('../../utils/error_message_util');
 const {client} = require('../../utils/line_bot');
 
 exports.create = async (req, res) => {
-  console.log('Schedule Create');
-
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
@@ -94,8 +92,6 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  console.log('Schedule Update');
-
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
@@ -140,8 +136,6 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  console.log('Schedule Delete');
-
   // get id from url
   const scheduleId = req.params.id;
 
@@ -186,9 +180,6 @@ exports.delete = async (req, res) => {
 };
 
 exports.like = async (req, res) => {
-  console.log('Schedule Like');
-
-  // get id from url
   const scheduleId = req.params.id;
   const userId = req.userData.id;
 
@@ -219,9 +210,6 @@ exports.like = async (req, res) => {
 }
 
 exports.unlike = async (req, res) => {
-  console.log('Schedule Unlike');
-
-  // get id from url
   const scheduleId = req.params.id;
   const userId = req.userData.id;
 

@@ -5,7 +5,7 @@ const mailOptions = require('./email_options');
 const logger = require('../logger');
 
 
-async function sendMailWithOption (options) {
+async function sendMailWithOption(options) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -14,14 +14,14 @@ async function sendMailWithOption (options) {
     }
   });
 
-  transporter.sendMail(options, function(error, info){
-    if(error){
+  transporter.sendMail(options, function (error, info) {
+    if (error) {
       console.log(error);
     } else {
       console.log('Email Sent Successfully: ' + info.response);
-      
+
       // write info to log file
-      logger.saveToLogFile((options.to+'\n'+info.response));
+      logger.saveToLogFile(('To: ' + options.to + '\n' + info.response));
     }
   });
 }
@@ -31,7 +31,7 @@ exports.sendSignupEmail = async (receiver, name) => {
   const [subject, html] = mailOptions.signup(name);
   const options = {
     from: process.env.SYSTEM_FROM,
-    to: receiver+','+process.env.SYSTEM_EMAIL,
+    to: receiver + ',' + process.env.SYSTEM_EMAIL,
     subject: subject,
     html: html,
   };
@@ -42,7 +42,7 @@ exports.sendAddedTripEmail = async (receivers, senderName, recipientName, tripNa
   const [subject, html] = mailOptions.addedTrip(senderName, recipientName, tripName);
   const options = {
     from: process.env.SYSTEM_FROM,
-    to: receivers+','+process.env.SYSTEM_EMAIL,
+    to: receivers + ',' + process.env.SYSTEM_EMAIL,
     subject: subject,
     html: html,
   };
@@ -53,7 +53,7 @@ exports.sendCreateTripEmail = async (receivers, senderName, tripName) => {
   const [subject, html] = mailOptions.createTrip(senderName, tripName);
   const options = {
     from: process.env.SYSTEM_FROM,
-    to: receivers+','+process.env.SYSTEM_EMAIL,
+    to: receivers + ',' + process.env.SYSTEM_EMAIL,
     subject: subject,
     html: html,
   };
@@ -65,7 +65,7 @@ exports.sendPreTripEmail = async (receivers, recipientName, tripName) => {
   const [subject, html] = mailOptions.preTrip(recipientName, tripName);
   const options = {
     from: process.env.SYSTEM_FROM,
-    to: receivers+','+process.env.SYSTEM_EMAIL,
+    to: receivers + ',' + process.env.SYSTEM_EMAIL,
     subject: subject,
     html: html,
   };
