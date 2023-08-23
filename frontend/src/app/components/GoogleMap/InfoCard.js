@@ -44,6 +44,7 @@ export default function InfoCard({
             alt={placeDetails.name}
             fill
             objectFit="cover"
+            unoptimized
           />
         ) : (
           <div>沒有照片</div>
