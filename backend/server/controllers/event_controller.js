@@ -1,15 +1,13 @@
 const eventModel = require('../models/event_model');
 
 exports.getEvents = async (req, res) => {
-  console.log('Events Get');
-
   const { 'id': myId } = req.userData;
 
   try {
     const events = await eventModel.getEvents(myId);
     if (events === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
-      return res.status(errorCode).json({ error: errorMessage });
+      return res.status(errorode).json({ error: errorMessage });
     }
 
     // 200 OK
@@ -26,8 +24,6 @@ exports.getEvents = async (req, res) => {
 };
 
 exports.read = async (req, res) => {
-  console.log('Event Read');
-
   const { 'id': myId } = req.userData;
   const { 'event_id': eventId } = req.params;
 

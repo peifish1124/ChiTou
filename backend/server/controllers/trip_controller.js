@@ -5,8 +5,6 @@ const errorRes = require('../../utils/error_message_util');
 const emailUtils = require('../../utils/email_service/email_utils');
 
 exports.createTrip = async (req, res) => {
-  console.log('Create Trip');
-
   const { 'id': myId, 'name': myName } = req.userData;
 
   if (req.headers['content-type'] !== 'application/json') {
@@ -63,8 +61,6 @@ exports.createTrip = async (req, res) => {
 };
 
 exports.getTrips = async (req, res) => {
-  console.log('Get Trips');
-
   const { 'id': myId } = req.userData;
 
   try {
@@ -87,8 +83,6 @@ exports.getTrips = async (req, res) => {
 };
 
 exports.tripDetail = async (req, res) => {
-  console.log('Get Trip Detail');
-
   const { 'id': tripId } = req.params;
   const { 'id': myId } = req.userData;
 
@@ -121,8 +115,6 @@ exports.tripDetail = async (req, res) => {
 };
 
 exports.uploadPicture = async (req, res) => {
-  console.log('Upload Picture');
-
   if(!req.headers['content-type']) {
     const [errorCode, errorMessage] = errorRes.emptyInput();
     return res.status(errorCode).json({ error: errorMessage });
@@ -161,8 +153,6 @@ exports.uploadPicture = async (req, res) => {
 };
 
 exports.changeSequence = async (req, res) => {
-  console.log('Change Schedule Sequence');
-
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
@@ -219,7 +209,6 @@ exports.changeSequence = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-  console.log('Trip Search');
   // get keyword
   const { keyword } = req.query;
   const { 'id': myId } = req.userData;

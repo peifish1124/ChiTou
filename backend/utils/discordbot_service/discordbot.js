@@ -16,10 +16,24 @@ exports.startDiscordBot = () => {
 
     if (interaction.commandName === 'log') {
       const title = 'System Log File\n------------------------------------\n';
-      const logContent = await logger.readLogFile();
+      var logContent = await logger.readLogFile();
       const footer = '\n------------------------------------\n';
+
+      if(logContent.length >1900)
+        logContent = logContent.substring(0,1900)+"\n......";  
+
       await interaction.reply(title + logContent+ footer);
       // await logger.clearLogFile();
+
+    } else if (interaction.commandName === 'accesslog') {
+      const title = 'Access Log File\n------------------------------------\n';
+      const logContent = await logger.readAccessLogFile();
+      const footer = '------------------------------------\n';
+
+      if(logContent.length >1900)
+      logContent = logContent.substring(0,1900)+"\n......";  
+
+      await interaction.reply(title + logContent + footer);
 
     } else if (interaction.commandName === 'report') {
       const title = 'System Report File\n------------------------------------\n';
