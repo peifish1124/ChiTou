@@ -3,7 +3,6 @@ import axiosAuth from "@/api/axiosTypeAndAuth";
 
 export default function useDeleteSchedule(id) {
   const deleteSchedule = async () => {
-    console.log("delete schedule");
     try {
       const response = await axiosAuth.delete(`/schedules/${id}`);
       console.log("delete schedule response", response.data.data.schedule);
