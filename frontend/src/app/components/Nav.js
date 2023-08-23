@@ -56,7 +56,7 @@ export default function Nav({ changeToStart, userName }) {
           <Image
             className="image"
             // src={user.picture || "/user-chou.png"}
-            src="/user-chou.png"
+            src="/user.svg"
             width={36}
             height={36}
             alt="user picture"
@@ -182,7 +182,7 @@ export default function Nav({ changeToStart, userName }) {
         <button className={nav.userPic} type="button" onClick={handleLogout}>
           <Image
             // className="image"
-            src="/logout-color.png"
+            src="/logout.svg"
             width={36}
             height={36}
             alt="user picture"
