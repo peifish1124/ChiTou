@@ -43,7 +43,10 @@ export default function TripDetail({ tripId }) {
       </div>
       <div className={tripcard.tripInfo}>
         <div className={tripcard.tripInfoTop}>
-          <h2>{tripDetail.name}</h2>
+          <div>
+            <h2>{tripDetail.name}</h2>
+            <p>Trip ID: {tripId}</p>
+          </div>
           <p>目的地： {tripDetail.destination}</p>
         </div>
         <div className={tripcard.tripInfoBottom}>
