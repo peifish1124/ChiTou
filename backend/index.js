@@ -69,13 +69,13 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
 
 app.post('/simulate-message', async (req, res) => {
   try {
-    const userId = 'U6e6b7239d8b5c5baa56c7ff8bccd85a9';
+    const groupId = 'Ced4b7909ce1bd708e431b55523044d3d';
     const message = {
       type: 'text',
       text: '這是模擬帳戶的訊息。',
     };
 
-    await client.pushMessage(userId, message);
+    await client.pushMessage(groupId, message);
 
     res.status(200).json({ message: '訊息已成功發送給機器人。' });
   } catch (error) {
