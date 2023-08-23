@@ -58,6 +58,7 @@ export default function EditPage({ params }) {
               addNote={addNote}
               submitNewSchedule={submitNewSchedule}
               getTripDetail={getTripDetail}
+              tripId={params.id}
             />
           )}
         </div>

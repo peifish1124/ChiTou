@@ -186,7 +186,7 @@ export default function Nav({ changeToStart, userName }) {
           <Image
             className="image"
             // src={user.picture || "/user-chou.png"}
-            src="/chat.svg"
+            src="/line.svg"
             width={36}
             height={36}
             alt="user picture"
