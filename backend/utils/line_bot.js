@@ -12,7 +12,7 @@ module.exports = {
     if (event.type === 'join' && event.source.type === 'group') {
       const welcomeMessage = {
         type: 'text',
-        text: '歡迎加入 ChiTou 機器人～\n 請幫我輸入你們在 ChiTou 的旅遊 ID & 創建者名稱（以空格隔開）！',
+        text: '歡迎加入 ChiTou 機器人～\n請幫我輸入你們在 ChiTou 的旅遊 ID & 創建者的使用者名稱（以空格隔開）！',
       };
 
       await client.replyMessage(event.replyToken, welcomeMessage);
@@ -29,7 +29,7 @@ module.exports = {
           const tripName = await tripModel.getTripName(parseInt(id));
           await client.replyMessage(event.replyToken, {
               type: 'text',
-              text: `Hello『${tripName}』 的小夥伴們，\n 之後行程有任何變更我都會通知你們呦～`,
+              text: `Hello『${tripName}』 的小夥伴們，\n之後行程有任何變更我都會通知你們呦～`,
           });
         } else {
           await client.replyMessage(event.replyToken, {

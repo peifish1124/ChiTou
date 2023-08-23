@@ -44,9 +44,34 @@ exports.create = async (req, res) => {
     const groupId = await scheduleModel.getLineGroupId(tripId);
     if (groupId != null) {
       const tripDetail = await tripModel.tripDetail(tripId, myId);
+
+      var organizedData = {};
+      for (var i = 0; i < tripDetail.schedules.length; i++) {
+          var item = tripDetail.schedules[i];
+          var trip_detail_day = item.trip_day;
+
+          if (!organizedData[trip_detail_day]) {
+              organizedData[trip_detail_day] = [];
+          }
+
+          var entry = "*" + item.place + "*:\n大約停留時間為 " + item.duration + " 小時"+ "\n目前投此行程人數為 " + item.like_count + '\n';
+          organizedData[trip_detail_day].push({ sequence: item.sequence, entry: entry });
+      }
+
+      var schedule_text = '';
+      for (var day in organizedData) {
+        schedule_text += ("```第" + day + "天```\n");
+        organizedData[day].sort(function (a, b) {
+          return a.sequence - b.sequence;
+        });
+        organizedData[day].forEach(function (item) {
+          schedule_text += (item.entry + '\n');
+        });
+      }
+
       const message = {
         type: 'text',
-        text: JSON.stringify(tripDetail.schedules),
+        text: schedule_text,
       };
       await client.pushMessage(groupId, message);
     }
