@@ -109,6 +109,31 @@ exports.getTripName = async (id) => {
   }
 }
 
+exports.isCreator = async(trip_id, user_name) => {
+  const connection = await poolConnection();
+  const query_trip = `
+    SELECT creator_id
+    FROM trips 
+    WHERE id = ?
+    `;
+  const query = `
+    SELECT name
+    FROM users 
+    WHERE id = ?
+    `;
+
+  try {
+    const [trip] = await connection.query(query_trip, [trip_id]);
+    const [user] = await connection.query(query, [trip[0].creator_id]);
+    return user[0].name == user_name;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+}
+
 exports.tripExist = async (id) => {
   const connection = await poolConnection();
   const query = `

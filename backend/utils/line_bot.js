@@ -12,7 +12,7 @@ module.exports = {
     if (event.type === 'join' && event.source.type === 'group') {
       const welcomeMessage = {
         type: 'text',
-        text: '歡迎加入 ChiTou 機器人～\n 請幫我輸入你們在 ChiTou 的旅遊 ID（可於 ChiTou 頁面中看到）！',
+        text: '歡迎加入 ChiTou 機器人～\n 請幫我輸入你們在 ChiTou 的旅遊 ID & 創建者名稱（以空格隔開）！',
       };
 
       await client.replyMessage(event.replyToken, welcomeMessage);
@@ -20,16 +20,24 @@ module.exports = {
 
     if (event.type === 'message' && event.message.type === 'text') {
       const messageText = event.message.text;
-      await tripModel.addLineGroupId(event.source.groupId, parseInt(messageText));
+      var id = '';
+      if (messageText.includes(' ')) var [id, user_name] = messageText.split(' ');
 
-      if (/^-?\d+$/.test(messageText)) {
-        const tripName = await tripModel.getTripName(parseInt(messageText));
-        await client.replyMessage(event.replyToken, {
+      if (/^-?\d+$/.test(id)) {
+        if( await tripModel.isCreator(id, user_name) ) {
+          await tripModel.addLineGroupId(event.source.groupId, parseInt(id));
+          const tripName = await tripModel.getTripName(parseInt(id));
+          await client.replyMessage(event.replyToken, {
+              type: 'text',
+              text: `Hello『${tripName}』 的小夥伴們，\n 之後行程有任何變更我都會通知你們呦～`,
+          });
+        } else {
+          await client.replyMessage(event.replyToken, {
             type: 'text',
-            text: `Hello『${tripName}』 的小夥伴們，\n 之後行程有任何變更我都會通知你們呦～`,
+            text: `輸入的 旅行 ID 和 創建者名稱 資訊不符合呦～`,
         });
+        }
       }
-
     }
   },
   line,
