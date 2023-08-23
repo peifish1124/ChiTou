@@ -1,22 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import axiosAuth from "@/api/axiosAuth";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
+import debounce from "@/utils/debounce";
 
 export default function DaySchedules({ schedule }) {
   const [expanded, setExpanded] = useState(false);
-  const [isLiked, setIsLiked] = useState(schedule.is_liked || false);
+  const [isLiked, setIsLiked] = useState(schedule.is_like || false);
   const [likeCount, setLikeCount] = useState(schedule.like_count || 0);
+  const createLike = async (id) => {
+    try {
+      const result = await axiosAuth.post(`/schedules/${id}/like`);
+      console.log("create like result", result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteLike = async (id) => {
+    try {
+      const result = await axiosAuth.delete(`/schedules/${id}/like`);
+      console.log("delete like result", result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleLike = () => {
     setIsLiked((prevIsLiked) => !prevIsLiked);
 
     if (isLiked) {
+      deleteLike(schedule.id);
       setLikeCount((prevLikeCount) => prevLikeCount - 1);
     } else {
+      createLike(schedule.id);
       setLikeCount((prevLikeCount) => prevLikeCount + 1);
     }
   };
+  const debouncedHandleLike = debounce(handleLike, 500);
+
   return (
     <li key={schedule.id}>
       <p style={{ width: "25%" }}>{schedule.place}</p>
@@ -62,7 +84,7 @@ export default function DaySchedules({ schedule }) {
         </svg>
       </button>
       <div className={styles.vote}>
-        <button type="button" onClick={handleLike}>
+        <button type="button" onClick={debouncedHandleLike}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

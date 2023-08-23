@@ -9,10 +9,29 @@
     overflow: hidden;
     width: 100%;
     height: 4.5rem;
-    background: #103727;
+    // background: #103727;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    border-bottom: 1px solid #103727;
+    // border-bottom: 1px solid #103727;
+    .overlay {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      color: #F0F2F5;
+      text-align: center;
+      font-weight: 700;
+    }
+    .dragging {
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 2px dashed #555;
+    }
   }
   .tripInfo {
     display: flex;
@@ -56,6 +75,14 @@
     height: 2rem;
     top: calc(100vh - 142px);
     left: 91.5vw;
+    cursor: pointer;
+  }
+  .returnBtn{
+    position: fixed;
+    width: 5rem;
+    height: 2.5rem;
+    top: calc(100vh - 145px);
+    left: 88vw;
     cursor: pointer;
   }
 }

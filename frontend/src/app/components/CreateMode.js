@@ -1,53 +1,111 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 "use client";
 
 import { useState, useEffect } from "react";
-import { TextField } from "@mui/material/TextField";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 import Image from "next/image";
+import useUserSearch from "@/hooks/useUserSearch";
+import useCreateTrip from "@/hooks/useCreateTrip";
 import styles from "@/styles/css-modules/createmode.module.scss";
+import cityData from "@/data/taiwan-district-zip-code.json";
 
-export default function CreateMode() {
-  const [participantName, setParticipantName] = useState("");
-  const [participantsList, setParticipantsList] = useState([]);
+export default function CreateMode({
+  accessToken,
+  getTrips,
+  userName,
+  userId,
+}) {
+  const { createTrip } = useCreateTrip();
+  const { searchUsers } = useUserSearch(accessToken);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [participantsName, setParticipantsName] = useState([userName]);
+  const [participantsId, setParticipantsId] = useState([parseInt(userId, 10)]);
+  const [showSearchList, setShowSearchList] = useState(false);
 
-  const handleInputKeyPress = (e) => {
-    if (e.key === "Enter" && participantName.trim() !== "") {
-      e.preventDefault();
-      setParticipantsList([...participantsList, participantName]);
-      setParticipantName("");
-    }
+  const validationSchema = yup.object().shape({
+    end_date: yup.date().min(yup.ref("start_date"), "結束日期必須晚於開始日期"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      destination: "",
+      start_date: "",
+      end_date: "",
+      user_ids: [],
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      const tripData = {
+        name: values.trip_name,
+        destination: values.destination,
+        start_date: startDate,
+        end_date: endDate,
+        user_ids: participantsId,
+      };
+      // console.log(tripData);
+      createTrip(tripData, accessToken);
+      getTrips();
+    },
+  });
+
+  // user search
+  const handleSearchResult = async (e) => {
+    setSearchKeyword(e.target.value);
+    const results = await searchUsers(e.target.value);
+    setSearchResults(results);
   };
   useEffect(() => {
-    // console.log(participantsList);
-  }, [participantsList]);
+    // console.log("searchKeyword", searchKeyword);
+    // console.log("searchResults: ", searchResults);
+  }, [searchResults, searchKeyword]);
 
-  const handleParticipantRemove = (index) => {
-    const updatedParticipants = [...participantsList];
-    updatedParticipants.splice(index, 1);
-    setParticipantsList(updatedParticipants);
-  };
-
-  // Error handling
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  // const [error, setError] = useState(false);
-  // console.log(error);
-
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    if (endDate && date > endDate) {
-      // setError(true);
-    } else {
-      // setError(false);
+  // participants
+  const handleSearchResultSelect = async (user) => {
+    if (participantsName.includes(user.name)) {
+      return; // 不能輸入重複的使用者
     }
+    setParticipantsName([...participantsName, user.name]);
+    setParticipantsId([...participantsId, user.id]);
+    setSearchKeyword("");
+    setShowSearchList(false);
+  };
+  const handleParticipantRemove = (index) => {
+    if (index === 0) {
+      // 不能刪除自己
+      return;
+    }
+    const updatedParticipantsName = [...participantsName];
+    const updatedParticipantsId = [...participantsId];
+    updatedParticipantsName.splice(index, 1);
+    updatedParticipantsId.splice(index, 1);
+    setParticipantsName(updatedParticipantsName);
+    setParticipantsId(updatedParticipantsId);
+  };
+  useEffect(() => {
+    console.log(participantsName);
+  }, [participantsId, participantsName]);
+
+  // start and end date
+  const handleStartDateChange = (date) => {
+    const dayjsDate = dayjs(date);
+    const formattedDate = dayjsDate.format("YYYY-MM-DD");
+    setStartDate(formattedDate);
+    formik.setFieldValue("start_date", date);
   };
   const handleEndDateChange = (date) => {
-    setEndDate(date);
-    if (startDate && date < startDate) {
-      // setError(true);
-    } else {
-      // setError(false);
-    }
+    const dayjsDate = dayjs(date);
+    const formattedDate = dayjsDate.format("YYYY-MM-DD");
+    setEndDate(formattedDate);
+    formik.setFieldValue("end_date", date);
   };
 
   return (
@@ -57,89 +115,122 @@ export default function CreateMode() {
       </div>
       <div className={styles.createModeContainer}>
         <h3>創建屬於你們的小旅行</h3>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className={styles.createTripForm}>
             <div className={styles.tripInfoItem}>
               <p>旅行名稱：</p>
               <div className={styles.tripInfoInput}>
-                <input type="text" />
+                <input type="text" {...formik.getFieldProps("trip_name")} />
               </div>
             </div>
             <div className={styles.tripInfoItem}>
               <p>目的地：</p>
               <div className={styles.tripInfoInput}>
-                <input type="text" placeholder="請填入縣市名稱" />
+                <select
+                  className={styles.destinationCitySelect}
+                  {...formik.getFieldProps("destination")}
+                >
+                  <option value="" disabled>
+                    選擇目的地縣市
+                  </option>
+                  {cityData.map((city) => (
+                    <option key={city.name} value={city.name}>
+                      {city.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className={styles.dataPickerItem}>
               <p>開始時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/25/2023" /> */}
               <DatePicker
-                value={startDate}
+                className={styles.dataPickerInput}
                 onChange={handleStartDateChange}
-                renderInput={(params) => (
-                  <TextField
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...params}
-                  />
-                )}
+                renderInput={(params) => <TextField {...params} />}
               />
             </div>
             <div className={styles.dataPickerItem}>
               <p>結束時間：</p>
               {/* <input type="text" placeholder="範例格式: 08/27/2023" /> */}
+              {/* <div className={styles.tripInfoInput}> */}
               <DatePicker
-                value={endDate}
+                className={styles.dataPickerInput}
                 onChange={handleEndDateChange}
-                renderInput={(params) => (
-                  <TextField
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...params}
-                  />
-                )}
+                renderInput={(params) => <TextField {...params} />}
               />
+              {/* </div> */}
             </div>
             <div className={styles.tripInfoItem}>
               <p>參與者：</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  width: "100%",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="輸入姓名並按 Enter"
-                  value={participantName}
-                  onChange={(e) => setParticipantName(e.target.value)}
-                  onKeyPress={handleInputKeyPress}
-                />
-                <div className={styles.participantsBox}>
-                  {participantsList.map((participant, index) => {
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div className={styles.participantTag} key={index}>
-                        {participant}
+              <div className={styles.participantsItem}>
+                <div className={styles.participantsInput}>
+                  <input
+                    type="text"
+                    placeholder="輸入邀請對象"
+                    value={searchKeyword}
+                    onFocus={() => setShowSearchList(true)}
+                    // onBlur={() => setShowSearchList(false)}
+                    onChange={handleSearchResult}
+                  />
+                  <div className={styles.participantsBox}>
+                    {participantsName.map((participant, index) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div className={styles.participantTag} key={index}>
+                          {participant}
+                          <button
+                            type="button"
+                            onClick={() => handleParticipantRemove(index)}
+                          >
+                            <Image
+                              src="/tag-cancel.svg"
+                              alt="cancel"
+                              width={15}
+                              height={15}
+                              objectFit="cover"
+                            />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                {showSearchList && (
+                  <div className={styles.participantsSearchList}>
+                    {searchResults && searchResults.length > 0 ? (
+                      searchResults.map((user) => (
+                        // <div className={styles.participantsSearchItem}
+                        //   key={user.id}
+                        // >
+                        //   <p onClick={() => handleSearchResultSelect(user)}>
+                        //     {user.name}
+                        //   </p>
+                        // </div>
                         <button
                           type="button"
-                          onClick={() => handleParticipantRemove(index)}
+                          className={styles.participantsSearchItem}
+                          key={user.id}
+                          onClick={() => handleSearchResultSelect(user)}
                         >
-                          <Image
-                            src="/tag-cancel.svg"
-                            alt="cancel"
-                            width={20}
-                            height={20}
-                            objectFit="cover"
-                          />
+                          {user.name}
                         </button>
-                      </div>
-                    );
-                  })}
-                </div>
+                      ))
+                    ) : (
+                      // <div>No search results found.</div>
+                      // eslint-disable-next-line react/jsx-no-useless-fragment
+                      <></>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
+          </div>
+          {/* Error Message */}
+          <div>
+            {formik.touched.end_date && formik.errors.end_date ? (
+              <div className={styles.error}>{formik.errors.end_date}</div>
+            ) : null}
           </div>
           <div className={styles.formBtn}>
             <button type="button">
@@ -154,10 +245,10 @@ export default function CreateMode() {
             <button type="submit">
               <Image
                 src="/checkBtn.svg"
-                alt="cancel button"
+                alt="check button"
                 width={30}
                 height={30}
-                objectFit="cover"
+                // objectFit="cover"
               />
             </button>
           </div>

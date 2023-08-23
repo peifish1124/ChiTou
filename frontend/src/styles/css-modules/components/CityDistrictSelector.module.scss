@@ -1,0 +1,47 @@
+.cityDistrictSelector {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 100px;
+  box-shadow:
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  .citySelect {
+    width: 6rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0.375rem;
+    background: #f0f2f5;
+    color: #3d4a35;
+    border-radius: 100px;
+    &:hover {
+      background: #87c28f;
+      color: #fff;
+    }
+    &:focus {
+      background: #87c28f;
+      color: #fff;
+    }
+    &:focus-visible {
+      outline: 0;
+    }
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #d9e7ca;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: #103727;
+    }
+    .cityGroup {
+      background-color: #f0f2f5;
+      color: #3d4a35;
+      font-size: 700;
+    }
+  }
+}

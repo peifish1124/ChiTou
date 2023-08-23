@@ -10,103 +10,57 @@ import TripCard from "@/components/TripCard";
 import StartMode from "@/components/StartMode";
 import CreateMode from "@/components/CreateMode";
 import TravelDetail from "@/components/TravelDetail";
+import useGetTrips from "@/hooks/trip/useGetTrips";
+import useSearchTrip from "@/hooks/trip/useSearchTrip";
 import styles from "@/styles/css-modules/page.module.scss";
-
-const trip = {
-  id: 1,
-  name: "台北一日遊",
-  picture: "/trip-cover.jpg",
-  destination: "台北",
-  start_date: "2023-08-10",
-  end_date: "2023-08-12",
-  member_count: 5,
-};
-const schedules = [
-  {
-    id: 1,
-    place: "台北101",
-    duration: 2,
-    note: "台北101好高好高好好玩",
-    sequence: 1,
-    trip_day: 1,
-  },
-  {
-    id: 2,
-    place: "台北車站",
-    duration: 2,
-    note: "台北車站好好玩",
-    sequence: 3,
-    trip_day: 1,
-  },
-  {
-    id: 3,
-    place: "台北動物園",
-    duration: 2,
-    note: "台北動物園好好玩",
-    sequence: 2,
-    trip_day: 1,
-  },
-  {
-    id: 4,
-    place: "台中一中街",
-    duration: 2,
-    note: "台中一中街好好玩",
-    sequence: 1,
-    trip_day: 2,
-  },
-  {
-    id: 5,
-    place: "台中火車站",
-    duration: 2,
-    note: "台中火車站好好玩",
-    sequence: 2,
-    trip_day: 2,
-  },
-  {
-    id: 6,
-    place: "台中逢甲夜市",
-    duration: 2,
-    note: "台中逢甲夜市好好玩",
-    sequence: 3,
-    trip_day: 2,
-  },
-  {
-    id: 7,
-    place: "高雄六合夜市",
-    duration: 2,
-    note: "高雄六合夜市好好玩",
-    sequence: 2,
-    trip_day: 3,
-  },
-  {
-    id: 8,
-    place: "高雄車站",
-    duration: 2,
-    note: "高雄車站好好玩",
-    sequence: 1,
-    trip_day: 3,
-  },
-];
+import getCookies from "@/utils/getCookies";
 
 export default function Home() {
+  const { accessToken, userName, userId } = getCookies();
   const [mode, setMode] = useState("start");
-
+  const [tripId, setTripId] = useState(null);
+  const { trips, getTrips } = useGetTrips();
+  const { tripsSearchKeyword, tripsSearchResult, handleInputChange } =
+    useSearchTrip();
   return (
     <main className={styles.main}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Nav changeToStart={() => setMode("start")} />
+        <Nav userName={userName} changeToStart={() => setMode("start")} />
 
         <div className={styles.page}>
           <div className={styles.leftPage}>
             <div className={styles.searchTripCard}>
-              <SearchTripCard />
+              <SearchTripCard handleInputChange={handleInputChange} />
             </div>
 
-            <div className={styles.tripcard}>
-              <TripCard changeToDetail={() => setMode("detailed")} />
-              <TripCard />
-              <TripCard />
-            </div>
+            {tripsSearchResult.length > 0 && (
+              <div className={styles.tripcard}>
+                {tripsSearchResult.map((trip) => (
+                  <TripCard
+                    key={trip.id}
+                    trip={trip}
+                    changeToDetail={() => {
+                      setMode("detailed");
+                      setTripId(trip.id);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            {!tripsSearchKeyword && (
+              <div className={styles.tripcard}>
+                {trips.map((trip) => (
+                  <TripCard
+                    key={trip.id}
+                    trip={trip}
+                    changeToDetail={() => {
+                      setMode("detailed");
+                      setTripId(trip.id);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
             <button
               type="button"
@@ -119,10 +73,15 @@ export default function Home() {
 
           <div className={styles.rightPage}>
             {mode === "start" && <StartMode />}
-            {mode === "detailed" && (
-              <TravelDetail trip={trip} schedules={schedules} />
+            {mode === "detailed" && <TravelDetail tripId={tripId} />}
+            {mode === "create" && (
+              <CreateMode
+                accessToken={accessToken}
+                userName={userName}
+                userId={userId}
+                getTrips={getTrips}
+              />
             )}
-            {mode === "create" && <CreateMode />}
           </div>
         </div>
       </LocalizationProvider>

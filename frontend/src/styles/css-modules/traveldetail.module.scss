@@ -1,7 +1,8 @@
 .daySchedules {
   width: 100%;
   .daySchedules__header {
-    width: 30%;
+    // width: 33%;
+    width: 100%;
     font-size: 1.125rem;
     font-weight: 700;
     color: #525252;
@@ -9,10 +10,127 @@
     align-items: center;
     justify-content: space-between;
     margin: 0 0 0.5rem 0;
+
+    .daySchedules__title {
+      display: flex;
+      width:70%;
+    }
+
+    h2{
+      width: 8rem;
+      flex-shrink: 0;
+    }
+
+    .weatherInfo{
+      position: relative;
+        width: 36px;
+        height: 36px;
+    }
+  }
+
+  .editDaySchedules__header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #525252;
+    display: flex;
+    align-items: center;
+    
+    margin: 0 0 0.5rem 0;
     .weather {
       display: none;
     }
+    .addBtn{
+      position: relative;
+      width: 2rem;
+      height: 2rem;
+    }
   }
+  .weatherInfoCard {
+    display: flex;
+    width: 100%;
+    height: 10rem;
+    justify-content: space-between;
+    border:#181426;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      color: #5C5C5C;
+      font-family: Outfit;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    p {
+      color: #5C5C5C;
+      font-family: Outfit;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .temperatureBox {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 20%;
+      height: 100%;
+      background: #EAF1F5;
+      border-radius: 10px;
+    }
+    .weatherInfoBox {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 78%;
+      height: 100%;
+
+      .threeWeather {
+        display: flex;
+        width: 100%;
+        height: 4.5rem;
+        gap: 2%;
+
+        .threeWeatherItem {
+          display: flex;
+          padding: 3%;
+          // padding-left: 0.8rem;
+          // padding-right: 0.8rem;
+          justify-content: space-between;
+          align-items: center;
+          width: 32%;
+          height: 100%;
+          background: #EAF1F5;
+          border-radius: 10px;
+
+          .threeWeatherItemIndo {
+            width: 2rem;
+          }
+        }
+      }
+
+      .weatherSummary {
+        display: flex;
+        flex-direction: column;
+        // padding-left: 0.8rem;
+        padding: 3%;
+        width: 100%;
+        height: 5rem;
+        justify-content: center;
+        background: #EAF1F5;
+        border-radius: 10px;
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
   .schedule__key {
     font-weight: 500;
     font-size: 1rem;
@@ -27,6 +145,7 @@
   .timeline {
     li {
       width: 100%;
+      padding: 0.5rem 0;
       box-sizing: border-box;
       position: relative;
       display: flex;
@@ -88,4 +207,119 @@
     flex-grow: 1;
     justify-content: space-around;
   }
+
+  .schedule{
+    li {
+      width: 100%;
+      padding: 0.5rem 0;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      align-items: center;
+      &:nth-child(n)::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        width: 1px;
+        top: 0;
+        height: 100%;
+        background-color: #d1d3cb;
+        right: calc(50% + 20px);
+      }
+
+      &:nth-last-child(1)::after {
+        height: 50%;
+      }
+
+      &:nth-child(1)::after {
+        top: 50%;
+        height: 50%;
+      }
+
+      &:nth-child(n)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: calc(50% + 16px);
+        bottom: 0;
+        margin: auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #181426;
+        z-index: 2;
+      }
+    }
+    .note {
+      width: 35%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &.expand {
+        white-space: normal; /* 展開時取消截斷 */
+      }
+    }
+  }
+  .scheduleTitle{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .createSchedule{
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 6rem;
+    
+    input, textarea{
+      font-family: Outfit;
+      font-size: 15px;
+      font-weight: 500;
+      color: #525252;
+    }
+  }
+  .scheduleBtn{
+    display: flex;
+    justify-content: space-between;
+    width: 10%;
+    padding-left: 3%;
+
+    button{
+      position: relative;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+.hiddenDragBtn {
+  position: absolute;
+  left: -1rem;
+
+  button{
+    width: 1rem;
+    height: 1rem;
+  }
+}
+.scheduleListItem .hiddenBtn {
+  justify-content: space-between;
+  width: 10%;
+  padding-left: 3%;
+
+  .editbutton{
+    position: relative;
+    margin-top: 0.1rem;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  .removebutton{
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+.scheduleListItem:hover .hiddenBtn {
+  display: block;
 }
