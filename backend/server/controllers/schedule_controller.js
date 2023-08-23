@@ -41,9 +41,8 @@ exports.create = async (req, res) => {
 
     // line bot send message
     const groupId = await scheduleModel.getLineGroupId(tripId);
-    console.log(groupId);
     if (groupId != null) {
-      const tripDetail = await tripModel.tripDetail(tripDetail, myId);
+      const tripDetail = await tripModel.tripDetail(tripId, myId);
       const message = {
         type: 'text',
         text: JSON.stringify(tripDetail.schedules),
