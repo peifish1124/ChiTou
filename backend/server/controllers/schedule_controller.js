@@ -54,7 +54,7 @@ exports.create = async (req, res) => {
               organizedData[trip_detail_day] = [];
           }
 
-          var entry = "*" + item.place + "*:\n大約停留時間為 " + item.duration + " 小時"+ "\n目前投此行程人數為 " + item.like_count + '\n';
+          var entry = "*" + item.place + "* :\n大約停留時間為 " + item.duration + " 小時"+ "\n目前投此行程人數為 " + item.like_count + '\n';
           organizedData[trip_detail_day].push({ sequence: item.sequence, entry: entry });
       }
 
