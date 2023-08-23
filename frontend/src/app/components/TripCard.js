@@ -9,7 +9,7 @@ export default function TripCard({ trip, changeToDetail }) {
       <div className={styles.cover}>
         <Link href="/" onClick={changeToDetail}>
           <Image
-            src={trip.picture ? trip.picture : " /default-cover.svg"}
+            src={trip.picture ? trip.picture : "/cover.png"}
             alt="cover"
             fill
             objectFit="cover"
