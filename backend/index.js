@@ -14,7 +14,7 @@ const searchRoute = require('./server/routes/search_route');
 
 // line bot
 const lineBotUtil = require('./utils/line_bot');
-const {line, config, client} = require('./utils/line_bot');
+const {line, config} = require('./utils/line_bot');
 
 const app = express();
 const port = process.env.WEB_PORT;

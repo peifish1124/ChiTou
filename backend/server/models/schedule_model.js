@@ -185,3 +185,22 @@ exports.unlike = async (userId, scheduleId) => {
     connection.release();
   }
 };
+
+exports.getLineGroupId = async (trip_id) => {
+  const connection = await poolConnection();
+  const query = `
+    SELECT line_group_id
+    FROM trips 
+    WHERE id = ?
+    `;
+  
+  try {
+    const [trip] = await connection.query(query, [id]);
+    return trip[0].line_group_id;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};

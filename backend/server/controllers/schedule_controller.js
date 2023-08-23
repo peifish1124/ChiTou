@@ -1,5 +1,6 @@
 const scheduleModel = require('../models/schedule_model');
 const eventModel = require('../models/event_model');
+const tripModel = require('../models/trip_model');
 const errorRes = require('../../utils/error_message_util');
 
 exports.create = async (req, res) => {
@@ -39,15 +40,15 @@ exports.create = async (req, res) => {
     console.log('Schedule Created Success');
 
     // line bot send message
-    const groupId = 'Ced4b7909ce1bd708e431b55523044d3d';
+    const groupId = await scheduleModel.getLineGroupId(tripId);
+    const tripDetail = await tripModel.tripDetail(tripDetail, myId);
     const message = {
       type: 'text',
-      text: '這是模擬帳戶的訊息。',
+      text: JSON.stringify(tripDetail.schedules),
     };
 
     await client.pushMessage(groupId, message);
 
-    res.status(200).json({ message: '訊息已成功發送給機器人。' });
 
     // create event for all members
     const isSuccess = await eventModel.create(Number(myId), userIds, tripId, 'updated_trip');
