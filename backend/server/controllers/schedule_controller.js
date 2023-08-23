@@ -41,13 +41,15 @@ exports.create = async (req, res) => {
 
     // line bot send message
     const groupId = await scheduleModel.getLineGroupId(tripId);
-    const tripDetail = await tripModel.tripDetail(tripDetail, myId);
-    const message = {
-      type: 'text',
-      text: JSON.stringify(tripDetail.schedules),
-    };
+    if (groupId != NULL) {
+      const tripDetail = await tripModel.tripDetail(tripDetail, myId);
+      const message = {
+        type: 'text',
+        text: JSON.stringify(tripDetail.schedules),
+      };
 
-    await client.pushMessage(groupId, message);
+      await client.pushMessage(groupId, message);
+    }
 
 
     // create event for all members
