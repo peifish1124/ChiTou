@@ -38,6 +38,17 @@ exports.create = async (req, res) => {
     // 200 OK
     console.log('Schedule Created Success');
 
+    // line bot send message
+    const groupId = 'Ced4b7909ce1bd708e431b55523044d3d';
+    const message = {
+      type: 'text',
+      text: '這是模擬帳戶的訊息。',
+    };
+
+    await client.pushMessage(groupId, message);
+
+    res.status(200).json({ message: '訊息已成功發送給機器人。' });
+
     // create event for all members
     const isSuccess = await eventModel.create(Number(myId), userIds, tripId, 'updated_trip');
     console.log('Create Event Success: ', isSuccess);

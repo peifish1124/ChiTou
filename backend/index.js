@@ -12,7 +12,9 @@ const eventRoute = require('./server/routes/event_route');
 const weatherRoute = require('./server/routes/weather_route');
 const searchRoute = require('./server/routes/search_route');
 
+// line bot
 const lineBotUtil = require('./utils/line_bot');
+const {line, config, client} = require('./utils/line_bot');
 
 const app = express();
 const port = process.env.WEB_PORT;
@@ -47,41 +49,16 @@ app.get('/', (req, res) => {
     res.send('<h1 style="text-align: center; padding: 20px;">Hello, My Server!</h1>');
 });
 
-// line bot
-const line = require('@line/bot-sdk');
-const config = {
-    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-    channelSecret: process.env.CHANNEL_SECRET,
-};
-const client = new line.Client(config);
-
 app.post('/line-webhook', line.middleware(config), async (req, res) => {
     try {
       for (const event of req.body.events) {
-        await lineBotUtil.handleEvent(event, client);
+        await lineBotUtil.handleEvent(event);
       }
       res.json({ success: true });
     } catch (error) {
       console.error(error);
       res.status(500).end();
     }
-});
-
-app.post('/simulate-message', async (req, res) => {
-  try {
-    const groupId = 'Ced4b7909ce1bd708e431b55523044d3d';
-    const message = {
-      type: 'text',
-      text: '這是模擬帳戶的訊息。',
-    };
-
-    await client.pushMessage(groupId, message);
-
-    res.status(200).json({ message: '訊息已成功發送給機器人。' });
-  } catch (error) {
-    console.error('發送訊息時發生錯誤：', error);
-    res.status(500).json({ error: '發送訊息時發生錯誤。' });
-  }
 });
 
 app.listen(port, () => {

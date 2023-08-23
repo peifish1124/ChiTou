@@ -1,7 +1,14 @@
 const tripModel = require('../server/models/trip_model');
 
+const line = require('@line/bot-sdk');
+const config = {
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+    channelSecret: process.env.CHANNEL_SECRET,
+};
+const client = new line.Client(config);
+
 module.exports = {
-  handleEvent: async (event, client) => {
+  handleEvent: async (event) => {
     if (event.type === 'join' && event.source.type === 'group') {
       const welcomeMessage = {
         type: 'text',
@@ -19,10 +26,13 @@ module.exports = {
         const tripName = await tripModel.getTripName(parseInt(messageText));
         await client.replyMessage(event.replyToken, {
             type: 'text',
-            text: `Hello ${tripName} 的小夥伴們，之後行程有任何變更我都會通知你們呦～`,
+            text: `Hello『${tripName}』 的小夥伴們，\n 之後行程有任何變更我都會通知你們呦～`,
         });
       }
 
     }
-  }
+  },
+  line,
+  config,
+  client
 }
