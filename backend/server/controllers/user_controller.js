@@ -1,6 +1,7 @@
 const userModel = require('../models/user_model');
 const userUtil = require('../../utils/user_util');
 const errorRes = require('../../utils/error_message_util');
+const emailUtils = require('../../utils/email_service/email_utils');
 
 
 exports.signup = async (req, res) => {
@@ -49,6 +50,10 @@ exports.signup = async (req, res) => {
     // 200 OK
     accessToken = await userUtil.generateAccessToken(user);
     console.log('User Signup Success');
+
+    // send email
+    if(false) await emailUtils.sendSignupEmail(email, name);
+
     return res.status(200).json({
       data: {
         access_token: accessToken,

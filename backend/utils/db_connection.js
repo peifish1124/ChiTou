@@ -11,6 +11,10 @@ const POOL = mysql.createPool({
 const poolConnection = async () => {
   try {
     const connection = await POOL.getConnection();
+
+    const sessionTimezone = 'Asia/Taipei';
+    await connection.query(`SET time_zone = '${sessionTimezone}'`);
+
     return connection;
   } catch (err) {
     console.error('connecting failed');
