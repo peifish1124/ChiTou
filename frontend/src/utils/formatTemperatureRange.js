@@ -5,7 +5,6 @@ export default function formatTemperatureRange(originalText) {
     const minTemperature = temperatureRange[0];
     const maxTemperature = temperatureRange[1];
     return `${minTemperature}~${maxTemperature}℃`;
-  } else {
-    return "25℃";
   }
+  return "25℃";
 }

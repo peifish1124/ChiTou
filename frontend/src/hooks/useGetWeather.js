@@ -9,7 +9,7 @@ export default function useGetWeather() {
 
   const getWeather = async (date, locationName) => {
     setLoading(true);
-    console.log("get weather");
+    // console.log("get weather");
     try {
       const response = await axiosAuth.get(
         `/weathers?date=${date}&location_name=${encodeURIComponent(
@@ -20,10 +20,9 @@ export default function useGetWeather() {
       // console.log("get weather response", response.data.data.weather);
       setWeatherData(response.data.data.weather);
       return response.data.data.weather;
-      setLoading(false);
     } catch (err) {
       const { status } = err.response;
-      console.error("獲取天氣失敗:", status);
+      // console.error("獲取天氣失敗:", status);
       setLoading(false);
       setError(status);
       return null;

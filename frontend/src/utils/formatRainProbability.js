@@ -3,7 +3,6 @@ export default function formatRainProbability(originalText) {
 
   if (probability) {
     return `${probability}%`;
-  } else {
-    return "50%";
   }
+  return "50%";
 }
