@@ -27,6 +27,9 @@ app.use('/images', express.static('static'));
 
 const logFileName = `access-log-${logger.getDate()}.txt`;
 var accessLogStream = fs.createWriteStream(path.join(__dirname, './logs', logFileName), { flags: 'a' })
+
+app.use(morgan('short'));
+
 app.use(morgan(function (tokens, req, res) {
     const taiwanTime = moment().tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
 

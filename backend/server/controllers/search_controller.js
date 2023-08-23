@@ -3,8 +3,6 @@ const searchUtil = require('../../utils/search_util');
 const searchModel = require('../models/search_model');
 
 exports.getGoogleSearch = async (req, res) => {
-  console.log('Get Google Search');
-
   const { place_name } = req.query;
   if(typeof place_name == 'undefined') return res.status(200).json({data: {search: ''}});
 

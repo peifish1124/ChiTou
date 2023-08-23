@@ -5,8 +5,6 @@ const emailUtils = require('../../utils/email_service/email_utils');
 
 
 exports.signup = async (req, res) => {
-  console.log('User Signup');
-
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
@@ -68,8 +66,6 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  console.log('User Signin');
-
   if (req.headers['content-type'] !== 'application/json') {
     const [errorCode, errorMessage] = errorRes.contentTypeError();
     return res.status(errorCode).json({ error: errorMessage });
@@ -82,7 +78,6 @@ exports.signin = async (req, res) => {
   }
 
   try {
-
     const isNameExist = await userModel.isNameExist(name);
     if (isNameExist === null) {
       const [errorCode, errorMessage] = errorRes.queryFailed();
@@ -140,7 +135,6 @@ exports.authorization = async (req, res, next) => {
 };
 
 exports.search = async (req, res) => {
-  console.log('User Search');
   const { keyword } = req.query;
 
   if (typeof keyword == 'undefined') {
