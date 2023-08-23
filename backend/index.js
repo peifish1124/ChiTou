@@ -69,7 +69,7 @@ app.post('/line-webhook', line.middleware(config), async (req, res) => {
 
 app.post('/simulate-message', async (req, res) => {
   try {
-    const userId = '891124sophia';
+    const userId = 'U6e6b7239d8b5c5baa56c7ff8bccd85a9';
     const message = {
       type: 'text',
       text: '這是模擬帳戶的訊息。',
