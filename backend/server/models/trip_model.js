@@ -72,6 +72,24 @@ exports.getTrips = async (myId) => {
     }
 };
 
+exports.addLineGroupId = async (line_group_id, trip_id) => {
+  const connection = await poolConnection();
+  const query = `
+    UPDATE trips SET line_group_id = ? WHERE id = ?
+      `;
+
+  try {
+    const [trip] = await connection.query(query, [line_group_id, trip_id]);
+    if(trip.affectedRows != 1) return null;
+    return true;
+  } catch (err) {
+    console.error(err);
+    return null;
+  } finally {
+    connection.release();
+  }
+};
+
 exports.getTripName = async (id) => {
   const connection = await poolConnection();
   const query = `

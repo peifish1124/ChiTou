@@ -13,7 +13,8 @@ module.exports = {
 
     if (event.type === 'message' && event.message.type === 'text') {
       const messageText = event.message.text;
-      console.log(`群組 ID: ${event.source.groupId}`);
+      await tripModel.addLineGroupId(event.source.groupId, parseInt(messageText));
+
       if (/^-?\d+$/.test(messageText)) {
         const tripName = await tripModel.getTripName(parseInt(messageText));
         await client.replyMessage(event.replyToken, {
@@ -22,12 +23,6 @@ module.exports = {
         });
       }
 
-      if(messageText === '這是模擬帳戶的訊息。'){
-        await client.replyMessage(event.replyToken, {
-          type: 'text',
-          text: `Hello Hello`,
-      });
-      }
     }
   }
 }
