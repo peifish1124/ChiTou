@@ -195,7 +195,7 @@ exports.getLineGroupId = async (trip_id) => {
     `;
   
   try {
-    const [trip] = await connection.query(query, [id]);
+    const [trip] = await connection.query(query, [trip_id]);
     return trip[0].line_group_id;
   } catch (err) {
     console.error(err);
