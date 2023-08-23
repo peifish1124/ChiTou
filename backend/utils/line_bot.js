@@ -13,7 +13,7 @@ module.exports = {
 
     if (event.type === 'message' && event.message.type === 'text') {
       const messageText = event.message.text;
-      console.log(`使用者 ID: ${event.source.userId}`);
+      console.log(`群組 ID: ${event.source.groupId}`);
       if (/^-?\d+$/.test(messageText)) {
         const tripName = await tripModel.getTripName(parseInt(messageText));
         await client.replyMessage(event.replyToken, {
