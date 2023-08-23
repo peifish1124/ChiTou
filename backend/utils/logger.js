@@ -15,7 +15,7 @@ exports.saveToLogFile = async (message) => {
   const seconds = String(now.getSeconds()).padStart(2, '0');
 
   // log file
-  const logFileName = `log-${year}-${month}-${day}.txt`;
+  const logFileName = `log-${year}-${month}-${day}.log`;
   const logFilePath = path.join(__dirname, '../logs', logFileName);
 
   const timestamp = `[${year}-${month}-${day} ${hours}:${minutes}:${seconds}]`;
@@ -32,7 +32,7 @@ exports.readLogFile = async () => {
   try {
     // log file
     dateString = this.getDate();
-    const logFileName = `log-${dateString}.txt`;
+    const logFileName = `log-${dateString}.log`;
     const logFilePath = path.join(__dirname, '../logs', logFileName);
 
     const logContent = fs.readFileSync(logFilePath, 'utf8');
@@ -47,7 +47,7 @@ exports.readAccessLogFile = async () => {
   try { 
     // log file
     const dateString = this.getDate();
-    const logFileName = `access-log-${dateString}.txt`;
+    const logFileName = `access-log-${dateString}.log`;
     const logFilePath = path.join(__dirname, '../logs', logFileName);
 
     const logContent = fs.readFileSync(logFilePath, 'utf8');
@@ -62,7 +62,7 @@ exports.clearLogFile = async () => {
   try {
     // log file
     const dateString = this.getDate();
-    const logFileName = `log-${dateString}.txt`;
+    const logFileName = `log-${dateString}.log`;
     const logFilePath = path.join(__dirname, '../logs', logFileName);
 
     fs.writeFileSync(logFilePath, '');

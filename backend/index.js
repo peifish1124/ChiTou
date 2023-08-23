@@ -25,7 +25,7 @@ const port = process.env.WEB_PORT;
 app.use(express.json());
 app.use('/images', express.static('static'));
 
-const logFileName = `access-log-${logger.getDate()}.txt`;
+const logFileName = `access-log-${logger.getDate()}.log`;
 var accessLogStream = fs.createWriteStream(path.join(__dirname, './logs', logFileName), { flags: 'a' })
 
 app.use(morgan('short'));
@@ -42,7 +42,8 @@ app.use(morgan(function (tokens, req, res) {
         tokens['response-time'](req, res), 'ms',
         '\n',
     ].join(' ');
-}, { stream: accessLogStream, skip: function (req, res) { return res.statusCode < 400 }}));
+}, { stream: accessLogStream}));
+// skip: function (req, res) { return res.statusCode < 400 }
 
 app.all('*', (req, res, next) => {
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
