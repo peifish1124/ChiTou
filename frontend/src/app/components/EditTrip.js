@@ -30,7 +30,7 @@ export default function EditTrip({
   const dayList = Array.from({ length: daysCount }, (_, index) => index + 1);
   const groupedSchedules = dayList.reduce((groups, tripDay) => {
     const schedulesOnDay = tripDetail.schedules.filter(
-      (schedule) => schedule.trip_day === tripDay
+      (schedule) => schedule.trip_day === tripDay,
     );
     return { ...groups, [tripDay]: schedulesOnDay };
   }, {});
