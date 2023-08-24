@@ -8,12 +8,17 @@ import useUpdateSchedule from "@/hooks/schedules/useUpdateSchedule";
 import useDeleteSchedule from "@/hooks/schedules/useDeleteSchedule";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 
-export default function EditSchedule({ schedule, userIds, getTripDetail }) {
+export default function EditSchedule({
+  schedule,
+  tripId,
+  userIds,
+  getTripDetail,
+}) {
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   // const [DragDisabled, setDragDisabled] = useState(isDragDisabled);
   const [editSchedule, setEditSchedule] = useState(schedule);
-  const { updateSchedule } = useUpdateSchedule(schedule.id, userIds);
+  const { updateSchedule } = useUpdateSchedule(schedule.id, tripId, userIds);
   const { deleteSchedule } = useDeleteSchedule(schedule.id);
 
   const handleEditClick = () => {
