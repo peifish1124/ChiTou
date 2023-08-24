@@ -48,7 +48,15 @@ export default function Home() {
               </div>
             )}
             {tripsSearchKeyword && tripsSearchResult.length === 0 && (
-              <div className={styles.tripcard}>查無結果，請重新輸入</div>
+              // <div className={styles.noSearch}>查無結果，請重新輸入</div>
+              <div className={styles.noSearch}>
+                <Image
+                  src="/airplain.png"
+                  alt="loading"
+                  width={100}
+                  height={100}
+                />
+              </div>
             )}
             {!tripsSearchKeyword && (
               <div className={styles.tripcard}>
