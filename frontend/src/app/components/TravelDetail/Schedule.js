@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 import styles from "@/styles/css-modules/traveldetail.module.scss";
 import debounce from "@/utils/debounce";
 
@@ -10,6 +10,7 @@ export default function DaySchedules({ schedule }) {
   const [isLiked, setIsLiked] = useState(schedule.is_like || false);
   const [likeCount, setLikeCount] = useState(schedule.like_count || 0);
   const createLike = async (id) => {
+    const axiosAuth = createAxiosAuth();
     try {
       const result = await axiosAuth.post(`/schedules/${id}/like`);
       console.log("create like result", result.data.data);
@@ -19,6 +20,7 @@ export default function DaySchedules({ schedule }) {
   };
   const deleteLike = async (id) => {
     try {
+      const axiosAuth = createAxiosAuth();
       const result = await axiosAuth.delete(`/schedules/${id}/like`);
       console.log("delete like result", result.data.data);
     } catch (error) {

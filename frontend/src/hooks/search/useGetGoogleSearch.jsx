@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 
 export default function useGetGoogleSearch(query) {
   const [googleSearch, setGoogleSearch] = useState("");
   const getGoogleSearch = async () => {
     console.log("get google search");
     try {
+      const axiosAuth = createAxiosAuth();
       const response = await axiosAuth.get(
         `/searches?place_name=${query.trim()}`,
       );

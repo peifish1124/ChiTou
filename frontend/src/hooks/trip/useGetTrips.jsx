@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 import useLogout from "../useLogout";
 
 export default function useGetTrips() {
@@ -13,6 +13,7 @@ export default function useGetTrips() {
     setLoading(true);
     console.log("get trips");
     try {
+      const axiosAuth = createAxiosAuth();
       const response = await axiosAuth.get("/trips");
       console.log("get trips response", response.data.data.trips);
       setTrips(response.data.data.trips);

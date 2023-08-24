@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 
 const apiEventGet = async () => {
+  const axiosAuth = createAxiosAuth();
   const response = await axiosAuth.get("/events");
   return response;
 };
 
 const apiEventRead = async (id) => {
+  const axiosAuth = createAxiosAuth();
   const response = await axiosAuth.put(`/events/${id}/read`);
   return response;
 };
