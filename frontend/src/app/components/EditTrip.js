@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import EditDaySchedules from "./TravelDetail/EditDaySchedules";
 import useUploadPic from "@/hooks/trip/useUploadPic";
@@ -24,17 +24,17 @@ export default function EditTrip({
   const { uploadPic } = useUploadPic(tripDetail.id);
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
-  // const [groupedSchedules, setGroupedSchedules] = useState({});
+  const [groupedSchedules, setGroupedSchedules] = useState({});
   const startDate = dayjs(tripDetail.start_date);
   const endDate = dayjs(tripDetail.end_date);
   const daysCount = endDate.diff(startDate, "day") + 1;
   const dayList = Array.from({ length: daysCount }, (_, index) => index + 1);
-  const groupedSchedules = dayList.reduce((groups, tripDay) => {
-    const schedulesOnDay = tripDetail.schedules.filter(
-      (schedule) => schedule.trip_day === tripDay,
-    );
-    return { ...groups, [tripDay]: schedulesOnDay };
-  }, {});
+  // const groupedSchedules = dayList.reduce((groups, tripDay) => {
+  //   const schedulesOnDay = tripDetail.schedules.filter(
+  //     (schedule) => schedule.trip_day === tripDay,
+  //   );
+  //   return { ...groups, [tripDay]: schedulesOnDay };
+  // }, {});
   console.log(groupedSchedules);
   const userIds = tripDetail.members.map((member) => member.id);
   const handleDrop = (e) => {
@@ -54,16 +54,16 @@ export default function EditTrip({
       }
     }
   };
-  // useEffect(() => {
-  //   setGroupedSchedules(
-  //     dayList.reduce((groups, tripDay) => {
-  //       const schedulesOnDay = tripDetail.schedules.filter(
-  //         (schedule) => schedule.trip_day === tripDay
-  //       );
-  //       return { ...groups, [tripDay]: schedulesOnDay };
-  //     }, {})
-  //   );
-  // }, [tripDetail]);
+  useEffect(() => {
+    setGroupedSchedules(
+      dayList.reduce((groups, tripDay) => {
+        const schedulesOnDay = tripDetail.schedules.filter(
+          (schedule) => schedule.trip_day === tripDay,
+        );
+        return { ...groups, [tripDay]: schedulesOnDay };
+      }, {}),
+    );
+  }, [tripDetail]);
 
   return (
     <div
