@@ -27,7 +27,7 @@ exports.startDiscordBot = () => {
 
     } else if (interaction.commandName === 'accesslog') {
       const title = 'Access Log File\n------------------------------------\n';
-      const logContent = await logger.readAccessLogFile();
+      var logContent = await logger.readAccessLogFile();
       const footer = '------------------------------------\n';
 
       if(logContent.length >1900)

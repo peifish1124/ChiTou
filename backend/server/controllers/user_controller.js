@@ -50,7 +50,7 @@ exports.signup = async (req, res) => {
     console.log('User Signup Success');
 
     // send email
-    if(false) await emailUtils.sendSignupEmail(email, name);
+    if(true) await emailUtils.sendSignupEmail(email, name);
 
     return res.status(200).json({
       data: {
