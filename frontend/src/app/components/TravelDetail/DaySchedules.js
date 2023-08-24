@@ -181,7 +181,7 @@ export default function DaySchedules({
           <div className={styles.schedule__key}>
             <p style={{ width: "25%", fontWeight: "700" }}>地點</p>
             <p style={{ width: "25%", fontWeight: "700" }}>停留時間</p>
-            <p style={{ width: "50%", fontWeight: "700" }}>備註</p>
+            <p style={{ width: "50%", fontWeight: "700" }}>筆記</p>
           </div>
           <ul className={styles.timeline}>
             {sortedDaySchedules.map((schedule, index) => (
