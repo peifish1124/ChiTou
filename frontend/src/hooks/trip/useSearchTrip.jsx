@@ -24,6 +24,9 @@ export default function useSearchTrip() {
   }, 500);
 
   const handleInputChange = (event) => {
+    if (event.target.value.trim() === "") {
+      setTripsSearchResult([]);
+    }
     setTripsSearchKeyword(event.target.value.trim());
     searchTrip(event.target.value.trim());
   };

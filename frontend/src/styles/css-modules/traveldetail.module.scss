@@ -145,7 +145,7 @@
   .timeline {
     li {
       width: 100%;
-      padding: 0.5rem 0;
+      padding: 0.75rem 0;
       box-sizing: border-box;
       position: relative;
       display: flex;
@@ -171,7 +171,7 @@
         height: 50%;
       }
 
-      &:nth-child(n)::before {
+      &:nth-child(odd)::before {
         content: "";
         position: absolute;
         top: 0;
@@ -322,4 +322,13 @@
 }
 .scheduleListItem:hover .hiddenBtn {
   display: block;
+}
+.travelInfo{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #a3a2a2;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: underline;
 }
