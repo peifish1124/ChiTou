@@ -1,6 +1,6 @@
 import { useState } from "react";
 // import Swal from "sweetalert2";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 
 export default function useGetWeather() {
   const [weatherData, setWeatherData] = useState(null);
@@ -11,6 +11,7 @@ export default function useGetWeather() {
     setLoading(true);
     // console.log("get weather");
     try {
+      const axiosAuth = createAxiosAuth();
       const response = await axiosAuth.get(
         `/weathers?date=${date}&location_name=${encodeURIComponent(
           locationName,

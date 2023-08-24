@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 import debounce from "@/utils/debounce";
 
 export default function useSearchTrip() {
@@ -11,6 +11,7 @@ export default function useSearchTrip() {
   const searchTrip = debounce(async (trip) => {
     setLoading(true);
     try {
+      const axiosAuth = createAxiosAuth();
       const response = await axiosAuth.get(`/trips/search?keyword=${trip}`);
       setTripsSearchResult(response.data.data.trips);
       setLoading(false);

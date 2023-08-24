@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosAuth from "@/api/axiosAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 
 export default function useTripDetail(id) {
   const [tripDetail, setTripDetail] = useState({});
@@ -10,6 +10,7 @@ export default function useTripDetail(id) {
     setLoading(true);
     console.log("get trip id", id);
     try {
+      const axiosAuth = createAxiosAuth();
       const response = await axiosAuth.get(`/trips/${id}`);
       console.log("get trip detail response", response.data.data.trip);
       setTripDetail(response.data.data.trip);

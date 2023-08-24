@@ -1,12 +1,15 @@
 import Swal from "sweetalert2";
-import axiosAuth from "@/api/axiosTypeAndAuth";
+import createAxiosAuth from "@/api/axiosAuth";
 
 export default function useDeleteSchedule(id) {
   const deleteSchedule = async () => {
     try {
+      const axiosAuth = createAxiosAuth();
+      console.log("delete schedule id", id);
       const response = await axiosAuth.delete(`/schedules/${id}`);
       console.log("delete schedule response", response.data.data.schedule);
     } catch (err) {
+      console.error("刪除失敗:", err);
       const { status } = err.response;
       console.error("刪除失敗:", status);
       if (status === 403) {
