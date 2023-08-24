@@ -15,6 +15,7 @@ export default function DaySchedules({
   destination,
 }) {
   const [expanded, setExpanded] = useState(true);
+  const [weatherIconVisible, setWeatherIconVisible] = useState(true);
   const [weatherInfoVisible, setWeatherInfoVisible] = useState(false);
   const targetDate = dayjs(startDate).add(tripDay - 1, "day");
   const sortedDaySchedules = [...daySchedules].sort(
@@ -25,6 +26,17 @@ export default function DaySchedules({
   const [weatherData, setWeatherData] = useState(null);
   useEffect(() => {
     let isMounted = true;
+    const currentDate = dayjs();
+    const sixDaysFromNow = currentDate.add(6, "days");
+    if (
+      targetDate.isBefore(currentDate) ||
+      targetDate.isAfter(sixDaysFromNow)
+    ) {
+      setWeatherIconVisible(false);
+      return () => {
+        isMounted = false;
+      };
+    }
     const fetchWeather = async () => {
       try {
         const results = await getWeather(
@@ -90,15 +102,17 @@ export default function DaySchedules({
             </svg>
           </button>
         </div>
-        <button type="button" className={styles.weather}>
-          <Image
-            src="/weather.png"
-            width={30}
-            height={30}
-            alt="weather icon"
-            onClick={toggleWeatherInfo}
-          />
-        </button>
+        {weatherIconVisible && (
+          <button type="button" className={styles.weather}>
+            <Image
+              src="/weather.png"
+              width={30}
+              height={30}
+              alt="weather icon"
+              onClick={toggleWeatherInfo}
+            />
+          </button>
+        )}
       </div>
       {/* Weather information */}
       {weatherInfoVisible &&
