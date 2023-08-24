@@ -33,7 +33,7 @@ export default function Home() {
               <SearchTripCard handleInputChange={handleInputChange} />
             </div>
 
-            {tripsSearchResult.length > 0 && (
+            {tripsSearchKeyword && tripsSearchResult.length > 0 && (
               <div className={styles.tripcard}>
                 {tripsSearchResult.map((trip) => (
                   <TripCard
@@ -46,6 +46,9 @@ export default function Home() {
                   />
                 ))}
               </div>
+            )}
+            {tripsSearchKeyword && tripsSearchResult.length === 0 && (
+              <div className={styles.tripcard}>查無結果，請重新輸入</div>
             )}
             {!tripsSearchKeyword && (
               <div className={styles.tripcard}>
