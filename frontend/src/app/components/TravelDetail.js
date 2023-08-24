@@ -10,6 +10,7 @@ import tripcard from "@/styles/css-modules/tripcard.module.scss";
 
 export default function TripDetail({ tripId }) {
   const { tripDetail, loading } = useTripDetail(tripId);
+
   if (loading) {
     return <EditPageSkeleton />;
   }
