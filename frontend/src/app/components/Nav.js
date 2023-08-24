@@ -53,6 +53,9 @@ export default function Nav({ changeToStart, userName }) {
       <Link href="/" className={nav.logo} onClick={changeToStart}>
         ChiTou
       </Link>
+      {/* <div className={nav.flight}>
+        <Image src="/airplain.png" width={100} height={100} />
+      </div> */}
       <div className={nav.user}>
         <div className={nav.userNameBox}>{name}</div>
         <div className={nav.userPic}>
