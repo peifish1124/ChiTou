@@ -130,6 +130,7 @@ export default function EditDaySchedules({
               {sortedDaySchedules.map((schedule) => (
                 <EditSchedule
                   key={schedule.id}
+                  tripId={tripId}
                   schedule={schedule}
                   getTripDetail={getTripDetail}
                 />
@@ -163,6 +164,7 @@ export default function EditDaySchedules({
                             <EditSchedule
                               key={schedule.id}
                               schedule={schedule}
+                              tripId={tripId}
                               userIds={userIds}
                               isDragDisabled={isDragDisabled}
                               getTripDetail={getTripDetail}

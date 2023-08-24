@@ -1,11 +1,12 @@
 import Swal from "sweetalert2";
 import axiosTypeAndAuth from "@/api/axiosTypeAndAuth";
 
-export default function useUpdateSchedule(id, userIds) {
+export default function useUpdateSchedule(id, tripId, userIds) {
   const updateSchedule = async (schedule) => {
     console.log("create schedule");
     const requestBody = {
       ...schedule,
+      trip_id: tripId,
       user_ids: userIds,
     };
     console.log("requestBody", requestBody);
