@@ -15,6 +15,8 @@
   - 旅行詳細介面
     - 對行程進行投票
     - 可以查看天氣、預估交通時間
+    - <img width="555" alt="截圖 2023-09-15 下午7 13 21" src="https://github.com/peifish1124/ChiTou/assets/58721888/4427a417-715e-44d3-b502-51aabd11c62e">
+
 - Google Maps API
   - 創建行程
     - 可以在地圖上透過 filter 如：行政區、大分類，也可透過關鍵字搜尋
@@ -29,6 +31,7 @@
 - ChatGPT Note
     - 我們希望在使用者加入某個行程後，我們能自動為這個行程整理一些相關資訊
     - 實作方式：用 Google Search API 去搜尋文章內容並丟入 ChatGPT OpenAI 做統整，並為了加快下次搜尋速度我們會將 note 內容存入資料庫
+    - <img width="555" alt="截圖 2023-09-15 下午7 15 16" src="https://github.com/peifish1124/ChiTou/assets/58721888/c596f86a-eee9-4f7b-9124-65f28fd290a4">
 - 通知
   - 系統本身的通知
   - 綁定 Gmail 通知
